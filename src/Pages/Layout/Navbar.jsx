@@ -42,7 +42,7 @@ export function Navbar() {
               src="/sim.webp"
               alt="Simpolo"
               className={`
-                max-h-[86px]
+                max-h-[110px]
                 w-auto
                 object-contain
                 transition-transform duration-300
