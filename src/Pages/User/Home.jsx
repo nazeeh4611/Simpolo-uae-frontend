@@ -183,6 +183,14 @@ function HomePage() {
     setVideoLoaded(true);
   };
 
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(error => {
+        console.log("Video autoplay prevented:", error);
+      });
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FAF7F0] to-white">
       <style dangerouslySetInnerHTML={{__html: `
@@ -311,17 +319,22 @@ function HomePage() {
 
       <section className="relative min-h-screen text-white overflow-hidden">
         <div className="absolute inset-0">
-          <video
+                    <video
             ref={videoRef}
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
-            onLoadedData={handleVideoLoaded}
-            className={`w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-40' : 'opacity-0'}`}
-          >
-            <source src="https://pub-6070c66a49144147b12828af75c69a0c.r2.dev/IMG_3565%20(1).mp4" type="video/mp4" />
+            webkit-playsinline="true"
+            preload="auto"
+            className="w-full h-full object-cover"
+            style={{
+                WebkitTransform: 'translateZ(0)',
+                backfaceVisibility: 'hidden'
+            }}
+            >
+
+            <source src="https://pub-6070c66a49144147b12828af75c69a0c.r2.dev/IMG_3.mp4" type="video/mp4" />
           </video>
           
           {!videoLoaded && (
@@ -334,7 +347,11 @@ function HomePage() {
             </div>
           )}
           
-          <div className="absolute inset-0 bg-gradient-to-r from-[rgba(227,178,158,0.95)] via-[rgba(186,156,142,0.85)] to-[rgba(120,60,33,0.7)] opacity-80"></div>
+          <div className="absolute inset-0 bg-gradient-to-r 
+  from-[rgba(227,178,158,0.85)] 
+  via-[rgba(186,156,142,0.75)] 
+  to-[rgba(120,60,33,0.65)]">
+</div>
         </div>
         
         <div className="absolute inset-0">
