@@ -317,131 +317,122 @@ function HomePage() {
         }
       `}} />
 
-      <section className="relative min-h-screen text-white overflow-hidden">
-        <div className="absolute inset-0">
-                    <video
-            ref={videoRef}
-            autoPlay
-            muted
-            loop
-            playsInline
-            webkit-playsinline="true"
-            preload="auto"
-            className="w-full h-full object-cover"
-            style={{
-                WebkitTransform: 'translateZ(0)',
-                backfaceVisibility: 'hidden'
-            }}
-            >
+<section className="relative min-h-screen overflow-hidden text-white">
+  <div className="absolute inset-0 z-0">
+    <video
+      ref={videoRef}
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      poster="/ban.webp"
+      className="w-full h-full object-cover"
+    >
+      <source
+        src="https://pub-6070c66a49144147b12828af75c69a0c.r2.dev/IMG_3.mp4"
+        type="video/mp4"
+      />
+    </video>
 
-            <source src="https://pub-6070c66a49144147b12828af75c69a0c.r2.dev/IMG_3.mp4" type="video/mp4" />
-          </video>
-          
-          {!videoLoaded && (
-            <div className="absolute inset-0">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1728486885790-1454260d9246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
-                alt="Luxury tiles showroom"
-                className="w-full h-full object-cover opacity-40"
-              />
-            </div>
-          )}
-          
-          <div className="absolute inset-0 bg-gradient-to-r 
-  from-[rgba(227,178,158,0.85)] 
-  via-[rgba(186,156,142,0.75)] 
-  to-[rgba(120,60,33,0.65)]">
-</div>
-        </div>
-        
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgba(158,80,44,0.1)] rounded-full blur-3xl animate-float"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgba(120,60,33,0.1)] rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
-        </div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center pt-32 pb-16">
-          <div className="animate-on-scroll max-w-3xl">
-            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-[rgba(158,80,44,0.3)]">
-              <Sparkles size={18} className="mr-2 text-[rgba(158,80,44,1)]" />
-              <span className="text-[rgba(158,80,44,1)] font-medium">Premier Tile Solutions</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              SIMPOLO <span className="trading-text">TRADING</span> LLC
-            </h1>
-            
-            <div className="w-32 h-1.5 burgundy-gradient mb-8 rounded-full shimmer"></div>
-            
-            <div className="text-2xl md:text-3xl mb-8 text-[rgba(158,80,44,1)] font-semibold h-12">
-              <Typewriter
-                options={{
-                  strings: [
-                    'Crafted for Excellence',
-                    'Designed for Perfection',
-                    'Premium Tile Solutions',
-                    'Your Trusted Partner',
-                    'Innovative Designs',
-                    'Quality Guaranteed'
-                  ],
-                  autoStart: true,
-                  loop: true,
-                  delay: 50,
-                  deleteSpeed: 30,
-                  cursorClassName: 'typewriter-cursor'
-                }}
-              />
-            </div>
-            
-            <p className="text-lg md:text-xl mb-10 text-gray-200 max-w-2xl leading-relaxed">
-              Your trusted partner for premium tiles, sanitary ware, and bathroom fittings across the UAE. 
-              Delivering exceptional quality through direct manufacturing and innovative solutions with 
-              15+ years of expertise in transforming spaces.
-            </p>
-            
-            <div className="flex flex-wrap gap-4">
-              <Link
-                to="/contact"
-                className="group px-8 py-4 burgundy-gradient text-white rounded-xl font-semibold hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 card-hover"
-              >
-                <span>Get Free Consultation</span>
-                <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
-              </Link>
-              
-              <Link
-                to="/services"
-                className="group px-8 py-4 border-2 border-[rgba(158,80,44,0.5)] text-white rounded-xl font-semibold hover:bg-white/10 hover:border-[rgba(158,80,44,1)] transition-all duration-300 flex items-center space-x-3"
-              >
-                <span>View Products</span>
-                <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </div>
+    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-[rgba(227,178,158,0.75)] via-[rgba(186,156,142,0.65)] to-[rgba(120,60,33,0.6)]" />
+  </div>
 
-        <div className="absolute bottom-0 left-0 right-0">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pb-12">
-              {features.map((feature, index) => (
-                <div 
-                  key={index} 
-                  className="animate-on-scroll bg-white/10 backdrop-blur-md p-5 rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-300 card-hover"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="flex items-start space-x-3">
-                    <div className="p-2.5 rounded-lg burgundy-gradient flex-shrink-0">
-                      <feature.icon className="text-white" size={22} />
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold mb-1">{feature.title}</div>
-                      <div className="text-sm text-gray-300">{feature.description}</div>
-                    </div>
-                  </div>
+  <div className="absolute inset-0 z-10 pointer-events-none">
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgba(158,80,44,0.12)] rounded-full blur-3xl animate-float" />
+    <div
+      className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgba(120,60,33,0.12)] rounded-full blur-3xl animate-float"
+      style={{ animationDelay: "1.5s" }}
+    />
+  </div>
+
+  <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-32 pb-20">
+    <div className="max-w-3xl">
+      <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur border border-[rgba(158,80,44,0.4)]">
+        <Sparkles size={18} className="mr-2 text-[rgba(158,80,44,1)]" />
+        <span className="text-[rgba(158,80,44,1)] font-medium">
+          Premier Tile Solutions
+        </span>
+      </div>
+
+      <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+        SIMPOLO <span className="trading-text">TRADING</span> LLC
+      </h1>
+
+      <div className="w-32 h-1.5 burgundy-gradient mb-8 rounded-full" />
+
+      <div className="text-2xl md:text-3xl mb-8 text-[rgba(158,80,44,1)] font-semibold h-12">
+        <Typewriter
+          options={{
+            strings: [
+              "Crafted for Excellence",
+              "Designed for Perfection",
+              "Premium Tile Solutions",
+              "Your Trusted Partner",
+              "Innovative Designs",
+              "Quality Guaranteed",
+            ],
+            autoStart: true,
+            loop: true,
+            delay: 50,
+            deleteSpeed: 30,
+          }}
+        />
+      </div>
+
+      <p className="text-lg md:text-xl mb-10 text-gray-200 max-w-2xl leading-relaxed">
+        Your trusted partner for premium tiles, sanitary ware, and bathroom
+        fittings across the UAE. Delivering exceptional quality through direct
+        manufacturing and innovative solutions with 15+ years of expertise in
+        transforming spaces.
+      </p>
+
+      <div className="flex flex-wrap gap-4">
+        <Link
+          to="/contact"
+          className="px-8 py-4 burgundy-gradient rounded-xl font-semibold hover:shadow-2xl transition-all duration-300 flex items-center space-x-3"
+        >
+          <span>Get Free Consultation</span>
+          <ArrowRight size={20} />
+        </Link>
+
+        <Link
+          to="/services"
+          className="px-8 py-4 border-2 border-[rgba(158,80,44,0.6)] rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 flex items-center space-x-3"
+        >
+          <span>View Products</span>
+          <ChevronRight size={20} />
+        </Link>
+      </div>
+    </div>
+  </div>
+
+  <div className="relative z-20 pb-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {features.map((feature, index) => (
+          <div
+            key={index}
+            className="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-300"
+          >
+            <div className="flex items-start space-x-3">
+              <div className="p-2.5 rounded-lg burgundy-gradient">
+                <feature.icon className="text-white" size={22} />
+              </div>
+              <div>
+                <div className="font-semibold mb-1">{feature.title}</div>
+                <div className="text-sm text-gray-300">
+                  {feature.description}
                 </div>
-              ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
 
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
