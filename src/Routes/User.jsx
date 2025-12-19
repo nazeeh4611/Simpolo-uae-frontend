@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { Home } from "../Pages/User/Home";
+import HomePage from "../Pages/User/Home";
 import { About } from "../Pages/User/About";
 import { Services } from "../Pages/User/Services";
 import { Portfolio } from "../Pages/User/Portfolio";
@@ -50,7 +50,7 @@ function User() {
       />
 
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="about" element={<About />} />
         <Route path="services" element={<Services />} />
         <Route path="portfolio" element={<Portfolio />} />

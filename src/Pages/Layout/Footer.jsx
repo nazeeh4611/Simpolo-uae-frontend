@@ -43,15 +43,17 @@ export function Footer() {
           {/* Brand & Description */}
           <div className="space-y-6">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-[#B8860B] to-[#FFD700] rounded-lg flex items-center justify-center">
-                <Building2 className="text-white" size={24} />
-              </div>
-              <div className="text-xl font-bold">
-                <span className="bg-gradient-to-r from-[#FFD700] via-[#D4AF37] to-[#FFD700] bg-clip-text text-transparent">
-                  SIMPOLO TRADING
-                </span>
-                <div className="text-sm text-gray-400">LLC</div>
-              </div>
+            <img
+              src="/sim.webp"
+              alt="Simpolo"
+              className={`
+                max-h-[110px]
+                w-auto
+                object-contain
+                transition-transform duration-300
+              
+              `}
+            />
             </div>
             <p className="text-gray-300 leading-relaxed">
               Pioneering excellence in premium tile solutions through innovation, quality, and unparalleled craftsmanship across the UAE.

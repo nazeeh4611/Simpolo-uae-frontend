@@ -1,7 +1,7 @@
-import React from 'react'
-import { Package, Settings, Layers, Hammer, ChevronRight, CheckCircle2, Sparkles, Target, Award, Zap, Shield, Droplets } from 'lucide-react';
+import React, { useState, useEffect } from 'react'
+import { Package, Settings, Layers, Hammer, ChevronRight, CheckCircle2, Sparkles, Target, Award, Zap, Shield, Droplets, Users, Globe, Building, CheckCircle, Truck, Clock, MapPin, Phone, Mail, TrendingUp, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import Typewriter from 'typewriter-effect';
 
 export function Services() {
   const products = [
@@ -10,7 +10,6 @@ export function Services() {
       description: 'Durable, non-porous tiles made from refined clay and fired at high temperatures. Waterproof, stain-resistant, suitable for floors and walls.',
       sizes: ['200 × 1200 mm', '600 × 600 mm', '600 × 1200 mm', '800 × 1600 mm'],
       icon: Layers,
-      color: 'from-[#00C896] to-[#06D6A0]',
       features: ['Waterproof', 'Stain-resistant', 'High durability', 'Low maintenance']
     },
     {
@@ -18,7 +17,6 @@ export function Services() {
       description: 'Custom cutting, shaping, and customizing using advanced CNC routers and 5-axis water jet machines.',
       services: ['Custom dimensions', 'Steps & Skirting', 'Special edges', 'Drainer grooves'],
       icon: Settings,
-      color: 'from-[#FF6B6B] to-[#FF8E53]',
       features: ['Precision CNC', 'Waterjet cutting', 'Custom profiles', 'Quick turnaround']
     },
     {
@@ -26,7 +24,6 @@ export function Services() {
       description: 'Large-format porcelain tiles for seamless surfaces. Minimal grout lines, high durability, resistance to scratches and moisture.',
       features: ['Minimal grout lines', 'High durability', 'Low maintenance', 'Wide range of designs'],
       icon: Package,
-      color: 'from-[#4ECDC4] to-[#44A08D]',
       benefits: ['Seamless look', 'Easy cleaning', 'Modern aesthetic', 'Versatile applications']
     },
     {
@@ -34,7 +31,6 @@ export function Services() {
       description: 'High-quality tiles fired at high temperatures. Available in vitrified and unglazed forms. Highly resistant to heat shock.',
       sizes: ['300 × 300 mm', '300 × 600 mm'],
       icon: Layers,
-      color: 'from-[#FFD166] to-[#FFB347]',
       features: ['Heat resistant', 'Cost-effective', 'Easy installation', 'Variety of finishes']
     },
     {
@@ -42,7 +38,6 @@ export function Services() {
       description: '20mm thick flooring designed for seamless indoor-to-outdoor transitions. Impervious to water, frost and weather resistant, anti-slip surface.',
       features: ['Weather resistant', 'Anti-slip', 'No warping', 'Suitable for patios & driveways'],
       icon: Hammer,
-      color: 'from-[#118AB2] to-[#073B4C]',
       benefits: ['All-weather use', 'High safety', 'Minimal expansion', 'Long lifespan']
     },
     {
@@ -50,7 +45,6 @@ export function Services() {
       description: 'Small decorative pieces made from glass, ceramic, stone, and porcelain. Unlimited design possibilities with intricate patterns.',
       features: ['Artistic installations', 'High durability', 'Water resistance', 'Indoor & outdoor use'],
       icon: Package,
-      color: 'from-[#9D4EDD] to-[#7B2CBF]',
       applications: ['Feature walls', 'Pool borders', 'Backsplashes', 'Artistic floors']
     },
     {
@@ -58,7 +52,6 @@ export function Services() {
       description: 'Sourced from Italian, Spanish, and Chinese manufacturers. Excellent color stability, full water resistance, anti-fade properties.',
       features: ['Color stability', 'Water resistant', 'Long-lasting', 'Premium quality'],
       icon: Droplets,
-      color: 'from-[#00B4D8] to-[#0077B6]',
       benefits: ['No fading', 'Easy cleaning', 'Safe surfaces', 'Premium aesthetics']
     },
     {
@@ -66,7 +59,6 @@ export function Services() {
       description: 'Natural stone with prominent veining. Marble offers elegant asymmetry and unique character. Granite features speckled patterns.',
       features: ['Natural patterns', 'Elegant asymmetry', 'Unique character', 'Durable'],
       icon: Package,
-      color: 'from-[#E0AAFF] to-[#9D4EDD]',
       varieties: ['Carrara', 'Calacatta', 'Statuario', 'Imperial']
     },
     {
@@ -74,7 +66,6 @@ export function Services() {
       description: 'Professional countertop shaping and edge finishing. Various edge profiles and finishes available for functional and aesthetic requirements.',
       features: ['Countertop shaping', 'Edge finishing', 'Mitered edges', 'Custom profiles'],
       icon: Settings,
-      color: 'from-[#F15BB5] to-[#9B5DE5]',
       profiles: ['Bullnose', 'Bevel', 'Ogee', 'Waterfall']
     },
     {
@@ -82,7 +73,6 @@ export function Services() {
       description: 'RAK Sanitaryware for premium quality and superior strength. Indian sanitaryware for competitive pricing and modern design.',
       features: ['Premium quality', 'Superior strength', 'Long-term durability', 'Modern design'],
       icon: Package,
-      color: 'from-[#00BBF9] to-[#00F5D4]',
       brands: ['RAK', 'Simpolo', 'Volark', 'TOTO']
     },
     {
@@ -90,7 +80,6 @@ export function Services() {
       description: 'Complete range of plumbing fixtures and accessories. Includes mixers, taps, valves, and concealed systems.',
       features: ['Safe wastewater flow', 'Odor prevention', 'Efficient water control', 'Modern designs'],
       icon: Settings,
-      color: 'from-[#FF9E00] to-[#FF5400]',
       types: ['Mixers', 'Showers', 'Accessories', 'Concealed systems']
     },
   ];
@@ -100,19 +89,16 @@ export function Services() {
       title: 'Precision Cutting',
       description: 'Advanced CNC routers and water jet machines for custom dimensions and project-specific solutions',
       icon: Settings,
-      color: 'from-[#FF6B6B] to-[#FF8E53]'
     },
     {
       title: 'Customization',
       description: 'Steps, skirting, slab resizing, and tailored solutions for your specific project requirements',
       icon: Package,
-      color: 'from-[#4ECDC4] to-[#44A08D]'
     },
     {
       title: 'Profiling & Grooving',
       description: 'Special edges, drainer grooves, and functional and aesthetic detailing for perfect finishes',
       icon: Layers,
-      color: 'from-[#FFD166] to-[#FFB347]'
     }
   ];
 
@@ -175,9 +161,9 @@ export function Services() {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
         }
-        @keyframes pulse-glow {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.8; }
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
         }
         .animate-fadeInUp {
           animation: fadeInUp 0.6s ease-out forwards;
@@ -185,21 +171,25 @@ export function Services() {
         .animate-float {
           animation: float 3s ease-in-out infinite;
         }
-        .animate-pulse-glow {
-          animation: pulse-glow 2s ease-in-out infinite;
+        .burgundy-gradient {
+          background: linear-gradient(135deg, rgba(158, 80, 44, 1) 0%, rgba(120, 60, 33, 1) 50%, rgba(81, 40, 22, 1) 100%);
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease infinite;
         }
-        .gold-gradient {
-          background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #FFD700 100%);
-        }
-        .hero-gradient {
-          background: linear-gradient(135deg, #2C1C10 0%, #3D2817 50%, #5C4033 100%);
+        .burgundy-text {
+          background: linear-gradient(135deg, rgba(158, 80, 44, 1) 0%, rgba(120, 60, 33, 1) 50%, rgba(81, 40, 22, 1) 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease infinite;
         }
         .card-hover {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-hover:hover {
           transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(184, 134, 11, 0.15);
+          box-shadow: 0 20px 40px rgba(158, 80, 44, 0.15);
         }
         .product-card {
           transition: all 0.4s ease;
@@ -207,26 +197,62 @@ export function Services() {
         .product-card:hover {
           transform: translateY(-5px) scale(1.02);
         }
+        .typewriter-cursor {
+          display: inline-block;
+          width: 3px;
+          background: rgba(158, 80, 44, 1);
+          margin-left: 4px;
+          animation: blink 1s infinite;
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
       `}</style>
 
-      <section className="relative overflow-hidden hero-gradient text-white py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[rgba(81,40,22,1)] via-[rgba(120,60,33,1)] to-[rgba(158,80,44,1)] text-white py-24">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#D4AF37] rounded-full mix-blend-overlay filter blur-3xl"></div>
-          <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-[#B8860B] rounded-full mix-blend-overlay filter blur-3xl"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgba(158,80,44,0.2)] rounded-full blur-3xl animate-float"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgba(120,60,33,0.2)] rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="animate-on-scroll">
-            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm">
-              <Package size={18} className="mr-2 text-[#FFD700]" />
-              <span className="text-[#FFD700]">Premium Solutions</span>
+          <div className="animate-on-scroll max-w-4xl">
+            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-[rgba(158,80,44,0.3)]">
+              <Package size={18} className="mr-2 text-white" />
+              <span className="text-white font-medium">Premium Solutions</span>
             </div>
-            <h1 className="text-6xl md:text-7xl font-bold mb-6 leading-tight">
-              Products & <span className="gold-gradient bg-clip-text text-transparent">Services</span>
+
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              Products & <span>Services</span>
             </h1>
-            <div className="w-24 h-1 gold-gradient mb-8 rounded-full"></div>
-            <p className="text-xl md:text-2xl text-gray-200 max-w-3xl leading-relaxed">
-              Comprehensive range of premium tiles, sanitary ware, and specialized fabrication services for every project requirement
+
+            <div className="w-24 h-1.5 burgundy-gradient mb-8 rounded-full"></div>
+
+            <div className="text-2xl md:text-3xl mb-8 text-white font-semibold h-12">
+              <Typewriter
+                options={{
+                  strings: [
+                    'Comprehensive Tile Solutions',
+                    'Premium Quality Materials',
+                    'Custom Fabrication Services',
+                    'Expert Technical Support',
+                    'Timely Delivery Guaranteed',
+                    'End-to-End Project Solutions'
+                  ],
+                  autoStart: true,
+                  loop: true,
+                  delay: 50,
+                  deleteSpeed: 30,
+                  cursorClassName: 'typewriter-cursor'
+                }}
+              />
+            </div>
+
+            <p className="text-lg md:text-xl mb-10 text-gray-200 max-w-3xl leading-relaxed">
+              Discover our extensive range of premium tiles, sanitary ware, and specialized fabrication services. 
+              From residential renovations to large-scale commercial projects, we provide comprehensive solutions 
+              tailored to your specific requirements.
             </p>
           </div>
         </div>
@@ -241,8 +267,8 @@ export function Services() {
                 onClick={() => setActiveCategory(category)}
                 className={`px-6 py-3 rounded-full text-sm font-medium transition-all ${
                   activeCategory === category
-                    ? 'gold-gradient text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? 'burgundy-gradient text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-[rgba(81,40,22,1)]'
                 }`}
               >
                 {category}
@@ -263,24 +289,24 @@ export function Services() {
               >
                 <div className="p-8">
                   <div className="flex items-start justify-between mb-6">
-                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${product.color} flex items-center justify-center`}>
+                    <div className="w-14 h-14 rounded-xl burgundy-gradient flex items-center justify-center">
                       <product.icon className="text-white" size={24} />
                     </div>
-                    <div className="px-3 py-1 bg-[#F5EFE0] text-[#B8860B] text-xs font-medium rounded-full">
+                    <div className="px-3 py-1 bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-xs font-medium rounded-full">
                       Featured
                     </div>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-[#2C1C10] mb-4">{product.title}</h3>
+                  <h3 className="text-xl font-bold text-[rgba(81,40,22,1)] mb-4 hover:text-[rgba(158,80,44,1)] transition-colors">{product.title}</h3>
                   <p className="text-gray-600 mb-6 text-sm leading-relaxed">{product.description}</p>
                   
                   <div className="space-y-4">
                     {product.sizes && (
                       <div>
-                        <div className="text-xs font-medium text-[#B8860B] mb-2">AVAILABLE SIZES</div>
+                        <div className="text-xs font-medium text-[rgba(158,80,44,1)] mb-2">AVAILABLE SIZES</div>
                         <div className="flex flex-wrap gap-2">
                           {product.sizes.map((size, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
+                            <span key={idx} className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-[rgba(158,80,44,0.1)] hover:text-[rgba(81,40,22,1)] transition-colors">
                               {size}
                             </span>
                           ))}
@@ -290,12 +316,12 @@ export function Services() {
                     
                     {product.features && (
                       <div>
-                        <div className="text-xs font-medium text-[#B8860B] mb-2">KEY FEATURES</div>
+                        <div className="text-xs font-medium text-[rgba(158,80,44,1)] mb-2">KEY FEATURES</div>
                         <div className="space-y-2">
                           {product.features.map((feature, idx) => (
-                            <div key={idx} className="flex items-center">
-                              <CheckCircle2 size={14} className="text-[#00C896] mr-2 flex-shrink-0" />
-                              <span className="text-sm text-gray-700">{feature}</span>
+                            <div key={idx} className="flex items-center group">
+                              <CheckCircle2 size={14} className="text-[rgba(158,80,44,1)] mr-2 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                              <span className="text-sm text-gray-700 group-hover:text-[rgba(81,40,22,1)] transition-colors">{feature}</span>
                             </div>
                           ))}
                         </div>
@@ -304,10 +330,10 @@ export function Services() {
                     
                     {product.benefits && (
                       <div>
-                        <div className="text-xs font-medium text-[#B8860B] mb-2">BENEFITS</div>
+                        <div className="text-xs font-medium text-[rgba(158,80,44,1)] mb-2">BENEFITS</div>
                         <div className="flex flex-wrap gap-2">
                           {product.benefits.map((benefit, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-[#F5EFE0] text-[#B8860B] text-xs rounded-full">
+                            <span key={idx} className="px-2 py-1 bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-xs rounded-full hover:bg-[rgba(158,80,44,0.2)] transition-colors">
                               {benefit}
                             </span>
                           ))}
@@ -319,10 +345,10 @@ export function Services() {
                   <div className="mt-8 pt-6 border-t border-gray-100">
                     <Link
                       to="/contact"
-                      className="inline-flex items-center text-sm text-[#B8860B] hover:text-[#2C1C10] transition-colors font-medium"
+                      className="group inline-flex items-center text-sm text-[rgba(158,80,44,1)] hover:text-[rgba(81,40,22,1)] transition-colors font-medium"
                     >
                       Request Sample
-                      <ChevronRight size={16} className="ml-1" />
+                      <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>
                 </div>
@@ -332,15 +358,14 @@ export function Services() {
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-r from-[#FAF7F0] to-[#F5EFE0]">
+      <section className="py-24 bg-gradient-to-b from-[#FAF7F0] to-[#F5EFE0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-on-scroll">
-            <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm">
-              <Settings size={18} className="mr-2 text-[#B8860B]" />
-              <span className="text-[#B8860B] font-medium">Custom Solutions</span>
+            <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-sm font-semibold border border-[rgba(158,80,44,0.3)]">
+              <Settings size={18} className="mr-2" /> Custom Solutions
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#2C1C10]">
-              Precision <span className="gold-gradient bg-clip-text text-transparent">Fabrication</span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[rgba(81,40,22,1)]">
+              Precision <span className="burgundy-text">Fabrication</span> Services
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-lg">
               Advanced customization services to meet your exact project specifications
@@ -354,10 +379,10 @@ export function Services() {
                 className="animate-on-scroll bg-white rounded-2xl shadow-lg p-8 card-hover border border-[#F0E6D2]"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className={`w-16 h-16 rounded-xl bg-gradient-to-r ${service.color} flex items-center justify-center mb-6 mx-auto`}>
+                <div className="w-16 h-16 rounded-xl burgundy-gradient flex items-center justify-center mb-6 mx-auto">
                   <service.icon className="text-white" size={28} />
                 </div>
-                <h3 className="text-xl font-bold text-center text-[#2C1C10] mb-4">{service.title}</h3>
+                <h3 className="text-xl font-bold text-center text-[rgba(81,40,22,1)] mb-4">{service.title}</h3>
                 <p className="text-gray-600 text-center text-sm leading-relaxed">{service.description}</p>
               </div>
             ))}
@@ -365,24 +390,24 @@ export function Services() {
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-24 bg-gradient-to-br from-[rgba(81,40,22,1)] via-[rgba(120,60,33,1)] to-[rgba(158,80,44,1)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-r from-[#2C1C10] via-[#3D2817] to-[#2C1C10] rounded-3xl shadow-2xl overflow-hidden">
+          <div className="bg-white/5 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-white/10">
             <div className="grid lg:grid-cols-2">
               <div className="p-12 lg:p-16">
-                <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm">
-                  <Sparkles size={18} className="mr-2 text-[#FFD700]" />
-                  <span className="text-[#FFD700]">Why Choose Us</span>
+                <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
+                  <Sparkles size={18} className="mr-2 text-[#dedede]" />
+                  <span className="text-[#dedede]">Why Choose Us</span>
                 </div>
                 
                 <h2 className="text-4xl font-bold text-white mb-6">
-                  Beyond <span className="gold-gradient bg-clip-text text-transparent">Products</span>
+                  Beyond <span className="">Products</span>
                 </h2>
                 
                 <div className="space-y-6 mb-8">
                   <div className="flex items-start">
                     <div className="p-2 rounded-lg bg-white/10 mr-4">
-                      <Award className="text-[#FFD700]" size={20} />
+                      <Award className="text-[#ffffff]" size={20} />
                     </div>
                     <div>
                       <h4 className="text-white font-medium mb-1">Quality Assurance</h4>
@@ -392,7 +417,7 @@ export function Services() {
                   
                   <div className="flex items-start">
                     <div className="p-2 rounded-lg bg-white/10 mr-4">
-                      <Zap className="text-[#FFD700]" size={20} />
+                      <Truck className="text-[#ffffff]" size={20} />
                     </div>
                     <div>
                       <h4 className="text-white font-medium mb-1">Fast Delivery</h4>
@@ -402,11 +427,21 @@ export function Services() {
                   
                   <div className="flex items-start">
                     <div className="p-2 rounded-lg bg-white/10 mr-4">
-                      <Shield className="text-[#FFD700]" size={20} />
+                      <Shield className="text-[#ffffff]" size={20} />
                     </div>
                     <div>
                       <h4 className="text-white font-medium mb-1">Expert Support</h4>
                       <p className="text-gray-300 text-sm">Technical guidance and project consultation from concept to completion</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start">
+                    <div className="p-2 rounded-lg bg-white/10 mr-4">
+                      <Clock className="text-[#fcfcfc]" size={20} />
+                    </div>
+                    <div>
+                      <h4 className="text-white font-medium mb-1">Timely Response</h4>
+                      <p className="text-gray-300 text-sm">Quick quotes and responsive customer service</p>
                     </div>
                   </div>
                 </div>
@@ -414,7 +449,7 @@ export function Services() {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     to="/contact"
-                    className="group px-8 py-4 gold-gradient text-[#2C1C10] rounded-xl font-medium hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
+                    className="group px-8 py-4 burgundy-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover"
                   >
                     <span>Request Consultation</span>
                     <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
@@ -429,16 +464,88 @@ export function Services() {
                 </div>
               </div>
               
-              <div className="relative h-64 lg:h-auto min-h-[300px]">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#2C1C10] to-transparent lg:from-transparent lg:via-[#2C1C10]/50 lg:to-[#2C1C10] z-10"></div>
-                <div className="absolute inset-0 bg-gray-300 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-20 h-20 gold-gradient rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-glow">
+              <div className="relative h-64 lg:h-auto min-h-[300px] bg-gradient-to-r from-[rgba(81,40,22,0.8)] to-[rgba(158,80,44,0.8)]">
+                <div className="absolute inset-0 flex items-center justify-center p-8">
+                  <div className="text-center">
+                    <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 border border-white/20">
                       <Target className="text-white" size={32} />
                     </div>
-                    <p className="text-2xl font-bold text-[#2C1C10] mb-2">Custom Solutions</p>
-                    <p className="text-gray-600">Tailored to your needs</p>
+                    <p className="text-2xl font-bold text-white mb-2">Custom Solutions</p>
+                    <p className="text-gray-300">Tailored to your specific project needs</p>
+                    <div className="mt-8 grid grid-cols-2 gap-4 max-w-xs mx-auto">
+                      <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div className="text-xl font-bold text-white">300+</div>
+                        <div className="text-sm text-gray-300">Projects</div>
+                      </div>
+                      <div className="text-center p-4 bg-white/5 rounded-xl border border-white/10">
+                        <div className="text-xl font-bold text-white">15+</div>
+                        <div className="text-sm text-gray-300">Years Experience</div>
+                      </div>
+                    </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 animate-on-scroll">
+              <div className="bg-white rounded-2xl shadow-lg p-8 card-hover border border-[#F0E6D2]">
+                <div className="flex items-center mb-8">
+                  <div className="p-3 rounded-xl burgundy-gradient mr-4">
+                    <Heart className="text-white" size={32} />
+                  </div>
+                  <h3 className="text-3xl font-bold text-[rgba(81,40,22,1)]">Customer Commitment</h3>
+                </div>
+                <p className="text-gray-700 mb-8 leading-relaxed text-lg">
+                  We serve residential, commercial, hospitality, and government projects with 
+                  personalized solutions, technical support, and comprehensive after-sales service.
+                  Our team is dedicated to ensuring your complete satisfaction from concept to completion.
+                </p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {['Free Consultation', 'Custom Designs', 'Installation Support', '10-Year Warranty', 
+                    'Technical Guidance', 'Project Management', 'Quality Assurance', 'Timely Delivery'].map((item, idx) => (
+                    <div key={idx} className="flex items-center text-sm group">
+                      <CheckCircle size={16} className="text-[rgba(158,80,44,1)] mr-2 group-hover:scale-110 transition-transform" />
+                      <span className="text-gray-700 group-hover:text-[rgba(81,40,22,1)] transition-colors">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            
+            <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
+              <div className="bg-gradient-to-br from-[rgba(158,80,44,1)] to-[rgba(120,60,33,1)] rounded-2xl p-8 h-full card-hover">
+                <h3 className="text-2xl font-bold mb-6 text-white">Quick Contact</h3>
+                <p className="text-[rgba(255,245,240,1)] mb-8 leading-relaxed">Get in touch with our team for expert advice and quotes</p>
+                
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center text-white/90">
+                    <Phone size={18} className="mr-3 text-white/70" />
+                    <span>+971 55 723 4180</span>
+                  </div>
+                  <div className="flex items-center text-white/90">
+                    <Mail size={18} className="mr-3 text-white/70" />
+                    <span>info@simpolotrading.com</span>
+                  </div>
+                  <div className="flex items-center text-white/90">
+                    <Clock size={18} className="mr-3 text-white/70" />
+                    <span>Sun - Thu: 8 AM - 6 PM</span>
+                  </div>
+                </div>
+                
+                <Link
+                  to="/contact"
+                  className="group w-full px-6 py-4 bg-white/10 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/20 hover:shadow-xl transition-all duration-300 flex items-center justify-center"
+                >
+                  <span>Schedule a Consultation</span>
+                </Link>
+                <div className="mt-6 text-center">
+                  <div className="text-sm text-[rgba(255,245,240,0.8)]">Response within 24 hours</div>
                 </div>
               </div>
             </div>
@@ -449,8 +556,11 @@ export function Services() {
       <section className="pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center animate-on-scroll">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-[#2C1C10]">
-              Need a <span className="gold-gradient bg-clip-text text-transparent">Custom Solution</span>?
+            <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-sm font-semibold border border-[rgba(158,80,44,0.3)]">
+              <TrendingUp size={18} className="mr-2" /> Our Expertise
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-[rgba(81,40,22,1)]">
+              Need a <span className="burgundy-text">Custom Solution</span>?
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-lg mb-12">
               Our team specializes in creating tailored solutions for unique project requirements
@@ -459,7 +569,7 @@ export function Services() {
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 to="/portfolio"
-                className="group px-8 py-4 bg-[#2C1C10] text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 flex items-center space-x-3"
+                className="group px-8 py-4 burgundy-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover flex items-center space-x-3"
               >
                 <span>View Our Projects</span>
                 <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
@@ -467,7 +577,7 @@ export function Services() {
               
               <Link
                 to="/contact"
-                className="group px-8 py-4 border-2 border-[#D4AF37] text-[#2C1C10] rounded-xl font-medium hover:bg-[#F5EFE0] transition-all duration-300 flex items-center space-x-3"
+                className="group px-8 py-4 border-2 border-[rgba(158,80,44,1)] text-[rgba(81,40,22,1)] rounded-xl font-medium hover:bg-[rgba(158,80,44,0.1)] transition-all duration-300 flex items-center space-x-3"
               >
                 <span>Get Expert Advice</span>
                 <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
