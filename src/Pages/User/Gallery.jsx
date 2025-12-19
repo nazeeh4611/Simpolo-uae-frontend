@@ -180,7 +180,7 @@ export function Gallery() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#FAF7F0] to-white">
+    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <style jsx>{`
         @keyframes fadeInUp {
           from {
@@ -219,37 +219,38 @@ export function Gallery() {
         .animate-float {
           animation: float 3s ease-in-out infinite;
         }
-        .burgundy-gradient {
-          background: linear-gradient(135deg, rgba(158, 80, 44, 1) 0%, rgba(120, 60, 33, 1) 50%, rgba(81, 40, 22, 1) 100%);
+        .silver-gradient {
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           background-size: 200% 200%;
           animation: gradientShift 3s ease infinite;
         }
-        .burgundy-text {
-          background: linear-gradient(135deg, rgba(158, 80, 44, 1) 0%, rgba(120, 60, 33, 1) 50%, rgba(81, 40, 22, 1) 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
+        .silver-gradient-dark {
+          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+        }
+        .dark-gradient {
+          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%);
+        }
+        .light-gradient {
+          background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%);
         }
         .grid-item {
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .grid-item:hover {
           transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 25px 50px rgba(158, 80, 44, 0.15);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
         .category-btn {
           transition: all 0.3s ease;
         }
         .category-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 10px 20px rgba(158, 80, 44, 0.1);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         .typewriter-cursor {
           display: inline-block;
           width: 3px;
-          background: rgba(158, 80, 44, 1);
+          background: #808080;
           margin-left: 4px;
           animation: blink 1s infinite;
         }
@@ -262,33 +263,53 @@ export function Gallery() {
         }
         .card-hover:hover {
           transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(158, 80, 44, 0.15);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        .gallery-text {
+          display: inline-block;
+          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 700;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease infinite;
+        }
+        .showroom-text {
+          display: inline-block;
+          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 700;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease infinite;
         }
       `}</style>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-[rgba(81,40,22,1)] via-[rgba(120,60,33,1)] to-[rgba(158,80,44,1)] text-white py-24">
+<section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-24">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgba(158,80,44,0.2)] rounded-full blur-3xl animate-float"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full blur-3xl animate-float"></div>
           <div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgba(120,60,33,0.2)] rounded-full blur-3xl animate-float"
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full blur-3xl animate-float"
             style={{ animationDelay: '1.5s' }}
           ></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="animate-on-scroll max-w-4xl">
-            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-[rgba(158,80,44,0.3)]">
+            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-600">
               <Sparkles size={18} className="mr-2 text-white" />
               <span className="text-white font-medium">Visual Showcase</span>
             </div>
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Project <span>Gallery</span>
+              Project <span className="gallery-text">Gallery</span>
             </h1>
 
-            <div className="w-32 h-1.5 burgundy-gradient mb-8 rounded-full"></div>
+            <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full"></div>
 
-            <div className="text-2xl md:text-3xl mb-8 text-white font-semibold h-12">
+            <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
               <Typewriter
                 options={{
                   strings: [
@@ -308,22 +329,22 @@ export function Gallery() {
               />
             </div>
 
-            <p className="text-lg md:text-xl mb-10 text-gray-200 max-w-3xl leading-relaxed">
+            <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-3xl leading-relaxed">
               Explore our stunning portfolio of premium tile installations and projects across the UAE. 
               From luxury villas to commercial spaces, witness the transformation through our lens.
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <div className="flex items-center text-white/80">
-                <Award size={20} className="mr-2 text-[rgba(158,80,44,1)]" />
+              <div className="flex items-center text-gray-300">
+                <Award size={20} className="mr-2 text-gray-400" />
                 <span>300+ Successful Projects</span>
               </div>
-              <div className="flex items-center text-white/80">
-                <Users size={20} className="mr-2 text-[rgba(158,80,44,1)]" />
+              <div className="flex items-center text-gray-300">
+                <Users size={20} className="mr-2 text-gray-400" />
                 <span>Luxury & Commercial</span>
               </div>
-              <div className="flex items-center text-white/80">
-                <MapPin size={20} className="mr-2 text-[rgba(158,80,44,1)]" />
+              <div className="flex items-center text-gray-300">
+                <MapPin size={20} className="mr-2 text-gray-400" />
                 <span>All Emirates Covered</span>
               </div>
             </div>
@@ -331,17 +352,17 @@ export function Gallery() {
         </div>
       </section>
 
-      <section className="py-8 bg-white/80 backdrop-blur-sm sticky top-0 z-20 border-b border-[#F0E6D2] shadow-sm">
+      <section className="py-8 bg-white/80 backdrop-blur-sm sticky top-0 z-20 border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between">
             <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[rgba(158,80,44,1)]" size={20} />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-600" size={20} />
               <input
                 type="text"
                 placeholder="Search projects, tags, or locations..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 border border-[#F0E6D2] rounded-xl bg-white focus:outline-none focus:border-[rgba(120,60,33,1)] focus:ring-2 focus:ring-[rgba(120,60,33,0.2)] shadow-sm"
+                className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl bg-white focus:outline-none focus:border-gray-600 focus:ring-2 focus:ring-gray-200 shadow-sm"
               />
             </div>
 
@@ -351,7 +372,7 @@ export function Gallery() {
                 <select 
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 border border-[#F0E6D2] rounded-lg bg-white text-sm focus:outline-none focus:border-[rgba(120,60,33,1)] focus:ring-2 focus:ring-[rgba(120,60,33,0.2)]"
+                  className="px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:border-gray-600 focus:ring-2 focus:ring-gray-200"
                 >
                   <option value="date">Latest</option>
                   <option value="likes">Most Liked</option>
@@ -363,13 +384,13 @@ export function Gallery() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2.5 rounded-lg category-btn ${viewMode === 'grid' ? 'burgundy-gradient text-white' : 'bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] hover:bg-[rgba(158,80,44,0.2)]'}`}
+                  className={`p-2.5 rounded-lg category-btn ${viewMode === 'grid' ? 'dark-gradient text-white border border-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'}`}
                 >
                   <Grid size={20} />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2.5 rounded-lg category-btn ${viewMode === 'list' ? 'burgundy-gradient text-white' : 'bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] hover:bg-[rgba(158,80,44,0.2)]'}`}
+                  className={`p-2.5 rounded-lg category-btn ${viewMode === 'list' ? 'dark-gradient text-white border border-gray-700' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300'}`}
                 >
                   <List size={20} />
                 </button>
@@ -385,8 +406,8 @@ export function Gallery() {
                   onClick={() => setSelectedCategory(category)}
                   className={`category-btn px-4 py-2.5 rounded-full text-sm font-medium transition-all flex items-center ${
                     selectedCategory === category
-                      ? 'burgundy-gradient text-white shadow-lg'
-                      : 'bg-white text-gray-700 hover:bg-[rgba(158,80,44,0.1)] hover:text-[rgba(81,40,22,1)] border border-[#F0E6D2]'
+                      ? 'dark-gradient text-white shadow-lg border border-gray-700'
+                      : 'bg-white text-gray-700 hover:bg-gray-100 hover:text-gray-900 border border-gray-200'
                   }`}
                 >
                   {category === 'All' ? (
@@ -404,7 +425,7 @@ export function Gallery() {
 
           <div className="mt-4 flex items-center justify-between">
             <div className="text-sm text-gray-600">
-              Showing <span className="font-bold text-[rgba(158,80,44,1)]">{filteredGallery.length}</span> of {gallery.length} projects
+              Showing <span className="font-bold text-gray-900">{filteredGallery.length}</span> of {gallery.length} projects
             </div>
             <div className="flex items-center text-sm text-gray-500">
               <ImageIcon size={16} className="mr-1" />
@@ -418,10 +439,10 @@ export function Gallery() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredGallery.length === 0 ? (
             <div className="text-center py-24">
-              <div className="w-24 h-24 burgundy-gradient rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="text-white" size={32} />
+              <div className="w-24 h-24 silver-gradient rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search className="text-gray-900" size={32} />
               </div>
-              <h3 className="text-3xl font-bold text-[rgba(81,40,22,1)] mb-4">No Projects Found</h3>
+              <h3 className="text-3xl font-bold text-gray-900 mb-4">No Projects Found</h3>
               <p className="text-gray-600 max-w-md mx-auto mb-8">
                 Try adjusting your search or filter criteria to find what you're looking for
               </p>
@@ -430,7 +451,7 @@ export function Gallery() {
                   setSelectedCategory('All');
                   setSearchQuery('');
                 }}
-                className="px-6 py-3 burgundy-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all card-hover"
+                className="px-6 py-3 dark-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all card-hover border border-gray-700"
               >
                 Reset Filters
               </button>
@@ -440,7 +461,7 @@ export function Gallery() {
               {filteredGallery.map((item, index) => (
                 <div
                   key={index}
-                  className="grid-item group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl bg-white animate-on-scroll border border-[#F0E6D2] card-hover"
+                  className="grid-item group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl bg-white animate-on-scroll border border-gray-200 card-hover"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   <div className="aspect-[4/3] overflow-hidden relative">
@@ -456,7 +477,7 @@ export function Gallery() {
                       <Maximize2 className="text-white" size={20} />
                     </button>
                     <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-[rgba(81,40,22,1)] text-xs font-semibold rounded-full shadow-sm">
+                      <span className="px-3 py-1.5 bg-white/90 backdrop-blur-sm text-gray-900 text-xs font-semibold rounded-full shadow-sm">
                         {item.category}
                       </span>
                     </div>
@@ -477,7 +498,7 @@ export function Gallery() {
                   </div>
                   
                   <div className="p-5">
-                    <h3 className="text-lg font-bold text-[rgba(81,40,22,1)] mb-2 group-hover:text-[rgba(158,80,44,1)] transition-colors line-clamp-1">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors line-clamp-1">
                       {item.title}
                     </h3>
                     
@@ -493,7 +514,7 @@ export function Gallery() {
                       {item.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
-                          className="px-2.5 py-1 bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-xs font-medium rounded-full"
+                          className="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full"
                         >
                           {tag}
                         </span>
@@ -503,7 +524,7 @@ export function Gallery() {
                     <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                       <button
                         onClick={() => setSelectedImage(item)}
-                        className="text-sm text-[rgba(158,80,44,1)] hover:text-[rgba(81,40,22,1)] transition-colors font-semibold flex items-center group"
+                        className="text-sm text-gray-700 hover:text-gray-900 transition-colors font-semibold flex items-center group"
                       >
                         View Details
                         <ArrowRight size={16} className="ml-1.5 group-hover:translate-x-1 transition-transform" />
@@ -522,7 +543,7 @@ export function Gallery() {
               {filteredGallery.map((item, index) => (
                 <div
                   key={index}
-                  className="animate-on-scroll group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-[#F0E6D2] overflow-hidden card-hover"
+                  className="animate-on-scroll group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 overflow-hidden card-hover"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
                   <div className="flex flex-col md:flex-row">
@@ -546,16 +567,16 @@ export function Gallery() {
                     <div className="flex-1 p-6">
                       <div className="flex items-start justify-between mb-3">
                         <div>
-                          <span className="px-3 py-1 bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-sm font-semibold rounded-full">
+                          <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm font-semibold rounded-full">
                             {item.category}
                           </span>
-                          <h3 className="text-xl font-bold text-[rgba(81,40,22,1)] mt-3 mb-2 group-hover:text-[rgba(158,80,44,1)] transition-colors">{item.title}</h3>
+                          <h3 className="text-xl font-bold text-gray-900 mt-3 mb-2 group-hover:text-gray-700 transition-colors">{item.title}</h3>
                         </div>
                         <button
                           onClick={() => setSelectedImage(item)}
-                          className="p-2 rounded-lg bg-[rgba(158,80,44,0.1)] hover:bg-[rgba(158,80,44,0.2)] transition-colors"
+                          className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
                         >
-                          <ZoomIn size={20} className="text-[rgba(158,80,44,1)]" />
+                          <ZoomIn size={20} className="text-gray-700" />
                         </button>
                       </div>
                       
@@ -571,7 +592,7 @@ export function Gallery() {
                         {item.tags.map((tag, tagIndex) => (
                           <span
                             key={tagIndex}
-                            className="px-3 py-1.5 bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-sm font-medium rounded-full"
+                            className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full"
                           >
                             #{tag}
                           </span>
@@ -595,7 +616,7 @@ export function Gallery() {
                           </div>
                         </div>
                         
-                        <button className="px-4 py-2 burgundy-gradient text-white rounded-lg font-medium hover:shadow-lg transition-all card-hover">
+                        <button className="px-4 py-2 dark-gradient text-white rounded-lg font-medium hover:shadow-lg transition-all card-hover border border-gray-700">
                           Request Quote
                         </button>
                       </div>
@@ -608,7 +629,7 @@ export function Gallery() {
 
           {filteredGallery.length > 0 && (
             <div className="text-center mt-16">
-              <button className="group px-8 py-3.5 border-2 border-[rgba(120,60,33,1)] text-[rgba(81,40,22,1)] rounded-xl font-semibold hover:bg-[rgba(158,80,44,0.1)] hover:border-[rgba(158,80,44,1)] transition-all duration-300 inline-flex items-center card-hover">
+              <button className="group px-8 py-3.5 border-2 border-gray-600 text-gray-900 rounded-xl font-semibold hover:bg-gray-100 hover:border-gray-700 transition-all duration-300 inline-flex items-center card-hover">
                 <span>Load More Projects</span>
                 <ChevronRight size={20} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -630,11 +651,11 @@ export function Gallery() {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                  <button className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium hover:bg-white text-[rgba(81,40,22,1)] hover:text-[rgba(158,80,44,1)] transition-colors">
+                  <button className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium hover:bg-white text-gray-900 hover:text-gray-700 transition-colors">
                     <Download size={16} className="inline mr-2" />
                     Download
                   </button>
-                  <button className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium hover:bg-white text-[rgba(81,40,22,1)] hover:text-[rgba(158,80,44,1)] transition-colors">
+                  <button className="px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium hover:bg-white text-gray-900 hover:text-gray-700 transition-colors">
                     <Share2 size={16} className="inline mr-2" />
                     Share
                   </button>
@@ -650,18 +671,18 @@ export function Gallery() {
                 </button>
                 
                 <div className="mb-6">
-                  <span className="px-4 py-2 burgundy-gradient text-white text-sm font-semibold rounded-full">
+                  <span className="px-4 py-2 dark-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
                     {selectedImage.category}
                   </span>
-                  <h2 className="text-3xl font-bold text-[rgba(81,40,22,1)] mt-4 mb-3">
+                  <h2 className="text-3xl font-bold text-gray-900 mt-4 mb-3">
                     {selectedImage.title}
                   </h2>
                   
                   <div className="flex items-center text-gray-600 mb-6">
-                    <MapPin size={18} className="mr-2 text-[rgba(158,80,44,1)]" />
+                    <MapPin size={18} className="mr-2 text-gray-700" />
                     <span className="font-medium">{selectedImage.location}</span>
                     <span className="mx-3">•</span>
-                    <Calendar size={18} className="mr-2 text-[rgba(158,80,44,1)]" />
+                    <Calendar size={18} className="mr-2 text-gray-700" />
                     <span>{selectedImage.date}</span>
                   </div>
                 </div>
@@ -670,7 +691,7 @@ export function Gallery() {
                   {selectedImage.tags.map((tag, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1.5 bg-[rgba(158,80,44,0.1)] text-[rgba(158,80,44,1)] text-sm font-medium rounded-full"
+                      className="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full"
                     >
                       {tag}
                     </span>
@@ -679,7 +700,7 @@ export function Gallery() {
                 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="text-lg font-bold text-[rgba(81,40,22,1)] mb-3">Project Overview</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-3">Project Overview</h4>
                     <p className="text-gray-700 leading-relaxed">
                       This premium installation showcases exceptional craftsmanship and attention to detail. 
                       Using only the finest materials, our team transformed this space into a masterpiece 
@@ -689,10 +710,10 @@ export function Gallery() {
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-[rgba(158,80,44,0.05)] p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <div className="flex items-center mb-2">
-                        <Award size={20} className="text-[rgba(158,80,44,1)] mr-2" />
-                        <span className="font-semibold text-[rgba(81,40,22,1)]">Materials Used</span>
+                        <Award size={20} className="text-gray-600 mr-2" />
+                        <span className="font-semibold text-gray-900">Materials Used</span>
                       </div>
                       <ul className="text-sm text-gray-600 space-y-1">
                         <li>Premium Grade Porcelain Tiles</li>
@@ -701,10 +722,10 @@ export function Gallery() {
                       </ul>
                     </div>
                     
-                    <div className="bg-[rgba(158,80,44,0.05)] p-4 rounded-xl">
+                    <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
                       <div className="flex items-center mb-2">
-                        <Clock size={20} className="text-[rgba(158,80,44,1)] mr-2" />
-                        <span className="font-semibold text-[rgba(81,40,22,1)]">Project Timeline</span>
+                        <Clock size={20} className="text-gray-600 mr-2" />
+                        <span className="font-semibold text-gray-900">Project Timeline</span>
                       </div>
                       <ul className="text-sm text-gray-600 space-y-1">
                         <li>Design Phase: 2 weeks</li>
@@ -718,16 +739,16 @@ export function Gallery() {
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-4">
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-[rgba(158,80,44,1)]">{selectedImage.likes}</div>
+                          <div className="text-2xl font-bold text-gray-700">{selectedImage.likes}</div>
                           <div className="text-sm text-gray-500">Likes</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-[rgba(158,80,44,1)]">{selectedImage.views.toLocaleString()}</div>
+                          <div className="text-2xl font-bold text-gray-700">{selectedImage.views.toLocaleString()}</div>
                           <div className="text-sm text-gray-500">Views</div>
                         </div>
                       </div>
                       
-                      <button className="px-6 py-3 burgundy-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all card-hover">
+                      <button className="px-6 py-3 dark-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all card-hover border border-gray-700">
                         Request Similar Project
                       </button>
                     </div>
@@ -739,21 +760,20 @@ export function Gallery() {
         </div>
       )}
 
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[rgba(81,40,22,1)] via-[rgba(120,60,33,1)] to-[rgba(158,80,44,1)]"></div>
+      <section className="py-24 relative overflow-hidden dark-gradient">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[rgba(158,80,44,0.3)] rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[rgba(120,60,33,0.3)] rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-semibold border border-white/20">
+              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-semibold border border-gray-600">
                 <MapPin size={18} className="mr-2" /> Our Showroom
               </div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Experience Our <span className="">Showroom</span>
+                Experience Our <span className="showroom-text">Showroom</span>
               </h2>
               <p className="text-xl mb-8 text-gray-300 leading-relaxed">
                 Visit our state-of-the-art showroom to experience our premium tile collections in person. 
@@ -768,33 +788,33 @@ export function Gallery() {
                   { label: 'Design Experts', value: 'On-site' },
                   { label: 'Parking', value: 'Free' },
                 ].map((stat, index) => (
-                  <div key={index} className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-white/10">
-                    <div className="text-2xl font-bold text-[#ffffff] mb-1">{stat.value}</div>
-                    <div className="text-sm text-gray-300">{stat.label}</div>
+                  <div key={index} className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-gray-600">
+                    <div className="text-2xl font-bold text-gray-300 mb-1">{stat.value}</div>
+                    <div className="text-sm text-gray-400">{stat.label}</div>
                   </div>
                 ))}
               </div>
               
               <div className="flex flex-wrap gap-4">
-                <button className="group px-8 py-4 bg-white text-[rgba(81,40,22,1)] rounded-xl font-semibold hover:bg-[rgba(158,80,44,1)] hover:text-white hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 card-hover">
+                <button className="group px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 card-hover">
                   <MapPin size={20} className="mr-2" />
                   <span>Get Directions</span>
                   <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
                 </button>
                 
-                <button className="group px-8 py-4 border-2 border-white/30 text-white rounded-xl font-semibold hover:bg-white/10 hover:border-[rgba(158,80,44,1)] transition-all duration-300 flex items-center space-x-3 card-hover">
+                <button className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/10 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover">
                   <Calendar size={20} className="mr-2" />
                   <span>Book Appointment</span>
                 </button>
               </div>
             </div>
             
-            {/* <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
-              <div className="bg-gradient-to-br from-[rgba(158,80,44,1)] to-[rgba(120,60,33,1)] rounded-2xl p-1 card-hover">
-                <div className="bg-[rgba(81,40,22,1)] rounded-xl p-8 text-white">
+            <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
+              <div className="silver-gradient-dark rounded-2xl p-1 card-hover">
+                <div className="bg-gray-900 rounded-xl p-8 text-white">
                   <div className="text-center mb-8">
-                    <div className="w-20 h-20 burgundy-gradient rounded-full flex items-center justify-center mx-auto mb-6 animate-float">
-                      <Play className="text-white" size={32} />
+                    <div className="w-20 h-20 silver-gradient rounded-full flex items-center justify-center mx-auto mb-6 animate-float">
+                      <Play className="text-gray-900" size={32} />
                     </div>
                     <h3 className="text-2xl font-bold mb-2">Virtual Tour Available</h3>
                     <p className="text-gray-300">Explore our showroom from anywhere</p>
@@ -802,8 +822,8 @@ export function Gallery() {
                   
                   <div className="space-y-6">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-lg burgundy-gradient flex items-center justify-center mr-4">
-                        <Star className="text-white" size={24} />
+                      <div className="w-12 h-12 rounded-lg silver-gradient flex items-center justify-center mr-4">
+                        <Star className="text-gray-900" size={24} />
                       </div>
                       <div>
                         <div className="font-semibold">Live Demonstrations</div>
@@ -812,8 +832,8 @@ export function Gallery() {
                     </div>
                     
                     <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-lg burgundy-gradient flex items-center justify-center mr-4">
-                        <Users className="text-white" size={24} />
+                      <div className="w-12 h-12 rounded-lg silver-gradient flex items-center justify-center mr-4">
+                        <Users className="text-gray-900" size={24} />
                       </div>
                       <div>
                         <div className="font-semibold">Expert Consultations</div>
@@ -822,8 +842,8 @@ export function Gallery() {
                     </div>
                     
                     <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-lg burgundy-gradient flex items-center justify-center mr-4">
-                        <Award className="text-white" size={24} />
+                      <div className="w-12 h-12 rounded-lg silver-gradient flex items-center justify-center mr-4">
+                        <Award className="text-gray-900" size={24} />
                       </div>
                       <div>
                         <div className="font-semibold">Sample Collection</div>
@@ -839,7 +859,7 @@ export function Gallery() {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
       </section>

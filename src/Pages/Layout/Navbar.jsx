@@ -27,11 +27,11 @@ export function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50
-        bg-gradient-to-r from-[#2C1C10] via-[#3D2817] to-[#2C1C10]
-        transition-shadow duration-300
+        bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900
+        transition-all duration-300
         ${scrolled ? 'shadow-2xl' : ''}
       `}
-      style={{ height: '80px' }}   // 🔒 FIXED NAVBAR HEIGHT
+      style={{ height: '80px' }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
         <div className="flex justify-between items-center h-full">
@@ -42,7 +42,7 @@ export function Navbar() {
               src="/sim.webp"
               alt="Simpolo"
               className={`
-                max-h-[110px]
+                max-h-[90px]
                 w-auto
                 object-contain
                 transition-transform duration-300
@@ -62,24 +62,24 @@ export function Navbar() {
                 <span
                   className={`text-sm transition-colors ${
                     isActive(link.path)
-                      ? 'text-[#FFD700]'
-                      : 'text-gray-300 hover:text-[#FFD700]'
+                      ? 'text-gray-300'
+                      : 'text-gray-400 hover:text-gray-300'
                   }`}
                 >
                   {link.label}
                 </span>
 
                 {isActive(link.path) && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FFD700] to-[#D4AF37] rounded-full" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gray-400 via-gray-300 to-gray-400 rounded-full" />
                 )}
               </Link>
             ))}
 
             <Link
               to="/contact"
-              className="ml-6 px-6 py-2.5 bg-gradient-to-r from-[#B8860B] to-[#D4AF37]
+              className="ml-6 px-6 py-2.5 bg-gradient-to-r from-gray-700 via-gray-600 to-gray-700
               text-white rounded-xl font-medium flex items-center space-x-2
-              hover:shadow-lg hover:shadow-[#D4AF37]/20 transition-all"
+              hover:shadow-lg hover:shadow-gray-600/20 transition-all border border-gray-600"
             >
               <Phone size={16} />
               <span>Get Quote</span>
@@ -98,36 +98,39 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* MOBILE MENU */}
+        {/* MOBILE MENU - Fixed positioning */}
         {isOpen && (
-          <div className="lg:hidden mt-2 border-t border-white/10 pt-4 pb-4">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                onClick={() => setIsOpen(false)}
-                className={`block px-4 py-3 rounded-lg transition-all ${
-                  isActive(link.path)
-                    ? 'bg-gradient-to-r from-[#B8860B]/20 to-[#D4AF37]/20 text-[#FFD700]'
-                    : 'text-gray-300 hover:bg-white/10 hover:text-white'
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{link.label}</span>
-                  {isActive(link.path) && <Sparkles size={16} />}
-                </div>
-              </Link>
-            ))}
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-gradient-to-b from-gray-900 to-gray-800 shadow-2xl border-t border-gray-700">
+            <div className="px-4 pt-4 pb-6">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setIsOpen(false)}
+                  className={`block px-4 py-3 rounded-lg transition-all mb-2 ${
+                    isActive(link.path)
+                      ? 'bg-gradient-to-r from-gray-700/30 to-gray-600/30 text-gray-300 border-l-4 border-gray-300'
+                      : 'text-gray-400 hover:bg-gray-800 hover:text-gray-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">{link.label}</span>
+                    {isActive(link.path) && <Sparkles size={16} className="text-gray-300" />}
+                  </div>
+                </Link>
+              ))}
 
-            <Link
-              to="/contact"
-              onClick={() => setIsOpen(false)}
-              className="block mt-4 mx-4 px-4 py-3
-              bg-gradient-to-r from-[#B8860B] to-[#D4AF37]
-              text-white rounded-xl font-medium text-center"
-            >
-              Request a Quote
-            </Link>
+              <Link
+                to="/contact"
+                onClick={() => setIsOpen(false)}
+                className="block mt-6 mx-4 px-4 py-3
+                bg-gradient-to-r from-gray-700 to-gray-600
+                text-white rounded-xl font-medium text-center border border-gray-600
+                hover:shadow-lg hover:shadow-gray-600/20 transition-all"
+              >
+                Request a Quote
+              </Link>
+            </div>
           </div>
         )}
       </div>
