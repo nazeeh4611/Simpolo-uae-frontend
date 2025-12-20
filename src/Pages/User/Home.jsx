@@ -359,11 +359,11 @@ function HomePage() {
       <h1 className="mb-6 leading-tight text-white">
   <div className="relative inline-block">
     {/* Main Title */}
-    <span className="block text-5xl md:text-6xl lg:text-7xl font-bold">
+    <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
       SIMPOLO
     </span>
 
-    <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-semibold">
+    <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
   TRADING LLC
 </span>
 
