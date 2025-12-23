@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
-import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Heart, Share2, Eye, Calendar, Star } from 'lucide-react';
+import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 
-export function Portfolio() {
+ function Portfolio() {
   const projects = [
     { 
       name: 'Sharjah Budaiya Suburb', 
@@ -85,15 +85,6 @@ export function Portfolio() {
       date: '2021',
       image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
       description: 'Exclusive beachfront residences'
-    },
-    { 
-      name: 'Nakheel Projects', 
-      location: 'Dubai', 
-      type: 'Mixed Use',
-      category: 'iconic',
-      date: '2021',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
-      description: 'Mixed-use development featuring retail and residential'
     },
   ];
 
@@ -216,14 +207,8 @@ export function Portfolio() {
           background-size: 200% 200%;
           animation: gradientShift 3s ease infinite;
         }
-        .silver-gradient-dark {
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
-        }
         .dark-gradient {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%);
-        }
-        .light-gradient {
-          background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%);
         }
         .card-hover {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -237,12 +222,6 @@ export function Portfolio() {
         }
         .project-card:hover {
           transform: translateY(-5px) scale(1.02);
-        }
-        .category-badge {
-          transition: all 0.3s ease;
-        }
-        .category-badge:hover {
-          transform: scale(1.1);
         }
         .typewriter-cursor {
           display: inline-block;
@@ -287,7 +266,7 @@ export function Portfolio() {
         }
       `}</style>
 
-<section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-24">
+      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-24">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full blur-3xl animate-float"></div>
           <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
@@ -365,87 +344,34 @@ export function Portfolio() {
                 A showcase of our most prestigious and challenging projects across the UAE
               </p>
             </div>
-            <div className="mt-4 lg:mt-0 flex gap-2 animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              {['All', 'Iconic', 'Luxury', 'Premium', 'Specialty'].map((category) => (
-                <button
-                  key={category}
-                  className="px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors border border-gray-300"
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
-              <div
+              <Link
                 key={index}
-                className="animate-on-scroll project-card bg-white rounded-2xl shadow-sm overflow-hidden card-hover border border-gray-200"
+                to={`/gallery?project=${project.name.toLowerCase().replace(/\s+/g, '-')}`}
+                className="animate-on-scroll project-card group relative overflow-hidden rounded-none shadow-lg card-hover"
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
-                <div className="relative h-48 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent z-10"></div>
+                <div className="relative h-96 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                   <img
                     src={project.image}
                     alt={project.name}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute top-4 right-4 z-20">
-                    <span className={`category-badge px-3 py-1 text-xs font-medium rounded-full ${
-                      project.category === 'luxury' ? 'dark-gradient text-white border border-gray-700' :
-                      project.category === 'iconic' ? 'bg-gray-800 text-white' :
-                      project.category === 'specialty' ? 'bg-gray-700 text-white' :
-                      'bg-gray-600 text-white'
-                    }`}>
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex items-start">
-                      <div className="p-2 rounded-lg bg-gray-100 mr-3">
-                        <Building2 className="text-gray-700" size={20} />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-1 hover:text-gray-700 transition-colors">{project.name}</h3>
-                        <div className="flex items-center text-gray-600 text-sm">
-                          <MapPin size={14} className="mr-1" />
-                          {project.location}
-                          <span className="mx-2">•</span>
-                          <Calendar size={14} className="mr-1" />
-                          {project.date}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
                   
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">{project.description}</p>
-                  
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">
-                      {project.type}
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <button className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200">
-                        <Eye size={16} className="text-gray-600" />
-                      </button>
-                      <button className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200">
-                        <Share2 size={16} className="text-gray-600" />
-                      </button>
-                      <Link
-                        to={`/gallery?project=${project.name.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="text-sm text-gray-700 hover:text-gray-900 transition-colors flex items-center"
-                      >
-                        Details
-                        <ChevronRight size={14} className="ml-1" />
-                      </Link>
+                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+                    <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors uppercase tracking-wide">
+                      {project.name}
+                    </h3>
+                    <div className="flex items-center text-white/90 text-sm font-medium">
+                      <span className="uppercase tracking-wider">{project.type}</span>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
@@ -603,3 +529,4 @@ export function Portfolio() {
     </div>
   );
 }
+export default Portfolio

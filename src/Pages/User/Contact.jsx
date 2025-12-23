@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Clock, Send, ChevronRight, MessageSquare, Building, User, Globe, Calendar, Shield, CheckCircle, ArrowRight, Sparkles, Award, Target, Users } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 
-export function Contact() {
+ function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -717,3 +717,5 @@ export function Contact() {
     </div>
   );
 }
+
+export default Contact

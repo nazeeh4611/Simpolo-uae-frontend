@@ -3,7 +3,7 @@ import { Package, Settings, Layers, Hammer, ChevronRight, CheckCircle2, Sparkles
 import { Link } from 'react-router-dom';
 import Typewriter from 'typewriter-effect';
 
-export function Services() {
+ function Services() {
   const products = [
     {
       title: 'Porcelain Tiles',
@@ -620,3 +620,4 @@ export function Services() {
     </div>
   );
 }
+export default Services

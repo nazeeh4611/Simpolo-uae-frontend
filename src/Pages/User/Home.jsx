@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronRight, Sparkles, Award, Clock, Shield, Star, TrendingUp, Users, Zap, Package, Globe, Truck, CheckCircle, Home, Building, Hotel, ShoppingBag, Phone, Mail, MapPin } from 'lucide-react';
@@ -241,14 +239,15 @@ function HomePage() {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-hover:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
         .grid-item {
-          transition: all 0.4s ease;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .grid-item:hover {
-          transform: translateY(-5px);
+          transform: translateY(-8px) scale(1.02);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
         }
         .shimmer {
           background: linear-gradient(90deg, transparent, rgba(192, 192, 192, 0.3), transparent);
@@ -358,7 +357,6 @@ function HomePage() {
 
       <h1 className="mb-6 leading-tight text-white">
   <div className="relative inline-block">
-    {/* Main Title */}
     <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
       SIMPOLO
     </span>
@@ -389,6 +387,7 @@ function HomePage() {
             loop: true,
             delay: 50,
             deleteSpeed: 30,
+            cursorClassName: 'typewriter-cursor'
           }}
         />
       </div>
@@ -403,18 +402,18 @@ function HomePage() {
       <div className="flex flex-wrap gap-4">
         <Link
           to="/contact"
-          className="px-8 py-4 dark-gradient rounded-xl font-semibold hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 border border-gray-700"
+          className="group px-8 py-4 dark-gradient rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700"
         >
           <span>Get Free Consultation</span>
-          <ArrowRight size={20} />
+          <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
         </Link>
 
         <Link
           to="/services"
-          className="px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/10 transition-all duration-300 flex items-center space-x-3"
+          className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/10 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover"
         >
           <span>View Products</span>
-          <ChevronRight size={20} />
+          <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
         </Link>
       </div>
     </div>
@@ -426,7 +425,7 @@ function HomePage() {
         {features.map((feature, index) => (
           <div
             key={index}
-            className="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-gray-600 hover:bg-white/15 transition-all duration-300"
+            className="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-gray-600 hover:bg-white/15 transition-all duration-300 card-hover"
           >
             <div className="flex items-start space-x-3">
               <div className="p-2.5 rounded-lg silver-gradient">
@@ -453,7 +452,7 @@ function HomePage() {
             {stats.map((stat, index) => (
               <div 
                 key={index}
-                className="animate-on-scroll text-center p-6 rounded-2xl bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:shadow-lg transition-all duration-300 card-hover"
+                className="animate-on-scroll text-center p-6 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer card-hover bg-white border border-gray-200"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4">
@@ -512,19 +511,20 @@ function HomePage() {
             </div>
             
             <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
-              <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl card-hover border border-gray-200">
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1531586024505-b040066c2d5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
                   alt="Dubai building"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-gray-900/95 to-transparent p-8 text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
                   <div className="text-xl font-semibold mb-2">Serving UAE Since 2008</div>
                   <div className="text-sm text-gray-300">Transforming spaces across the Emirates</div>
                 </div>
               </div>
               
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl w-64 border border-gray-200">
+              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl w-64 border border-gray-200 card-hover">
                 <div className="flex items-center mb-4">
                   <div className="p-2 rounded-lg silver-gradient mr-3">
                     <Package size={20} className="text-gray-900" />
@@ -565,33 +565,38 @@ function HomePage() {
               <Link
                 key={index}
                 to={product.link}
-                className="group animate-on-scroll grid-item bg-white rounded-2xl shadow-lg overflow-hidden card-hover border border-gray-200"
+                className="group animate-on-scroll grid-item relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer card-hover bg-white border border-gray-200"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="relative h-64 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                   <ImageWithFallback
                     src={product.src}
                     alt={product.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1 dark-gradient text-white text-xs font-semibold rounded-full shadow-lg border border-gray-700">
+                  <div className="absolute top-4 right-4 z-20">
+                    <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300">
                       {product.tag}
                     </span>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+                    <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors">
+                      {product.title}
+                    </h3>
+                    <div className="text-white/90 text-sm font-medium">
+                      Explore Collection
+                    </div>
                   </div>
                 </div>
                 
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-gray-700 transition-colors">
-                    {product.title}
-                  </h3>
                   <p className="text-gray-600 mb-4 leading-relaxed">
                     {product.description}
                   </p>
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                     <span className="text-sm text-gray-700 font-semibold flex items-center">
-                      Explore Collection
+                      View Details
                       <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
                     </span>
                     <Zap size={18} className="text-gray-600" />
@@ -627,7 +632,7 @@ function HomePage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {services.map((service, index) => (
-                  <div key={index} className="p-6 rounded-2xl bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:shadow-lg transition-all duration-300 card-hover">
+                  <div key={index} className="p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 card-hover bg-white border border-gray-200">
                     <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4">
                       <service.icon className="text-gray-900" size={24} />
                     </div>
@@ -639,7 +644,7 @@ function HomePage() {
             </div>
             
             <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="dark-gradient rounded-2xl p-8 text-white h-full border border-gray-700">
+              <div className="dark-gradient rounded-2xl p-8 text-white h-full border border-gray-700 card-hover">
                 <h3 className="text-2xl font-bold mb-6 text-gray-300">Why Choose Us?</h3>
                 <ul className="space-y-4">
                   {benefits.map((benefit, index) => (
@@ -650,7 +655,7 @@ function HomePage() {
                   ))}
                 </ul>
                 
-                <div className="mt-8 p-6 bg-white/10 rounded-xl border border-gray-700">
+                <div className="mt-8 p-6 bg-white/10 rounded-xl border border-gray-700 card-hover">
                   <div className="flex items-center mb-4">
                     <Truck size={24} className="text-gray-400 mr-3" />
                     <div>
@@ -680,18 +685,18 @@ function HomePage() {
             {showcaseImages.map((image, index) => (
               <div
                 key={index}
-                className="animate-on-scroll group relative h-80 rounded-2xl overflow-hidden shadow-lg card-hover cursor-pointer border border-gray-200"
+                className="group animate-on-scroll relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer card-hover border border-gray-200"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
                 <ImageWithFallback
                   src={image.src}
                   alt={image.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/50 to-transparent opacity-70 group-hover:opacity-90 transition-opacity duration-300"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
                   <div className="text-xs font-semibold text-gray-300 mb-2">{image.category}</div>
-                  <div className="text-lg font-bold">{image.title}</div>
+                  <div className="text-lg font-bold group-hover:text-gray-200 transition-colors">{image.title}</div>
                 </div>
               </div>
             ))}
@@ -713,7 +718,7 @@ function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 animate-on-scroll">
-              <div className="dark-gradient rounded-2xl p-8 text-white border border-gray-700">
+              <div className="dark-gradient rounded-2xl p-8 text-white border border-gray-700 card-hover">
                 <h3 className="text-2xl font-bold mb-6 text-gray-300">Contact Information</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-start">
@@ -757,7 +762,7 @@ function HomePage() {
             </div>
             
             <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="silver-gradient-dark rounded-2xl p-8 h-full border border-gray-600">
+              <div className="silver-gradient-dark rounded-2xl p-8 h-full border border-gray-600 card-hover">
                 <h3 className="text-2xl font-bold mb-6 text-gray-900">Quick Inquiry</h3>
                 <p className="text-gray-700 mb-6">Get a free quote for your project</p>
                 <Link
@@ -794,7 +799,7 @@ function HomePage() {
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 to="/contact"
-                className="group px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-300"
+                className="group px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-300"
               >
                 <span>Contact Our Experts</span>
                 <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />

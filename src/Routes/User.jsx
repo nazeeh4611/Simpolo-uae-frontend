@@ -1,16 +1,15 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+
 import HomePage from "../Pages/User/Home";
-import { About } from "../Pages/User/About";
-import { Services } from "../Pages/User/Services";
-import { Portfolio } from "../Pages/User/Portfolio";
-import { Contact } from "../Pages/User/Contact";
-import { Gallery } from "../Pages/User/Gallery";
-import { Navbar } from "../Pages/Layout/Navbar";
-import { Footer } from "../Pages/Layout/Footer";
-
-
+import {Navbar} from "../Pages/Layout/Navbar"
+import {Footer} from "../Pages/Layout/Footer"
+import About from "../Pages/User/About"
+import  Services  from "../Pages/User/Services";
+import Portfolio from "../Pages/User/Portfolio"
+import Gallery from "../Pages/User/Gallery";
+import Contact from "../Pages/User/Contact";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -25,7 +24,7 @@ function ScrollToTop() {
   return null;
 }
 
-function User() {
+function UserRoutes() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FAF7F0] to-white overflow-x-hidden">
       <ScrollToTop />
@@ -51,11 +50,11 @@ function User() {
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="about" element={<About />} />
-        <Route path="services" element={<Services />} />
-        <Route path="portfolio" element={<Portfolio />} />
-        <Route path="gallery" element={<Gallery />} />
-        <Route path="contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
 
       <Footer />
@@ -63,4 +62,4 @@ function User() {
   );
 }
 
-export default User;
+export default UserRoutes;

@@ -1,20 +1,19 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import User from './User';
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
+import UserRoutes from './User';
+import AdminRoutes from './Admin';
 
 function AppRoute() {
   return (
-    <>
-      <Router>
- 
-          <Routes>
-            <Route path="/*" element={<User />} />
-            {/* <Route path="/admin/*" element={<AdminRoute />} /> */}
-          </Routes>
-    </Router>
-    </>
-  )
+    <Routes>
+      <Route path="/admin/*" element={<AdminRoutes />} />
+
+      <Route path="/*" element={<UserRoutes />} />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
-export default AppRoute
+export default AppRoute;

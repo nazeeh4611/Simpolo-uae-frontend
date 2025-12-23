@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Target, Eye, Award, ChevronRight, Users, Globe, Building, CheckCircle, Sparkles, TrendingUp, Shield, Star, Package, Truck, Clock, MapPin, Phone, Mail, Award as AwardIcon, Trophy, Briefcase, Heart } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 
-export function About() {
+ function About() {
   const partners = [
     { name: 'Simpolo Ceramics', logo: 'SC' },
     { name: 'Volark Indian Tiles', logo: 'VIT' },
@@ -671,3 +671,5 @@ export function About() {
     </div>
   );
 }
+
+export default About
