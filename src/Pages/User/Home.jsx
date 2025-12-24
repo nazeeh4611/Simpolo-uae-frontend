@@ -6,7 +6,6 @@ import Typewriter from 'typewriter-effect';
 
 function HomePage() {
   const [loaded, setLoaded] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const videoRef = useRef(null);
 
   const features = [
@@ -188,7 +187,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-black">
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes fadeInUp {
           from {
@@ -204,9 +203,9 @@ function HomePage() {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
         }
-        @keyframes shimmer {
-          0% { background-position: -1000px 0; }
-          100% { background-position: 1000px 0; }
+        @keyframes swordShimmer {
+          0% { background-position: -100% 0; }
+          100% { background-position: 200% 0; }
         }
         @keyframes gradientShift {
           0%, 100% { background-position: 0% 50%; }
@@ -218,6 +217,30 @@ function HomePage() {
         .animate-float {
           animation: float 3s ease-in-out infinite;
         }
+        .sword-shimmer {
+          background: linear-gradient(90deg, 
+            transparent, 
+            rgba(192, 192, 192, 0.1), 
+            rgba(192, 192, 192, 0.3), 
+            rgba(192, 192, 192, 0.6), 
+            rgba(192, 192, 192, 0.3), 
+            rgba(192, 192, 192, 0.1), 
+            transparent
+          );
+          background-size: 200% 100%;
+          animation: swordShimmer 3s infinite linear;
+        }
+        .sword-gradient {
+          background: linear-gradient(135deg, 
+            #000000 0%, 
+            #1a1a1a 25%, 
+            #2d2d2d 50%, 
+            #1a1a1a 75%, 
+            #000000 100%
+          );
+          background-size: 200% 200%;
+          animation: gradientShift 4s ease infinite;
+        }
         .silver-gradient {
           background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           background-size: 200% 200%;
@@ -227,36 +250,28 @@ function HomePage() {
           background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
         }
         .dark-gradient {
-          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%);
-        }
-        .light-gradient {
-          background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%);
+          background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
         }
         .hero-gradient {
-          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 30%, #404040 70%, #2d2d2d 100%);
+          background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #2d2d2d 70%, #1a1a1a 100%);
         }
         .card-hover {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-hover:hover {
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+          transform: translateY(-8px);
+          box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
         }
         .grid-item {
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .grid-item:hover {
-          transform: translateY(-8px) scale(1.02);
-          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-        .shimmer {
-          background: linear-gradient(90deg, transparent, rgba(192, 192, 192, 0.3), transparent);
-          background-size: 1000px 100%;
-          animation: shimmer 3s infinite;
+          transform: translateY(-8px);
+          box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
         }
         .trading-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -266,7 +281,7 @@ function HomePage() {
         }
         .collections-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -276,7 +291,7 @@ function HomePage() {
         }
         .showcase-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -286,7 +301,7 @@ function HomePage() {
         }
         .excellence-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -296,7 +311,7 @@ function HomePage() {
         }
         .transform-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -307,13 +322,46 @@ function HomePage() {
         .typewriter-cursor {
           display: inline-block;
           width: 3px;
-          background: #808080;
+          background: #c0c0c0;
           margin-left: 4px;
           animation: blink 1s infinite;
         }
         @keyframes blink {
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
+        }
+        .image-card-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.8) 100%);
+          z-index: 1;
+        }
+        .image-card-content {
+          position: relative;
+          z-index: 2;
+        }
+        .silver-button-shine {
+          position: relative;
+          overflow: hidden;
+        }
+        .silver-button-shine::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -60%;
+          width: 20%;
+          height: 200%;
+          background: linear-gradient(
+            rgba(255, 255, 255, 0.3), 
+            rgba(255, 255, 255, 0.1) 50%, 
+            rgba(255, 255, 255, 0.3)
+          );
+          transform: rotate(30deg);
+          animation: buttonShine 3s infinite linear;
+        }
+        @keyframes buttonShine {
+          0% { left: -60%; }
+          100% { left: 140%; }
         }
       `}} />
 
@@ -335,42 +383,41 @@ function HomePage() {
       />
     </video>
 
-    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-gray-900/70 to-black/80" />
+    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/70 to-black/80" />
   </div>
 
   <div className="absolute inset-0 z-10 pointer-events-none">
-    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700/20 rounded-full blur-3xl animate-float" />
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800/20 rounded-full blur-3xl animate-float" />
     <div
-      className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600/20 rounded-full blur-3xl animate-float"
+      className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700/20 rounded-full blur-3xl animate-float"
       style={{ animationDelay: "1.5s" }}
     />
   </div>
 
   <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-32 pb-20">
     <div className="max-w-3xl">
-      <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur border border-gray-600">
-        <Sparkles size={18} className="mr-2 text-gray-300" />
-        <span className="text-gray-300 font-medium">
+      <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
+        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+        <Sparkles size={18} className="mr-2 text-gray-400 relative z-10" />
+        <span className="text-gray-400 font-medium relative z-10">
           Premier Tile Solutions
         </span>
       </div>
 
       <h1 className="mb-6 leading-tight text-white">
-  <div className="relative inline-block">
-    <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
-      SIMPOLO
-    </span>
+        <div className="relative inline-block">
+          <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
+            SIMPOLO
+          </span>
+          <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
+            TRADING LLC
+          </span>
+        </div>
+      </h1>
 
-    <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
-  TRADING LLC
-</span>
-
-
-  </div>
-</h1>
-
-
-      <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full" />
+      <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
+        <div className="absolute inset-0 sword-shimmer"></div>
+      </div>
 
       <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
         <Typewriter
@@ -402,18 +449,20 @@ function HomePage() {
       <div className="flex flex-wrap gap-4">
         <Link
           to="/contact"
-          className="group px-8 py-4 dark-gradient rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700"
+          className="group px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
         >
-          <span>Get Free Consultation</span>
-          <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+          <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+          <span className="relative z-10">Get Free Consultation</span>
+          <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
         </Link>
 
         <Link
           to="/services"
-          className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/10 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover"
+          className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/5 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
         >
-          <span>View Products</span>
-          <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
+          <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+          <span className="relative z-10">View Products</span>
+          <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
         </Link>
       </div>
     </div>
@@ -425,15 +474,17 @@ function HomePage() {
         {features.map((feature, index) => (
           <div
             key={index}
-            className="bg-white/10 backdrop-blur-md p-5 rounded-xl border border-gray-600 hover:bg-white/15 transition-all duration-300 card-hover"
+            className="bg-white/5 backdrop-blur-md p-5 rounded-xl hover:bg-white/10 transition-all duration-300 card-hover relative overflow-hidden group"
           >
-            <div className="flex items-start space-x-3">
-              <div className="p-2.5 rounded-lg silver-gradient">
-                <feature.icon className="text-gray-900" size={22} />
+            <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+            <div className="flex items-start space-x-3 relative z-10">
+              <div className="p-2.5 rounded-lg silver-gradient relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                <feature.icon className="text-gray-900 relative z-10" size={22} />
               </div>
               <div>
                 <div className="font-semibold mb-1 text-white">{feature.title}</div>
-                <div className="text-sm text-gray-300">
+                <div className="text-sm text-gray-400">
                   {feature.description}
                 </div>
               </div>
@@ -445,36 +496,39 @@ function HomePage() {
   </div>
 </section>
 
-
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
             {stats.map((stat, index) => (
               <div 
                 key={index}
-                className="animate-on-scroll text-center p-6 rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer card-hover bg-white border border-gray-200"
+                className="animate-on-scroll text-center p-6 rounded-2xl hover:shadow-2xl cursor-pointer card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4">
-                  <stat.icon className="text-gray-900" size={24} />
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4 relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                  <stat.icon className="text-gray-900 relative z-10" size={24} />
                 </div>
-                <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                <div className="text-sm text-gray-600 font-medium">{stat.label}</div>
+                <div className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
+                <div className="text-sm text-gray-400 font-medium">{stat.label}</div>
               </div>
             ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold border border-gray-300">
-                <Award size={18} className="mr-2" /> Our Story
+              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                <Award size={18} className="mr-2 relative z-10" /> 
+                <span className="relative z-10">Our Story</span>
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Pioneering <span className="excellence-text">Excellence</span> in Tile Solutions
               </h2>
               
-              <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
                 <p>
                   Established in the heart of UAE, Simpolo Trading LLC has emerged as a leading provider 
                   of premium tiles and sanitary solutions. With over 15 years of industry experience, 
@@ -494,8 +548,8 @@ function HomePage() {
               
               <div className="mt-8 grid grid-cols-2 gap-4">
                 {benefits.slice(0, 4).map((benefit, index) => (
-                  <div key={index} className="flex items-center text-gray-700">
-                    <CheckCircle size={18} className="text-gray-600 mr-2 flex-shrink-0" />
+                  <div key={index} className="flex items-center text-gray-300">
+                    <CheckCircle size={18} className="text-gray-400 mr-2 flex-shrink-0" />
                     <span className="text-sm">{benefit}</span>
                   </div>
                 ))}
@@ -503,44 +557,48 @@ function HomePage() {
               
               <Link
                 to="/about"
-                className="group inline-flex items-center mt-8 px-6 py-3 dark-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700"
+                className="group inline-flex items-center mt-8 px-6 py-3 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
               >
-                <span>Discover Our Journey</span>
-                <ChevronRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                <span className="relative z-10">Discover Our Journey</span>
+                <ChevronRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
               </Link>
             </div>
             
             <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
-              <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl card-hover border border-gray-200">
+              <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl card-hover group">
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1531586024505-b040066c2d5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
                   alt="Dubai building"
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-                  <div className="text-xl font-semibold mb-2">Serving UAE Since 2008</div>
+                <div className="image-card-overlay"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-8 image-card-content">
+                  <div className="text-xl font-semibold mb-2 text-white">Serving UAE Since 2008</div>
                   <div className="text-sm text-gray-300">Transforming spaces across the Emirates</div>
                 </div>
               </div>
               
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-2xl shadow-2xl w-64 border border-gray-200 card-hover">
-                <div className="flex items-center mb-4">
-                  <div className="p-2 rounded-lg silver-gradient mr-3">
-                    <Package size={20} className="text-gray-900" />
+              <div className="absolute -bottom-6 -left-6 bg-white/5 backdrop-blur-md p-6 rounded-2xl shadow-2xl w-64 card-hover group relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <div className="flex items-center mb-4 relative z-10">
+                  <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                    <Package size={20} className="text-gray-900 relative z-10" />
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900">24,000+ m²</div>
-                    <div className="text-sm text-gray-600">Annual Production</div>
+                    <div className="font-bold text-white">24,000+ m²</div>
+                    <div className="text-sm text-gray-400">Annual Production</div>
                   </div>
                 </div>
-                <div className="flex items-center">
-                  <div className="p-2 rounded-lg silver-gradient mr-3">
-                    <Globe size={20} className="text-gray-900" />
+                <div className="flex items-center relative z-10">
+                  <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                    <Globe size={20} className="text-gray-900 relative z-10" />
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900">50+ Countries</div>
-                    <div className="text-sm text-gray-600">Global Reach</div>
+                    <div className="font-bold text-white">50+ Countries</div>
+                    <div className="text-sm text-gray-400">Global Reach</div>
                   </div>
                 </div>
               </div>
@@ -549,104 +607,108 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-              Premium <span className="collections-text">Collections</span>
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              Explore our curated selection of high-quality materials and innovative tile solutions for every space
-            </p>
-          </div>
+      <section className="py-24 bg-black">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product, index) => (
-              <Link
-                key={index}
-                to={product.link}
-                className="group animate-on-scroll grid-item relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer card-hover bg-white border border-gray-200"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-                  <ImageWithFallback
-                    src={product.src}
-                    alt={product.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute top-4 right-4 z-20">
-                    <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300">
-                      {product.tag}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-                    <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors">
-                      {product.title}
-                    </h3>
-                    <div className="text-white/90 text-sm font-medium">
-                      Explore Collection
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <span className="text-sm text-gray-700 font-semibold flex items-center">
-                      View Details
-                      <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <Zap size={18} className="text-gray-600" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+    {/* Section Header */}
+    <div className="text-center mb-16 animate-on-scroll">
+      <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+        Premium <span className="collections-text">Collections</span>
+      </h2>
+      <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+        Explore our curated selection of high-quality materials and innovative tile solutions for every space
+      </p>
+    </div>
 
-          <div className="text-center mt-12 animate-on-scroll">
-            <Link
-              to="/services"
-              className="group inline-flex items-center px-8 py-4 dark-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700"
-            >
-              <span>View All Product Categories</span>
-              <ChevronRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
-            </Link>
-          </div>
-        </div>
-      </section>
+    {/* Image Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {products.map((product, index) => (
+        <Link
+          key={index}
+          to={product.link}
+          className="group animate-on-scroll relative overflow-hidden rounded-2xl cursor-pointer"
+          style={{ animationDelay: `${index * 0.1}s` }}
+        >
+          {/* Image */}
+          <div className="relative h-80 overflow-hidden">
+            <ImageWithFallback
+              src={product.src}
+              alt={product.title}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
 
-      <section className="py-24 bg-white">
+            {/* Dark Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+            {/* Category Name */}
+            <div className="absolute bottom-6 left-6">
+              <h3 className="text-white text-2xl font-semibold tracking-wide">
+                {product.title}
+              </h3>
+            </div>
+
+            {/* Optional Tag (top-right) */}
+            {product.tag && (
+              <div className="absolute top-4 right-4">
+                <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white/90 text-gray-900">
+                  {product.tag}
+                </span>
+              </div>
+            )}
+          </div>
+        </Link>
+      ))}
+    </div>
+
+    {/* CTA */}
+    <div className="text-center mt-14 animate-on-scroll">
+      <Link
+        to="/services"
+        className="inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-xl"
+      >
+        View All Product Categories
+        <ChevronRight size={20} className="ml-2" />
+      </Link>
+    </div>
+
+  </div>
+</section>
+
+
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold border border-gray-300">
-                <Building size={18} className="mr-2" /> Our Services
+              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                <Building size={18} className="mr-2 relative z-10" /> 
+                <span className="relative z-10">Our Services</span>
               </div>
               
-              <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
                 Comprehensive <span className="showcase-text">Solutions</span>
               </h2>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {services.map((service, index) => (
-                  <div key={index} className="p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 card-hover bg-white border border-gray-200">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4">
-                      <service.icon className="text-gray-900" size={24} />
+                  <div key={index} className="p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <service.icon className="text-gray-900 relative z-10" size={24} />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-2">{service.title}</h3>
-                    <p className="text-sm text-gray-600">{service.description}</p>
+                    <h3 className="text-lg font-bold text-white mb-2 relative z-10">{service.title}</h3>
+                    <p className="text-sm text-gray-400 relative z-10">{service.description}</p>
                   </div>
                 ))}
               </div>
             </div>
             
             <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="dark-gradient rounded-2xl p-8 text-white h-full border border-gray-700 card-hover">
-                <h3 className="text-2xl font-bold mb-6 text-gray-300">Why Choose Us?</h3>
-                <ul className="space-y-4">
+              <div className="sword-gradient rounded-2xl p-8 text-white h-full card-hover relative overflow-hidden group">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Why Choose Us?</h3>
+                <ul className="space-y-4 relative z-10">
                   {benefits.map((benefit, index) => (
                     <li key={index} className="flex items-center">
                       <CheckCircle size={18} className="text-gray-400 mr-3 flex-shrink-0" />
@@ -655,8 +717,9 @@ function HomePage() {
                   ))}
                 </ul>
                 
-                <div className="mt-8 p-6 bg-white/10 rounded-xl border border-gray-700 card-hover">
-                  <div className="flex items-center mb-4">
+                <div className="mt-8 p-6 bg-white/5 rounded-xl card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-center mb-4 relative z-10">
                     <Truck size={24} className="text-gray-400 mr-3" />
                     <div>
                       <div className="font-bold text-gray-300">Fast Delivery Across UAE</div>
@@ -670,13 +733,13 @@ function HomePage() {
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
               Our <span className="showcase-text">Showcase</span>
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
               Witness the transformation of spaces with our premium tile solutions across various sectors
             </p>
           </div>
@@ -685,18 +748,18 @@ function HomePage() {
             {showcaseImages.map((image, index) => (
               <div
                 key={index}
-                className="group animate-on-scroll relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer card-hover border border-gray-200"
+                className="group animate-on-scroll relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer card-hover"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+                <div className="image-card-overlay"></div>
                 <ImageWithFallback
                   src={image.src}
                   alt={image.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-20 text-white">
+                <div className="absolute bottom-0 left-0 right-0 p-6 image-card-content text-white">
                   <div className="text-xs font-semibold text-gray-300 mb-2">{image.category}</div>
-                  <div className="text-lg font-bold group-hover:text-gray-200 transition-colors">{image.title}</div>
+                  <div className="text-lg font-bold group-hover:text-gray-300 transition-colors">{image.title}</div>
                 </div>
               </div>
             ))}
@@ -705,22 +768,24 @@ function HomePage() {
           <div className="text-center mt-12 animate-on-scroll">
             <Link
               to="/gallery"
-              className="group inline-flex items-center px-8 py-4 dark-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700"
+              className="group inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
             >
-              <span>View Full Gallery</span>
-              <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+              <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+              <span className="relative z-10">View Full Gallery</span>
+              <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 animate-on-scroll">
-              <div className="dark-gradient rounded-2xl p-8 text-white border border-gray-700 card-hover">
-                <h3 className="text-2xl font-bold mb-6 text-gray-300">Contact Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="sword-gradient rounded-2xl p-8 text-white card-hover relative overflow-hidden group">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Contact Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                   <div className="flex items-start">
                     <MapPin size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" />
                     <div>
@@ -762,15 +827,17 @@ function HomePage() {
             </div>
             
             <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="silver-gradient-dark rounded-2xl p-8 h-full border border-gray-600 card-hover">
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">Quick Inquiry</h3>
-                <p className="text-gray-700 mb-6">Get a free quote for your project</p>
+              <div className="silver-gradient-dark rounded-2xl p-8 h-full card-hover relative overflow-hidden group">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <h3 className="text-2xl font-bold mb-6 text-gray-900 relative z-10">Quick Inquiry</h3>
+                <p className="text-gray-700 mb-6 relative z-10">Get a free quote for your project</p>
                 <Link
                   to="/contact"
-                  className="group inline-flex items-center justify-center w-full px-6 py-4 dark-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700"
+                  className="group inline-flex items-center justify-center w-full px-6 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
                 >
-                  <span>Request a Quote</span>
-                  <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                  <span className="relative z-10">Request a Quote</span>
+                  <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
                 </Link>
               </div>
             </div>
@@ -779,11 +846,11 @@ function HomePage() {
       </section>
 
       <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 dark-gradient"></div>
+        <div className="absolute inset-0 sword-gradient"></div>
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-500 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
           </div>
         </div>
         
@@ -799,46 +866,53 @@ function HomePage() {
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 to="/contact"
-                className="group px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-300"
+                className="group px-8 py-4 silver-gradient text-gray-900 rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden silver-button-shine"
               >
-                <span>Contact Our Experts</span>
-                <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                <span className="relative z-10">Contact Our Experts</span>
+                <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
               </Link>
               
               <Link
                 to="/gallery"
-                className="group px-8 py-4 border-2 border-gray-400 text-white rounded-xl font-semibold hover:bg-white/10 hover:border-gray-300 transition-all duration-300 flex items-center space-x-3 card-hover"
+                className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
               >
-                <span>View Our Projects</span>
-                <ChevronRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <span className="relative z-10">View Our Projects</span>
+                <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
               </Link>
               
               <Link
                 to="/services"
-                className="group px-8 py-4 border-2 border-gray-400 text-white rounded-xl font-semibold hover:bg-white/10 hover:border-gray-300 transition-all duration-300 flex items-center space-x-3 card-hover"
+                className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
               >
-                <span>Request Samples</span>
-                <Package size={20} className="group-hover:translate-x-2 transition-transform" />
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <span className="relative z-10">Request Samples</span>
+                <Package size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
               </Link>
             </div>
 
-            <div className="mt-16 pt-12 border-t border-gray-600">
+            <div className="mt-16 pt-12 border-t border-gray-800">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-white">
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover border border-gray-700">
-                  <div className="text-4xl font-bold text-white mb-2">24/7</div>
-                  <div className="text-sm text-gray-300 font-medium">Project Support</div>
+                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="text-4xl font-bold text-white mb-2 relative z-10">24/7</div>
+                  <div className="text-sm text-gray-400 font-medium relative z-10">Project Support</div>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover border border-gray-700">
-                  <div className="text-4xl font-bold text-white mb-2">500+</div>
-                  <div className="text-sm text-gray-300 font-medium">Successful Projects</div>
+                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="text-4xl font-bold text-white mb-2 relative z-10">500+</div>
+                  <div className="text-sm text-gray-400 font-medium relative z-10">Successful Projects</div>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover border border-gray-700">
-                  <div className="text-4xl font-bold text-white mb-2">100%</div>
-                  <div className="text-sm text-gray-300 font-medium">Quality Guarantee</div>
+                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="text-4xl font-bold text-white mb-2 relative z-10">100%</div>
+                  <div className="text-sm text-gray-400 font-medium relative z-10">Quality Guarantee</div>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover border border-gray-700">
-                  <div className="text-4xl font-bold text-white mb-2">15+</div>
-                  <div className="text-sm text-gray-300 font-medium">Years Experience</div>
+                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="text-4xl font-bold text-white mb-2 relative z-10">15+</div>
+                  <div className="text-sm text-gray-400 font-medium relative z-10">Years Experience</div>
                 </div>
               </div>
             </div>

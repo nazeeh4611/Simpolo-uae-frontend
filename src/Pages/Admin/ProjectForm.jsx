@@ -1,11 +1,18 @@
-// src/components/admin/ProjectForm.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { baseurl } from '../../Util/Base';
+
+const projectCategories = [
+  'Residential',
+  'Commercial',
+  'Hospitality',
+  'Government',
+  'Pool & Villa'
+];
 
 const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCancel }) => {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [formData, setFormData] = useState({
@@ -19,27 +26,15 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
     featured: false
   });
   const [productsUsed, setProductsUsed] = useState([{ name: '', category: '', quantity: '' }]);
+  const token = localStorage.getItem('adminToken'); 
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+
 
   useEffect(() => {
     if (isEditMode && projectData) {
       loadProjectData();
     }
   }, [isEditMode, projectData]);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('/api/admin/projects/categories');
-      setCategories(Array.isArray(response.data) ? response.data : []);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Failed to load categories');
-      setCategories([]);
-    }
-  };
 
   const loadProjectData = () => {
     setFormData({
@@ -210,13 +205,16 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
       });
 
       if (isEditMode && projectData) {
-        await axios.put(`/api/admin/projects/${projectData._id}`, formDataToSend, {
+        await axios.put(`${baseurl}/admin/projects/${projectData._id}`, formDataToSend, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         toast.success('Project updated successfully');
       } else {
-        await axios.post('/api/admin/projects', formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+        await axios.post(`${baseurl}admin/projects`, formDataToSend, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          }
         });
         toast.success('Project created successfully');
       }
@@ -230,9 +228,13 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
     }
   };
 
+  const getCategoriesFromProjects = () => {
+    const allCategories = new Set(projectCategories);
+    return Array.from(allCategories);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
-      {/* Basic Information */}
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-900">Basic Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -293,7 +295,7 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Select Category</option>
-              {Array.isArray(categories) && categories.map((category) => (
+              {getCategoriesFromProjects().map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
@@ -359,7 +361,6 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
         </div>
       </div>
 
-      {/* Products Used */}
       <div className="border-t pt-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-900">Products Used</h2>
@@ -431,7 +432,6 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
         </div>
       </div>
 
-      {/* Images Section */}
       <div className="border-t pt-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
           Project Images <span className="text-red-500">*</span>
@@ -546,7 +546,6 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
         </div>
       </div>
 
-      {/* Form Actions */}
       <div className="border-t pt-6 flex justify-end space-x-4">
         <button
           type="button"

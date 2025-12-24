@@ -4,10 +4,18 @@ import { Link } from 'react-router-dom';
 import ProjectForm from './ProjectForm';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { baseurl } from '../../Util/Base';
+
+const projectCategories = [
+  'Residential',
+  'Commercial',
+  'Hospitality',
+  'Government',
+  'Pool & Villa'
+];
 
 const ProjectsList = () => {
   const [projects, setProjects] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -22,15 +30,12 @@ const ProjectsList = () => {
     limit: 10
   });
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  const token = localStorage.getItem('adminToken'); 
 
   useEffect(() => {
     fetchProjects();
   }, [pagination.page, selectedCategory, showFeatured, search]);
 
-  // Prevent body scroll when modal is open
   useEffect(() => {
     if (showModal) {
       document.body.style.overflow = 'hidden';
@@ -42,21 +47,14 @@ const ProjectsList = () => {
     };
   }, [showModal]);
 
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('/api/admin/projects/categories');
-      setCategories(Array.isArray(response.data) ? response.data : []);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-      toast.error('Failed to load categories');
-      setCategories([]);
-    }
-  };
-
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/admin/projects', {
+      const response = await axios.get(`${baseurl}admin/projects`,{
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          }}, {
         params: {
           page: pagination.page,
           limit: pagination.limit,
@@ -106,7 +104,7 @@ const ProjectsList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
       try {
-        await axios.delete(`/api/admin/projects/${id}`);
+        await axios.delete(`${baseurl}admin/projects/${id}`);
         toast.success('Project deleted successfully');
         fetchProjects();
       } catch (error) {
@@ -135,7 +133,7 @@ const ProjectsList = () => {
       });
       formData.append('featured', !currentStatus);
 
-      await axios.put(`/api/admin/projects/${id}`, formData, {
+      await axios.put(`${baseurl}admin/projects/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
 
@@ -167,9 +165,18 @@ const ProjectsList = () => {
     });
   };
 
+  const getCategoriesFromProjects = () => {
+    const allCategories = new Set(projectCategories);
+    projects.forEach(project => {
+      if (project.category) {
+        allCategories.add(project.category);
+      }
+    });
+    return Array.from(allCategories);
+  };
+
   return (
     <div className="space-y-6 p-4">
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Projects Management</h1>
@@ -186,7 +193,6 @@ const ProjectsList = () => {
         </button>
       </div>
 
-      {/* Filters */}
       <div className="bg-white rounded-xl shadow p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="md:col-span-2">
@@ -220,7 +226,7 @@ const ProjectsList = () => {
             className="border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="all">All Categories</option>
-            {Array.isArray(categories) && categories.map((category) => (
+            {getCategoriesFromProjects().map((category) => (
               <option key={category} value={category}>{category}</option>
             ))}
           </select>
@@ -238,7 +244,6 @@ const ProjectsList = () => {
           </select>
         </div>
 
-        {/* Projects Table */}
         {loading ? (
           <div className="flex justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
@@ -374,7 +379,6 @@ const ProjectsList = () => {
               </table>
             </div>
 
-            {/* Pagination */}
             {pagination.totalPages > 1 && (
               <div className="flex flex-col sm:flex-row items-center justify-between mt-6 pt-6 border-t border-gray-200">
                 <div className="text-sm text-gray-700 mb-4 sm:mb-0">
@@ -436,7 +440,6 @@ const ProjectsList = () => {
         )}
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow p-6">
           <div className="flex items-center">
@@ -477,7 +480,7 @@ const ProjectsList = () => {
             </div>
             <div className="ml-4">
               <h3 className="text-sm font-medium text-gray-500">Categories</h3>
-              <p className="text-2xl font-semibold mt-1">{categories.length}</p>
+              <p className="text-2xl font-semibold mt-1">{getCategoriesFromProjects().length}</p>
             </div>
           </div>
         </div>
@@ -499,21 +502,18 @@ const ProjectsList = () => {
         </div>
       </div>
 
-      {/* Fixed Modal - Updated to match GalleryList */}
       {showModal && (
         <div 
           className="fixed inset-0 z-[9999] overflow-y-auto"
           style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <div className="flex items-center justify-center min-h-screen px-4 py-6 sm:px-6 lg:px-8">
-            {/* Backdrop */}
             <div 
               className="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity"
               onClick={handleCloseModal}
               style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
             ></div>
             
-            {/* Modal Content */}
             <div 
               className="relative bg-white rounded-lg shadow-2xl w-full max-w-6xl mx-auto z-[10000] max-h-[90vh] overflow-y-auto"
               style={{ position: 'relative' }}
