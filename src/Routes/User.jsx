@@ -10,7 +10,7 @@ import  Services  from "../Pages/User/Services";
 import Portfolio from "../Pages/User/Portfolio"
 import Gallery from "../Pages/User/Gallery";
 import Contact from "../Pages/User/Contact";
-import Maintenance from "../Pages/Mainatance";
+import Maintenance from "../Pages/Maintenance";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
