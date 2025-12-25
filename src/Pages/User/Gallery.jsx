@@ -4,7 +4,7 @@ import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock,
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import { baseurl } from '../../Util/Base';
+import { baseurl } from '../../util/Base';
 
 function Gallery() {
   const [gallery, setGallery] = useState([]);

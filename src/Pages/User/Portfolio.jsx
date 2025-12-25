@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Star, ArrowRight, X, Download, Share2, ChevronLeft, ChevronRight as ChevronRightIcon, Heart, Calendar, Play, Eye, Tag, ImageIcon, Filter, Search, Grid, List, Layers } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
-import { baseurl } from '../../Util/Base';
+import { baseurl } from '../../util/Base';
 import { ImageWithFallback } from '../../util/Fallback';
 
 function Portfolio() {
