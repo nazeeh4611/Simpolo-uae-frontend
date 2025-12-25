@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, Phone, MapPin, Clock, Send, ChevronRight, MessageSquare, Building, User, Globe, Calendar, Shield, CheckCircle, ArrowRight, Sparkles, Award, Target, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Mail, Phone, MapPin, Clock, Send, ChevronRight, MessageSquare, Building, User, Globe, Calendar, Shield, CheckCircle, ArrowRight, Sparkles, Award, Target, Users, Home, ChevronLeft, Package } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 
- function Contact() {
+function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -96,8 +97,8 @@ import Typewriter from 'typewriter-effect';
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <style jsx>{`
+    <div className="min-h-screen bg-black">
+      <style dangerouslySetInnerHTML={{__html: `
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -112,19 +113,43 @@ import Typewriter from 'typewriter-effect';
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
         }
+        @keyframes swordShimmer {
+          0% { background-position: -100% 0; }
+          100% { background-position: 200% 0; }
+        }
         @keyframes gradientShift {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
-        }
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
         }
         .animate-fadeInUp {
           animation: fadeInUp 0.6s ease-out forwards;
         }
         .animate-float {
           animation: float 3s ease-in-out infinite;
+        }
+        .sword-shimmer {
+          background: linear-gradient(90deg, 
+            transparent, 
+            rgba(192, 192, 192, 0.1), 
+            rgba(192, 192, 192, 0.3), 
+            rgba(192, 192, 192, 0.6), 
+            rgba(192, 192, 192, 0.3), 
+            rgba(192, 192, 192, 0.1), 
+            transparent
+          );
+          background-size: 200% 100%;
+          animation: swordShimmer 3s infinite linear;
+        }
+        .sword-gradient {
+          background: linear-gradient(135deg, 
+            #000000 0%, 
+            #1a1a1a 25%, 
+            #2d2d2d 50%, 
+            #1a1a1a 75%, 
+            #000000 100%
+          );
+          background-size: 200% 200%;
+          animation: gradientShift 4s ease infinite;
         }
         .silver-gradient {
           background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
@@ -135,26 +160,23 @@ import Typewriter from 'typewriter-effect';
           background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
         }
         .dark-gradient {
-          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%);
-        }
-        .light-gradient {
-          background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%);
+          background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
         }
         .card-hover {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-hover:hover {
           transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
         }
         .input-focus:focus {
-          box-shadow: 0 0 0 3px rgba(128, 128, 128, 0.2);
-          border-color: #808080;
+          box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.2);
+          border-color: #c0c0c0;
         }
         .typewriter-cursor {
           display: inline-block;
           width: 3px;
-          background: #808080;
+          background: #c0c0c0;
           margin-left: 4px;
           animation: blink 1s infinite;
         }
@@ -162,23 +184,9 @@ import Typewriter from 'typewriter-effect';
           0%, 100% { opacity: 1; }
           50% { opacity: 0; }
         }
-        .shimmer-effect {
-          position: relative;
-          overflow: hidden;
-        }
-        .shimmer-effect::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          animation: shimmer 2s infinite;
-        }
         .touch-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -188,7 +196,7 @@ import Typewriter from 'typewriter-effect';
         }
         .findus-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -198,7 +206,7 @@ import Typewriter from 'typewriter-effect';
         }
         .emirates-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -208,7 +216,7 @@ import Typewriter from 'typewriter-effect';
         }
         .showroom-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -216,37 +224,76 @@ import Typewriter from 'typewriter-effect';
           background-size: 200% 200%;
           animation: gradientShift 3s ease infinite;
         }
-      `}</style>
+        .silver-button-shine {
+          position: relative;
+          overflow: hidden;
+        }
+        .silver-button-shine::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -60%;
+          width: 20%;
+          height: 200%;
+          background: linear-gradient(
+            rgba(255, 255, 255, 0.3), 
+            rgba(255, 255, 255, 0.1) 50%, 
+            rgba(255, 255, 255, 0.3)
+          );
+          transform: rotate(30deg);
+          animation: buttonShine 3s infinite linear;
+        }
+        @keyframes buttonShine {
+          0% { left: -60%; }
+          100% { left: 140%; }
+        }
+      `}} />
 
-<section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-24">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+      <section className="relative min-h-screen overflow-hidden text-white">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800/30 rounded-full blur-3xl animate-float" />
+          <div
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700/30 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: '1.5s' }}
+          />
         </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="animate-on-scroll max-w-4xl">
-            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-600">
-              <MessageSquare size={18} className="mr-2 text-white" />
-              <span className="text-white font-medium">Let's Connect</span>
+
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-32 pb-20">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
+              <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+              <MessageSquare size={18} className="mr-2 text-gray-400 relative z-10" />
+              <span className="text-gray-400 font-medium relative z-10">
+                Let's Connect
+              </span>
             </div>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              Get In <span className="touch-text">Touch</span>
+
+            <h1 className="mb-6 leading-tight text-white">
+              <div className="relative inline-block">
+                <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
+                  GET IN
+                </span>
+                <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
+                  CONTACT WITH US
+                </span>
+              </div>
             </h1>
-            
-            <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full"></div>
-            
+
+            <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
+              <div className="absolute inset-0 sword-shimmer"></div>
+            </div>
+
             <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
               <Typewriter
                 options={{
                   strings: [
-                    'Ready to Transform Your Space?',
-                    'Expert Tile Solutions',
-                    'Premium Quality Materials',
-                    'Custom Design Services',
-                    'Professional Consultation',
-                    'Free Quote Available'
+                    "Ready to Transform Your Space?",
+                    "Expert Tile Solutions",
+                    "Premium Quality Materials",
+                    "Custom Design Services",
+                    "Professional Consultation",
+                    "Free Quote Available"
                   ],
                   autoStart: true,
                   loop: true,
@@ -256,35 +303,57 @@ import Typewriter from 'typewriter-effect';
                 }}
               />
             </div>
-            
+
             <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-3xl leading-relaxed">
               Connect with our team of experts for personalized solutions, project consultations, 
               or to explore our premium tile collections. We're here to bring your vision to life 
               with exceptional service and quality craftsmanship.
             </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Link
+                to="/contact#form"
+                className="group px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                <span className="relative z-10">Send Message</span>
+                <Send size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+              </Link>
+
+              <Link
+                to="/services"
+                className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/5 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <span className="relative z-10">View Products</span>
+                <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {contactInfo.map((info, index) => (
               <div key={index} className="animate-on-scroll group" style={{ animationDelay: `${index * 0.1}s` }}>
-                <div className="bg-white rounded-2xl shadow-xl p-6 card-hover border border-gray-200 h-full">
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl silver-gradient mb-4 group-hover:scale-110 transition-transform duration-300">
-                    <info.icon className="text-gray-900" size={24} />
+                <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 card-hover border border-gray-700 hover:border-gray-600 h-full relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl silver-gradient mb-4 group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                    <info.icon className="text-gray-900 relative z-10" size={24} />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-gray-700 transition-colors">
+                  <h3 className="text-lg font-bold text-white mb-3 group-hover:text-gray-300 transition-colors relative z-10">
                     {info.title}
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-2 relative z-10">
                     {info.details.map((detail, idx) => (
-                      <p key={idx} className="text-gray-700 font-medium">{detail}</p>
+                      <p key={idx} className="text-gray-300 font-medium">{detail}</p>
                     ))}
                   </div>
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <p className="text-sm text-gray-500">{info.subtitle}</p>
+                  <div className="mt-4 pt-4 border-t border-gray-700 relative z-10">
+                    <p className="text-sm text-gray-400">{info.subtitle}</p>
                   </div>
                 </div>
               </div>
@@ -294,105 +363,115 @@ import Typewriter from 'typewriter-effect';
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="animate-on-scroll">
               <div className="sticky top-24">
-                <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold border border-gray-300">
-                  <Building size={18} className="mr-2" /> Our Locations
+                <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                  <Building size={18} className="mr-2 relative z-10" /> 
+                  <span className="relative z-10">Our Locations</span>
                 </div>
                 
-                <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900">
+                <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
                   Where to <span className="findus-text">Find Us</span>
                 </h2>
                 
                 <div className="space-y-8">
-                  <div className="group bg-white rounded-2xl shadow-xl p-8 card-hover border border-gray-200 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gray-100 to-transparent rounded-full -translate-y-8 translate-x-8"></div>
+                  <div className="group bg-white/5 backdrop-blur-md rounded-2xl p-8 card-hover border border-gray-700 hover:border-gray-600 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-gray-800/30 to-transparent rounded-full -translate-y-8 translate-x-8"></div>
                     <div className="flex items-start space-x-4 relative z-10">
-                      <div className="p-4 rounded-xl silver-gradient group-hover:scale-110 transition-transform duration-300">
-                        <MapPin className="text-gray-900" size={28} />
+                      <div className="p-4 rounded-xl silver-gradient group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <MapPin className="text-gray-900 relative z-10" size={28} />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-3">
-                          <h3 className="text-xl font-bold text-gray-900 group-hover:text-gray-700 transition-colors">
+                          <h3 className="text-xl font-bold text-white group-hover:text-gray-300 transition-colors">
                             Corporate Headquarters
                           </h3>
-                          <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
+                          <span className="px-3 py-1 bg-gray-800/50 text-gray-300 text-xs font-semibold rounded-full border border-gray-700">
                             Main Office
                           </span>
                         </div>
-                        <p className="text-gray-700 mb-4 leading-relaxed">
+                        <p className="text-gray-300 mb-4 leading-relaxed">
                           218, Al Suaidi Building, Al Murar<br />
                           Dubai, United Arab Emirates
                         </p>
-                        <div className="flex items-center text-sm text-gray-500 mb-4">
+                        <div className="flex items-center text-sm text-gray-400 mb-4">
                           <Clock size={14} className="mr-2" />
                           Mon-Sat: 8:00 AM - 6:00 PM
                         </div>
-                        <a href="#" className="inline-flex items-center px-4 py-2 dark-gradient text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 card-hover border border-gray-700">
-                          <MapPin size={16} className="mr-2" />
-                          Get Directions
+                        <a href="#" className="inline-flex items-center px-4 py-2 sword-gradient text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
+                          <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                          <MapPin size={16} className="mr-2 relative z-10" />
+                          <span className="relative z-10">Get Directions</span>
                         </a>
                       </div>
                     </div>
                   </div>
 
-                  <div className="group bg-white rounded-2xl shadow-xl p-8 card-hover border border-gray-200 relative overflow-hidden">
-                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-gray-100 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
+                  <div className="group bg-white/5 backdrop-blur-md rounded-2xl p-8 card-hover border border-gray-700 hover:border-gray-600 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-gray-800/30 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
                     <div className="flex items-start space-x-4 relative z-10">
-                      <div className="p-4 rounded-xl silver-gradient group-hover:scale-110 transition-transform duration-300">
-                        <Building className="text-gray-900" size={28} />
+                      <div className="p-4 rounded-xl silver-gradient group-hover:scale-110 transition-transform duration-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <Building className="text-gray-900 relative z-10" size={28} />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-3">
-                          <h3 className="text-xl font-bold text-gray-900 group-hover:text-gray-700 transition-colors">
+                          <h3 className="text-xl font-bold text-white group-hover:text-gray-300 transition-colors">
                             Showroom & Warehouse
                           </h3>
-                          <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
+                          <span className="px-3 py-1 bg-gray-800/50 text-gray-300 text-xs font-semibold rounded-full border border-gray-700">
                             Largest Collection
                           </span>
                         </div>
-                        <p className="text-gray-700 mb-4 leading-relaxed">
+                        <p className="text-gray-300 mb-4 leading-relaxed">
                           Sajja Industrial Area, Near Sharjah Cement Factory<br />
                           Sharjah, United Arab Emirates
                         </p>
-                        <div className="flex items-center text-sm text-gray-500 mb-4">
+                        <div className="flex items-center text-sm text-gray-400 mb-4">
                           <Users size={14} className="mr-2" />
                           Expert consultants available daily
                         </div>
-                        <a href="#" className="inline-flex items-center px-4 py-2 dark-gradient text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 card-hover border border-gray-700">
-                          <Calendar size={16} className="mr-2" />
-                          Schedule Visit
+                        <a href="#" className="inline-flex items-center px-4 py-2 sword-gradient text-white rounded-lg font-medium hover:shadow-lg transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
+                          <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                          <Calendar size={16} className="mr-2 relative z-10" />
+                          <span className="relative z-10">Schedule Visit</span>
                         </a>
                       </div>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="group dark-gradient rounded-2xl shadow-xl p-6 card-hover border border-gray-700">
-                      <div className="flex items-center mb-4">
+                    <div className="group sword-gradient rounded-2xl p-6 card-hover border border-gray-700 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                      <div className="flex items-center mb-4 relative z-10">
                         <div className="p-2 rounded-lg bg-white/10 mr-3">
                           <Award className="text-gray-300" size={20} />
                         </div>
                         <h4 className="text-white font-medium">Quick Response</h4>
                       </div>
-                      <p className="text-gray-300 text-sm mb-3">
+                      <p className="text-gray-300 text-sm mb-3 relative z-10">
                         We guarantee a response within 2 hours during business hours
                       </p>
-                      <div className="flex items-center text-sm text-gray-400">
+                      <div className="flex items-center text-sm text-gray-400 relative z-10">
                         <Shield size={14} className="mr-2" />
                         Priority Support Available
                       </div>
                     </div>
 
-                    <div className="group silver-gradient-dark rounded-2xl shadow-xl p-6 card-hover border border-gray-600">
-                      <div className="flex items-center mb-4">
+                    <div className="group silver-gradient-dark rounded-2xl p-6 card-hover border border-gray-600 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                      <div className="flex items-center mb-4 relative z-10">
                         <div className="p-2 rounded-lg bg-gray-900/20 mr-3">
                           <Target className="text-gray-900" size={20} />
                         </div>
                         <h4 className="text-gray-900 font-medium">Free Consultation</h4>
                       </div>
-                      <p className="text-gray-700 text-sm mb-3">
+                      <p className="text-gray-700 text-sm mb-3 relative z-10">
                         Book a free 30-minute consultation with our design experts
                       </p>
-                      <a href="#" className="inline-flex items-center text-sm text-gray-700 font-medium hover:text-gray-900 transition-colors">
+                      <a href="#" className="inline-flex items-center text-sm text-gray-700 font-medium hover:text-gray-900 transition-colors relative z-10">
                         Book Now
                         <ChevronRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
                       </a>
@@ -402,23 +481,25 @@ import Typewriter from 'typewriter-effect';
               </div>
             </div>
 
-            <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-200 relative overflow-hidden">
+            <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }} id="form">
+              <div className="bg-white/5 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-700 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 silver-gradient"></div>
-                <div className="flex items-center mb-8">
-                  <div className="p-4 rounded-xl silver-gradient mr-4 animate-float">
-                    <Send className="text-gray-900" size={28} />
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                <div className="flex items-center mb-8 relative z-10">
+                  <div className="p-4 rounded-xl silver-gradient mr-4 animate-float relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                    <Send className="text-gray-900 relative z-10" size={28} />
                   </div>
                   <div>
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Send Message</h2>
-                    <p className="text-gray-600 mt-2">Our team will get back to you within 24 hours</p>
+                    <h2 className="text-3xl md:text-4xl font-bold text-white">Send Message</h2>
+                    <p className="text-gray-400 mt-2">Our team will get back to you within 24 hours</p>
                   </div>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="group">
-                      <label htmlFor="name" className="block text-sm mb-2 text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
+                      <label htmlFor="name" className="block text-sm mb-2 text-gray-300 font-medium group-hover:text-white transition-colors">
                         <User size={16} className="inline mr-2" />
                         Full Name *
                       </label>
@@ -429,13 +510,13 @@ import Typewriter from 'typewriter-effect';
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none input-focus bg-gray-50/50 group-hover:bg-white transition-all duration-300"
+                        className="w-full px-4 py-3 bg-white/5 border border-gray-700 rounded-xl focus:outline-none input-focus text-white placeholder-gray-500 group-hover:bg-white/10 transition-all duration-300"
                         placeholder="John Smith"
                       />
                     </div>
 
                     <div className="group">
-                      <label htmlFor="email" className="block text-sm mb-2 text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
+                      <label htmlFor="email" className="block text-sm mb-2 text-gray-300 font-medium group-hover:text-white transition-colors">
                         <Mail size={16} className="inline mr-2" />
                         Email Address *
                       </label>
@@ -446,7 +527,7 @@ import Typewriter from 'typewriter-effect';
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none input-focus bg-gray-50/50 group-hover:bg-white transition-all duration-300"
+                        className="w-full px-4 py-3 bg-white/5 border border-gray-700 rounded-xl focus:outline-none input-focus text-white placeholder-gray-500 group-hover:bg-white/10 transition-all duration-300"
                         placeholder="john@example.com"
                       />
                     </div>
@@ -454,7 +535,7 @@ import Typewriter from 'typewriter-effect';
 
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="group">
-                      <label htmlFor="phone" className="block text-sm mb-2 text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
+                      <label htmlFor="phone" className="block text-sm mb-2 text-gray-300 font-medium group-hover:text-white transition-colors">
                         <Phone size={16} className="inline mr-2" />
                         Phone Number *
                       </label>
@@ -465,13 +546,13 @@ import Typewriter from 'typewriter-effect';
                         value={formData.phone}
                         onChange={handleChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none input-focus bg-gray-50/50 group-hover:bg-white transition-all duration-300"
+                        className="w-full px-4 py-3 bg-white/5 border border-gray-700 rounded-xl focus:outline-none input-focus text-white placeholder-gray-500 group-hover:bg-white/10 transition-all duration-300"
                         placeholder="+971 55 123 4567"
                       />
                     </div>
 
                     <div className="group">
-                      <label htmlFor="company" className="block text-sm mb-2 text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
+                      <label htmlFor="company" className="block text-sm mb-2 text-gray-300 font-medium group-hover:text-white transition-colors">
                         <Building size={16} className="inline mr-2" />
                         Company Name
                       </label>
@@ -481,14 +562,14 @@ import Typewriter from 'typewriter-effect';
                         name="company"
                         value={formData.company}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none input-focus bg-gray-50/50 group-hover:bg-white transition-all duration-300"
+                        className="w-full px-4 py-3 bg-white/5 border border-gray-700 rounded-xl focus:outline-none input-focus text-white placeholder-gray-500 group-hover:bg-white/10 transition-all duration-300"
                         placeholder="Optional"
                       />
                     </div>
                   </div>
 
                   <div className="group">
-                    <label htmlFor="projectType" className="block text-sm mb-2 text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
+                    <label htmlFor="projectType" className="block text-sm mb-2 text-gray-300 font-medium group-hover:text-white transition-colors">
                       <Target size={16} className="inline mr-2" />
                       Project Type *
                     </label>
@@ -498,11 +579,11 @@ import Typewriter from 'typewriter-effect';
                       value={formData.projectType}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none input-focus bg-gray-50/50 group-hover:bg-white transition-all duration-300 appearance-none"
+                      className="w-full px-4 py-3 bg-white/5 border border-gray-700 rounded-xl focus:outline-none input-focus text-white placeholder-gray-500 group-hover:bg-white/10 transition-all duration-300 appearance-none"
                     >
-                      <option value="">Select Project Type</option>
+                      <option value="" className="bg-gray-800">Select Project Type</option>
                       {projectTypes.map((type, index) => (
-                        <option key={index} value={type.toLowerCase().replace(/\s+/g, '-')}>
+                        <option key={index} value={type.toLowerCase().replace(/\s+/g, '-')} className="bg-gray-800">
                           {type}
                         </option>
                       ))}
@@ -510,7 +591,7 @@ import Typewriter from 'typewriter-effect';
                   </div>
 
                   <div className="group">
-                    <label htmlFor="message" className="block text-sm mb-2 text-gray-700 font-medium group-hover:text-gray-900 transition-colors">
+                    <label htmlFor="message" className="block text-sm mb-2 text-gray-300 font-medium group-hover:text-white transition-colors">
                       <MessageSquare size={16} className="inline mr-2" />
                       Project Details *
                     </label>
@@ -521,7 +602,7 @@ import Typewriter from 'typewriter-effect';
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none input-focus bg-gray-50/50 group-hover:bg-white transition-all duration-300 resize-none"
+                      className="w-full px-4 py-3 bg-white/5 border border-gray-700 rounded-xl focus:outline-none input-focus text-white placeholder-gray-500 group-hover:bg-white/10 transition-all duration-300 resize-none"
                       placeholder="Tell us about your project requirements, timeline, and any specific needs..."
                     ></textarea>
                   </div>
@@ -530,37 +611,38 @@ import Typewriter from 'typewriter-effect';
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="group w-full px-6 py-4 dark-gradient text-white rounded-xl font-semibold hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-3 disabled:opacity-70 disabled:cursor-not-allowed card-hover border border-gray-700"
+                      className="group w-full px-6 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-2xl transition-all duration-300 flex items-center justify-center space-x-3 disabled:opacity-70 disabled:cursor-not-allowed card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
                     >
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
                       {isSubmitting ? (
                         <>
-                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          <span>Processing Your Request...</span>
+                          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin relative z-10"></div>
+                          <span className="relative z-10">Processing Your Request...</span>
                         </>
                       ) : (
                         <>
-                          <span>Send Message</span>
-                          <Send size={20} className="group-hover:translate-x-2 transition-transform" />
+                          <span className="relative z-10">Send Message</span>
+                          <Send size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
                         </>
                       )}
                     </button>
-                    <div className="flex items-center justify-center mt-4 text-sm text-gray-500">
-                      <Shield size={14} className="mr-2 text-gray-600" />
+                    <div className="flex items-center justify-center mt-4 text-sm text-gray-400">
+                      <Shield size={14} className="mr-2 text-gray-500" />
                       Your information is secure and will never be shared
                     </div>
                   </div>
                 </form>
 
-                <div className="mt-8 pt-8 border-t border-gray-100">
+                <div className="mt-8 pt-8 border-t border-gray-700 relative z-10">
                   <div className="flex items-start space-x-4">
-                    <div className="p-3 rounded-full bg-gray-100 flex-shrink-0">
-                      <Sparkles className="text-gray-600" size={20} />
+                    <div className="p-3 rounded-full bg-white/5 flex-shrink-0">
+                      <Sparkles className="text-gray-400" size={20} />
                     </div>
                     <div>
-                      <h4 className="text-gray-900 font-medium mb-1">Need immediate assistance?</h4>
-                      <p className="text-gray-600 text-sm">
+                      <h4 className="text-white font-medium mb-1">Need immediate assistance?</h4>
+                      <p className="text-gray-400 text-sm">
                         Call our dedicated support line at{' '}
-                        <a href="tel:+971557234180" className="text-gray-700 hover:text-gray-900 font-medium">
+                        <a href="tel:+971557234180" className="text-gray-300 hover:text-white font-medium">
                           +971 55 723 4180
                         </a>
                         {' '}for urgent project requirements.
@@ -574,17 +656,19 @@ import Typewriter from 'typewriter-effect';
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-gray-100">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-on-scroll">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold border border-gray-300">
-                <Globe size={18} className="mr-2" /> Regional Support
+              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                <Globe size={18} className="mr-2 relative z-10" /> 
+                <span className="relative z-10">Regional Support</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Serving <span className="emirates-text">All Emirates</span>
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+              <p className="text-gray-400 max-w-2xl mx-auto text-lg">
                 With facilities across UAE, we provide comprehensive support and delivery services
               </p>
             </div>
@@ -598,19 +682,20 @@ import Typewriter from 'typewriter-effect';
                 { emirate: 'Ras Al Khaimah', projects: '60+', delivery: '72 Hours', icon: '⛰️' },
                 { emirate: 'Fujairah', projects: '45+', delivery: '72 Hours', icon: '🏖️' },
               ].map((region, index) => (
-                <div key={index} className="animate-on-scroll group bg-white rounded-2xl p-6 shadow-lg card-hover border border-gray-200" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <div className="flex items-center justify-between mb-4">
+                <div key={index} className="group animate-on-scroll bg-white/5 backdrop-blur-md rounded-2xl p-6 card-hover border border-gray-700 hover:border-gray-600 relative overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-center justify-between mb-4 relative z-10">
                     <div className="text-3xl">{region.icon}</div>
-                    <div className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-full">
+                    <div className="px-3 py-1 bg-gray-800/50 text-gray-300 text-xs font-semibold rounded-full border border-gray-700">
                       {region.delivery}
                     </div>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-gray-700 transition-colors">{region.emirate}</h3>
-                  <div className="text-2xl font-bold text-gray-700 mb-1">{region.projects}</div>
-                  <div className="text-sm text-gray-500">Completed Projects</div>
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <CheckCircle size={14} className="text-gray-600 mr-2" />
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gray-300 transition-colors relative z-10">{region.emirate}</h3>
+                  <div className="text-2xl font-bold text-gray-300 mb-1 relative z-10">{region.projects}</div>
+                  <div className="text-sm text-gray-400 relative z-10">Completed Projects</div>
+                  <div className="mt-4 pt-4 border-t border-gray-700 relative z-10">
+                    <div className="flex items-center text-sm text-gray-400">
+                      <CheckCircle size={14} className="text-gray-500 mr-2" />
                       On-site consultation available
                     </div>
                   </div>
@@ -621,17 +706,19 @@ import Typewriter from 'typewriter-effect';
         </div>
       </section>
 
-      <section className="py-24 relative overflow-hidden dark-gradient">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+      <section className="py-24 bg-black relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800/30 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700/30 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white text-sm font-semibold border border-gray-600">
-                <MapPin size={18} className="mr-2" /> Visit Our Showroom
+              <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                <MapPin size={18} className="mr-2 relative z-10" /> 
+                <span className="relative z-10">Visit Our Showroom</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Experience Our <span className="showroom-text">Showroom</span>
@@ -650,8 +737,9 @@ import Typewriter from 'typewriter-effect';
                   'Custom design workstation'
                 ].map((feature, index) => (
                   <div key={index} className="flex items-center text-white group">
-                    <div className="p-2 rounded-full bg-white/10 mr-4 group-hover:bg-gray-600 transition-colors">
-                      <CheckCircle size={18} className="text-gray-300 group-hover:text-white transition-colors" />
+                    <div className="p-2 rounded-full bg-white/10 mr-4 group-hover:silver-gradient transition-all duration-300 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                      <CheckCircle size={18} className="text-gray-300 group-hover:text-gray-900 relative z-10 transition-colors" />
                     </div>
                     <span>{feature}</span>
                   </div>
@@ -659,25 +747,29 @@ import Typewriter from 'typewriter-effect';
               </div>
               
               <div className="flex flex-wrap gap-4 mt-8">
-                <a href="#" className="group px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 card-hover">
-                  <MapPin size={20} className="mr-2" />
-                  <span>Get Directions</span>
-                  <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+                <a href="#" className="group px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-2xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                  <MapPin size={20} className="mr-2 relative z-10" />
+                  <span className="relative z-10">Get Directions</span>
+                  <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
                 </a>
                 
-                <a href="#" className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/10 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover">
-                  <Calendar size={20} className="mr-2" />
-                  <span>Book Appointment</span>
+                <a href="#" className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <Calendar size={20} className="mr-2 relative z-10" />
+                  <span className="relative z-10">Book Appointment</span>
                 </a>
               </div>
             </div>
             
             <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
-              <div className="silver-gradient-dark rounded-2xl p-1 card-hover">
-                <div className="bg-gray-900 rounded-xl p-8 text-white">
+              <div className="silver-gradient-dark rounded-2xl p-1 card-hover relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                <div className="bg-gray-900 rounded-xl p-8 text-white relative z-10">
                   <div className="text-center mb-6">
-                    <div className="w-16 h-16 silver-gradient rounded-full flex items-center justify-center mx-auto mb-4 animate-float">
-                      <MapPin className="text-gray-900" size={24} />
+                    <div className="w-16 h-16 silver-gradient rounded-full flex items-center justify-center mx-auto mb-4 animate-float relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <MapPin className="text-gray-900 relative z-10" size={24} />
                     </div>
                     <h3 className="text-2xl font-bold mb-2">Sajja Industrial Area</h3>
                     <p className="text-gray-300">Sharjah, United Arab Emirates</p>
@@ -718,4 +810,4 @@ import Typewriter from 'typewriter-effect';
   );
 }
 
-export default Contact
+export default Contact;
