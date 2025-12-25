@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
 import HomePage from "../Pages/User/Home";
@@ -14,6 +14,8 @@ import Maintenance from "../Pages/Maintenance"
 /* ===============================
    TOGGLE MAINTENANCE MODE HERE
 ================================= */
+
+const Navigate = useNavigate()
 const MAINTENANCE_MODE = true; // true = maintenance ON
 
 function ScrollToTop() {
