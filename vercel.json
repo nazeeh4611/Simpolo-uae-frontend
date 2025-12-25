@@ -2,20 +2,7 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-
-  "redirects": [
-    {
-      "source": "/((?!maintenance).*)",
-      "destination": "/maintenance",
-      "permanent": false
-    }
-  ],
-
   "rewrites": [
-    {
-      "source": "/maintenance",
-      "destination": "/maintenance.html"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
