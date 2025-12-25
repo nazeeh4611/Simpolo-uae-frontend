@@ -14,34 +14,25 @@ import Maintenance from "../Pages/Maintenance"
 /* ===============================
    TOGGLE MAINTENANCE MODE HERE
 ================================= */
-const MAINTENANCE_MODE = true; 
+const MAINTENANCE_MODE = true; // true = maintenance ON
 
 function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   }, [pathname]);
 
   return null;
 }
 
 function UserRoutes() {
-  /* 🔒 FORCE MAINTENANCE PAGE */
-  if (MAINTENANCE_MODE) {
-    return <Maintenance />;
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#FAF7F0] to-white overflow-x-hidden">
       <ScrollToTop />
-      <Navbar />
 
-      {/* Toast notifications */}
+      {!MAINTENANCE_MODE && <Navbar />}
+
       <Toaster
         position="top-right"
         toastOptions={{
@@ -51,31 +42,37 @@ function UserRoutes() {
             color: "#fff",
             border: "1px solid rgba(212, 175, 55, 0.2)",
           },
-          success: {
-            iconTheme: {
-              primary: "#D4AF37",
-              secondary: "#2C1C10",
-            },
-          },
         }}
       />
 
-      {/* Routes */}
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/contact" element={<Contact />} />
+        {/* 🔒 MAINTENANCE MODE */}
+        {MAINTENANCE_MODE && (
+          <>
+            <Route path="/maintenance" element={<Maintenance />} />
+            <Route path="*" element={<Navigate to="/maintenance" replace />} />
+          </>
+        )}
 
-        {/* Optional direct access */}
-        <Route path="/maintenance" element={<Maintenance />} />
+        {/* 🌍 NORMAL SITE */}
+        {!MAINTENANCE_MODE && (
+          <>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/portfolio" element={<Portfolio />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/contact" element={<Contact />} />
+          </>
+        )}
       </Routes>
 
-      <Footer />
+      {!MAINTENANCE_MODE && <Footer />}
     </div>
   );
 }
 
 export default UserRoutes;
+
+
+
