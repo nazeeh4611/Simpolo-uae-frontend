@@ -268,16 +268,11 @@ function Contact() {
                 Let's Connect
               </span>
             </div>
-            <h1 className="mb-6 leading-tight text-white">
-              <div className="relative inline-block">
-                <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
-                  GET IN
-                </span>
-                <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
-                  CONTACT WITH US
-                </span>
-              </div>
-            </h1>
+        
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white">
+ <span className="text-white">                  CONTACT WITH US
+</span>
+              </h1>
 
             <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
               <div className="absolute inset-0 sword-shimmer"></div>
@@ -309,7 +304,7 @@ function Contact() {
               with exceptional service and quality craftsmanship.
             </p>
 
-            <div className="flex flex-wrap gap-4">
+            {/* <div className="flex flex-wrap gap-4">
               <Link
                 to="/contact#form"
                 className="group px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
@@ -327,7 +322,7 @@ function Contact() {
                 <span className="relative z-10">View Products</span>
                 <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
