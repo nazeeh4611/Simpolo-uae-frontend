@@ -1,21 +1,23 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 
+/* Layout */
+import { Navbar } from "../Pages/Layout/Navbar";
+import { Footer } from "../Pages/Layout/Footer";
+
+/* Pages */
 import HomePage from "../Pages/User/Home";
-import {Navbar} from "../Pages/Layout/Navbar"
-import {Footer} from "../Pages/Layout/Footer"
-import About from "../Pages/User/About"
-import  Services  from "../Pages/User/Services";
-import Portfolio from "../Pages/User/Portfolio"
+import About from "../Pages/User/About";
+import Services from "../Pages/User/Services";
+import Portfolio from "../Pages/User/Portfolio";
 import Gallery from "../Pages/User/Gallery";
 import Contact from "../Pages/User/Contact";
-import Maintenance from "../Pages/Maintenance"
+import Maintenance from "../Pages/Maintenance";
+
 /* ===============================
    TOGGLE MAINTENANCE MODE HERE
 ================================= */
-
-const Navigate = useNavigate()
 const MAINTENANCE_MODE = true; // true = maintenance ON
 
 function ScrollToTop() {
@@ -75,6 +77,3 @@ function UserRoutes() {
 }
 
 export default UserRoutes;
-
-
-
