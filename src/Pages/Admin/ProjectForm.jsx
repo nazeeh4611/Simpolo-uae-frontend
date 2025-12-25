@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { baseurl } from '../../Util/Base';
+import { baseurl } from '../../util/Base';
 
 const projectCategories = [
   'Residential',

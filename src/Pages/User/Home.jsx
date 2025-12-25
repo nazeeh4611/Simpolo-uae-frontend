@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronRight, Sparkles, Award, Clock, Shield, Star, TrendingUp, Users, Zap, Package, Globe, Truck, CheckCircle, Home, Building, Hotel, ShoppingBag, Phone, Mail, MapPin } from 'lucide-react';
-import { ImageWithFallback } from '../../Util/Fallback';
+import { ImageWithFallback } from '../../util/Fallback';
 import Typewriter from 'typewriter-effect';
 
 function HomePage() {

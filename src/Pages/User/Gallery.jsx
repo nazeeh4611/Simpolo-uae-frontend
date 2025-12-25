@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ImageWithFallback } from '../../Util/Fallback';
+import { ImageWithFallback } from '../../util/Fallback';
 import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock, Users, Star, Heart, Share2, Download, Grid, List, X, ArrowRight, Play, ImageIcon, Eye, Tag, Layers, ChevronLeft, ChevronRight as ChevronRightIcon, CheckCircle } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { baseurl } from '../../Util/Base';
+import { baseurl } from '../../util/Base';
 import { 
   TrendingUp, 
   Users, 

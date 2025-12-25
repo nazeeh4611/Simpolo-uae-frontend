@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
-import { baseurl } from '../../Util/Base';
+import { baseurl } from '../../util/Base';
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({
