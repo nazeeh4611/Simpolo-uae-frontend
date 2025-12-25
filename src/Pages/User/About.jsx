@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { Target, Eye, Award, ChevronRight, Users, Globe, Building, CheckCircle, Sparkles, TrendingUp, Shield, Star, Package, Truck, Clock, MapPin, Phone, Mail, Award as AwardIcon, Trophy, Briefcase, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Target, Eye, Award, ChevronRight, Users, Globe, Building, CheckCircle, Sparkles, TrendingUp, Shield, Star, Package, Truck, Clock, MapPin, Phone, Mail, Briefcase, Heart, ArrowRight, Zap, Trophy } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 
- function About() {
+function About() {
   const partners = [
     { name: 'Simpolo Ceramics', logo: 'SC' },
     { name: 'Volark Indian Tiles', logo: 'VIT' },
@@ -74,8 +75,8 @@ import Typewriter from 'typewriter-effect';
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <style jsx>{`
+    <div className="min-h-screen bg-black">
+      <style dangerouslySetInnerHTML={{__html: `
         @keyframes fadeInUp {
           from {
             opacity: 0;
@@ -90,6 +91,10 @@ import Typewriter from 'typewriter-effect';
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-10px); }
         }
+        @keyframes swordShimmer {
+          0% { background-position: -100% 0; }
+          100% { background-position: 200% 0; }
+        }
         @keyframes gradientShift {
           0%, 100% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
@@ -100,6 +105,30 @@ import Typewriter from 'typewriter-effect';
         .animate-float {
           animation: float 3s ease-in-out infinite;
         }
+        .sword-shimmer {
+          background: linear-gradient(90deg, 
+            transparent, 
+            rgba(192, 192, 192, 0.1), 
+            rgba(192, 192, 192, 0.3), 
+            rgba(192, 192, 192, 0.6), 
+            rgba(192, 192, 192, 0.3), 
+            rgba(192, 192, 192, 0.1), 
+            transparent
+          );
+          background-size: 200% 100%;
+          animation: swordShimmer 3s infinite linear;
+        }
+        .sword-gradient {
+          background: linear-gradient(135deg, 
+            #000000 0%, 
+            #1a1a1a 25%, 
+            #2d2d2d 50%, 
+            #1a1a1a 75%, 
+            #000000 100%
+          );
+          background-size: 200% 200%;
+          animation: gradientShift 4s ease infinite;
+        }
         .silver-gradient {
           background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           background-size: 200% 200%;
@@ -109,17 +138,14 @@ import Typewriter from 'typewriter-effect';
           background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
         }
         .dark-gradient {
-          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%);
-        }
-        .light-gradient {
-          background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 50%, #e8e8e8 100%);
+          background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
         }
         .card-hover {
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .card-hover:hover {
           transform: translateY(-8px);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
         }
         .partner-card {
           transition: all 0.3s ease;
@@ -142,7 +168,7 @@ import Typewriter from 'typewriter-effect';
         .typewriter-cursor {
           display: inline-block;
           width: 3px;
-          background: #808080;
+          background: #c0c0c0;
           margin-left: 4px;
           animation: blink 1s infinite;
         }
@@ -161,9 +187,9 @@ import Typewriter from 'typewriter-effect';
           width: 12px;
           height: 12px;
           border-radius: 50%;
-          background: #808080;
-          border: 3px solid white;
-          box-shadow: 0 0 0 3px rgba(128, 128, 128, 0.2);
+          background: #c0c0c0;
+          border: 3px solid black;
+          box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.2);
         }
         .timeline-item::after {
           content: '';
@@ -172,14 +198,14 @@ import Typewriter from 'typewriter-effect';
           top: 40px;
           bottom: -20px;
           width: 2px;
-          background: linear-gradient(to bottom, #808080, transparent);
+          background: linear-gradient(to bottom, #c0c0c0, transparent);
         }
         .timeline-item:last-child::after {
           display: none;
         }
         .excellence-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -189,7 +215,7 @@ import Typewriter from 'typewriter-effect';
         }
         .divisions-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -199,7 +225,7 @@ import Typewriter from 'typewriter-effect';
         }
         .partners-text {
           display: inline-block;
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
           -webkit-background-clip: text;
           background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -207,184 +233,264 @@ import Typewriter from 'typewriter-effect';
           background-size: 200% 200%;
           animation: gradientShift 3s ease infinite;
         }
-      `}</style>
+        .journey-text {
+          display: inline-block;
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 700;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease infinite;
+        }
+        .team-text {
+          display: inline-block;
+          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 700;
+          background-size: 200% 200%;
+          animation: gradientShift 3s ease infinite;
+        }
+        .silver-button-shine {
+          position: relative;
+          overflow: hidden;
+        }
+        .silver-button-shine::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -60%;
+          width: 20%;
+          height: 200%;
+          background: linear-gradient(
+            rgba(255, 255, 255, 0.3), 
+            rgba(255, 255, 255, 0.1) 50%, 
+            rgba(255, 255, 255, 0.3)
+          );
+          transform: rotate(30deg);
+          animation: buttonShine 3s infinite linear;
+        }
+        @keyframes buttonShine {
+          0% { left: -60%; }
+          100% { left: 140%; }
+        }
+      `}} />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white py-24">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full blur-3xl animate-float"></div>
+      <section className="relative min-h-screen overflow-hidden text-white">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black opacity-90" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800/30 rounded-full blur-3xl animate-float" />
           <div
-            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full blur-3xl animate-float"
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700/30 rounded-full blur-3xl animate-float"
             style={{ animationDelay: '1.5s' }}
-          ></div>
+          />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-on-scroll max-w-4xl">
-              <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-600">
-                <Sparkles size={18} className="mr-2 text-white" />
-                <span className="text-white font-medium">Our Legacy</span>
-              </div>
-
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                About <span>SIMPOLO</span>
-              </h1>
-
-              <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full"></div>
-
-              <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
-                <Typewriter
-                  options={{
-                    strings: [
-                      '15+ Years of Excellence',
-                      'Pioneering Tile Solutions',
-                      'Quality That Endures',
-                      'Innovation in Design',
-                      'Your Trusted Partner',
-                      'Transforming Spaces'
-                    ],
-                    autoStart: true,
-                    loop: true,
-                    delay: 50,
-                    deleteSpeed: 30,
-                    cursorClassName: 'typewriter-cursor'
-                  }}
-                />
-              </div>
-
-              <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-3xl leading-relaxed">
-                From humble beginnings to becoming a market leader, Simpolo Trading LLC has redefined
-                excellence in premium tile solutions. Our journey spans over a decade of innovation,
-                quality craftsmanship, and unwavering commitment to customer satisfaction.
-              </p>
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-32 pb-20">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
+              <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+              <Sparkles size={18} className="mr-2 text-gray-400 relative z-10" />
+              <span className="text-gray-400 font-medium relative z-10">
+                Our Legacy & Vision
+              </span>
             </div>
 
-            <div className="hidden lg:flex justify-center items-center">
-              <div className="relative">
-                <img
-                  src="/simlogo.webp"
-                  alt="Simpolo Logo"
-                  className="w-[340px] xl:w-[400px] opacity-90 drop-shadow-2xl"
-                />
+            <h1 className="mb-6 leading-tight text-white">
+              <div className="relative inline-block">
+                <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
+                  ABOUT
+                </span>
+                <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
+                  SIMPOLO TRADING
+                </span>
               </div>
+            </h1>
+
+            <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
+              <div className="absolute inset-0 sword-shimmer"></div>
+            </div>
+
+            <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
+              <Typewriter
+                options={{
+                  strings: [
+                    "15+ Years of Excellence",
+                    "Pioneering Tile Solutions",
+                    "Quality That Endures",
+                    "Innovation in Design",
+                    "Your Trusted Partner",
+                    "Transforming Spaces"
+                  ],
+                  autoStart: true,
+                  loop: true,
+                  delay: 50,
+                  deleteSpeed: 30,
+                  cursorClassName: 'typewriter-cursor'
+                }}
+              />
+            </div>
+
+            <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-3xl leading-relaxed">
+              From humble beginnings to becoming a market leader, Simpolo Trading LLC has redefined
+              excellence in premium tile solutions. Our journey spans over a decade of innovation,
+              quality craftsmanship, and unwavering commitment to customer satisfaction.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Link
+                to="/contact"
+                className="group px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                <span className="relative z-10">Contact Our Team</span>
+                <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+              </Link>
+
+              <Link
+                to="/services"
+                className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/5 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <span className="relative z-10">Our Services</span>
+                <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid lg:grid-cols-3 gap-8 mb-16">
-              {[
-                { icon: Users, value: '300+', label: 'Happy Clients', desc: 'Across UAE' },
-                { icon: AwardIcon, value: '500+', label: 'Projects', desc: 'Successfully Completed' },
-                { icon: Globe, value: '15+', label: 'Years', desc: 'Industry Experience' },
-              ].map((stat, index) => (
-                <div key={index} className="animate-on-scroll text-center p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-white border border-gray-200 hover:shadow-xl transition-all duration-300 card-hover" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full silver-gradient mb-6">
-                    <stat.icon className="text-gray-900" size={28} />
-                  </div>
-                  <div className="text-4xl md:text-5xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                  <div className="text-lg font-semibold text-gray-700 mb-1">{stat.label}</div>
-                  <div className="text-sm text-gray-600">{stat.desc}</div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-16">
+            {[
+              { icon: Users, value: '300+', label: 'Happy Clients', desc: 'Across UAE' },
+              { icon: Award, value: '500+', label: 'Projects', desc: 'Successfully Completed' },
+              { icon: Globe, value: '15+', label: 'Years', desc: 'Industry Experience' },
+            ].map((stat, index) => (
+              <div 
+                key={index}
+                className="animate-on-scroll text-center p-8 rounded-2xl hover:shadow-2xl cursor-pointer card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full silver-gradient mb-6 relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                  <stat.icon className="text-gray-900 relative z-10" size={28} />
                 </div>
-              ))}
-            </div>
-
-            <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold border border-gray-300">
-                <Briefcase size={18} className="mr-2" /> Our Journey
+                <div className="text-4xl md:text-5xl font-bold text-white mb-2">{stat.value}</div>
+                <div className="text-lg font-semibold text-gray-300 mb-1">{stat.label}</div>
+                <div className="text-sm text-gray-400">{stat.desc}</div>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-12 text-gray-900">
-                Crafting <span className="excellence-text">Excellence</span> Since 2008
-              </h2>
-              
-              <div className="grid lg:grid-cols-2 gap-12 items-start">
-                <div className="space-y-8">
-                  <div className="bg-white p-8 rounded-3xl shadow-lg card-hover border-l-4 border-gray-600">
-                    <div className="flex items-start mb-4">
-                      <div className="p-3 rounded-xl silver-gradient mr-4">
-                        <Building className="text-gray-900" size={24} />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Company Foundation</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                          <span className="font-semibold text-gray-900">Simpolo Trading LLC</span> began its journey 
-                          in 2008 with a vision to revolutionize the tile industry in UAE through 
-                          superior quality and innovative designs.
-                        </p>
-                      </div>
+            ))}
+          </div>
+
+          <div className="animate-on-scroll">
+            <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+              <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+              <Briefcase size={18} className="mr-2 relative z-10" /> 
+              <span className="relative z-10">Our Journey</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-12 text-white">
+              Crafting <span className="journey-text">Excellence</span> Since 2008
+            </h2>
+            
+            <div className="grid lg:grid-cols-2 gap-12 items-start">
+              <div className="space-y-8">
+                <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl shadow-lg card-hover border-l-4 border-gray-600 relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-start mb-4 relative z-10">
+                    <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Building className="text-gray-900 relative z-10" size={24} />
                     </div>
-                  </div>
-                  
-                  <div className="bg-white p-8 rounded-3xl shadow-lg card-hover">
-                    <div className="flex items-start mb-4">
-                      <div className="p-3 rounded-xl silver-gradient mr-4">
-                        <Package className="text-gray-900" size={24} />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Manufacturing Excellence</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                          Our state-of-the-art production unit in India employs cutting-edge technology 
-                          meeting BS/EN and ANSI/ASTM standards, ensuring exceptional product quality 
-                          and innovative design capability.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white p-8 rounded-3xl shadow-lg card-hover">
-                    <div className="flex items-start mb-4">
-                      <div className="p-3 rounded-xl silver-gradient mr-4">
-                        <Truck className="text-gray-900" size={24} />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">UAE Operations</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                          With a dedicated fabrication facility in ICAD, Abu Dhabi and warehousing in 
-                          Sharjah, we provide rapid customization and reliable delivery across all Emirates.
-                        </p>
-                      </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">Company Foundation</h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        <span className="font-semibold text-white">Simpolo Trading LLC</span> began its journey 
+                        in 2008 with a vision to revolutionize the tile industry in UAE through 
+                        superior quality and innovative designs.
+                      </p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="space-y-8">
-                  <div className="dark-gradient text-white p-8 rounded-3xl shadow-xl border border-gray-700">
-                    <h3 className="text-2xl font-bold mb-6 text-gray-300">Our Timeline</h3>
-                    <div className="space-y-8 pl-6">
-                      {milestones.map((milestone, index) => (
-                        <div key={index} className="timeline-item pl-8">
-                          <div className="text-3xl font-bold text-gray-400 mb-1">{milestone.year}</div>
-                          <div className="text-lg font-semibold mb-1">{milestone.title}</div>
-                          <div className="text-gray-300 text-sm">{milestone.description}</div>
-                        </div>
-                      ))}
+                <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl shadow-lg card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-start mb-4 relative z-10">
+                    <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Package className="text-gray-900 relative z-10" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">Manufacturing Excellence</h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        Our state-of-the-art production unit in India employs cutting-edge technology 
+                        meeting BS/EN and ANSI/ASTM standards, ensuring exceptional product quality 
+                        and innovative design capability.
+                      </p>
                     </div>
                   </div>
-                  
-                  <div className="bg-white p-8 rounded-3xl shadow-lg card-hover border-r-4 border-gray-600">
-                    <div className="flex items-start mb-4">
-                      <div className="p-3 rounded-xl silver-gradient mr-4">
-                        <Heart className="text-gray-900" size={24} />
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Customer Commitment</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                          We serve residential, commercial, hospitality, and government projects with 
-                          personalized solutions, technical support, and after-sales service.
-                        </p>
-                      </div>
+                </div>
+                
+                <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl shadow-lg card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-start mb-4 relative z-10">
+                    <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Truck className="text-gray-900 relative z-10" size={24} />
                     </div>
-                    <div className="mt-6 grid grid-cols-2 gap-4">
-                      {['Free Consultation', 'Custom Designs', 'Installation Support', '10-Year Warranty'].map((item, idx) => (
-                        <div key={idx} className="flex items-center text-sm">
-                          <CheckCircle size={16} className="text-gray-600 mr-2" />
-                          <span>{item}</span>
-                        </div>
-                      ))}
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">UAE Operations</h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        With a dedicated fabrication facility in ICAD, Abu Dhabi and warehousing in 
+                        Sharjah, we provide rapid customization and reliable delivery across all Emirates.
+                      </p>
                     </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-8">
+                <div className="sword-gradient text-white p-8 rounded-3xl shadow-xl border border-gray-700 relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Our Timeline</h3>
+                  <div className="space-y-8 pl-6 relative z-10">
+                    {milestones.map((milestone, index) => (
+                      <div key={index} className="timeline-item pl-8">
+                        <div className="text-3xl font-bold text-gray-400 mb-1">{milestone.year}</div>
+                        <div className="text-lg font-semibold mb-1 text-white">{milestone.title}</div>
+                        <div className="text-gray-300 text-sm">{milestone.description}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl shadow-lg card-hover border-r-4 border-gray-600 relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-start mb-4 relative z-10">
+                    <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Heart className="text-gray-900 relative z-10" size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-2">Customer Commitment</h3>
+                      <p className="text-gray-300 leading-relaxed">
+                        We serve residential, commercial, hospitality, and government projects with 
+                        personalized solutions, technical support, and after-sales service.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-6 grid grid-cols-2 gap-4 relative z-10">
+                    {['Free Consultation', 'Custom Designs', 'Installation Support', '10-Year Warranty'].map((item, idx) => (
+                      <div key={idx} className="flex items-center text-sm">
+                        <CheckCircle size={16} className="text-gray-400 mr-2" />
+                        <span className="text-gray-300">{item}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -393,19 +499,21 @@ import Typewriter from 'typewriter-effect';
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-gray-100">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="animate-on-scroll">
-              <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-200 overflow-hidden relative">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gray-100 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="bg-white/5 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-700 relative overflow-hidden group">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gray-800/30 rounded-full -translate-y-16 translate-x-16"></div>
                 <div className="flex items-center mb-8 relative z-10">
-                  <div className="p-3 rounded-xl silver-gradient mr-4">
-                    <Eye className="text-gray-900" size={32} />
+                  <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                    <Eye className="text-gray-900 relative z-10" size={32} />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Our Vision</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white">Our Vision</h2>
                 </div>
-                <p className="text-lg text-gray-700 mb-8 leading-relaxed relative z-10">
+                <p className="text-lg text-gray-300 mb-8 leading-relaxed relative z-10">
                   To become the most trusted and preferred tile supplier in the UAE market by consistently 
                   delivering superior ceramic, porcelain, and specialty tile solutions that transform spaces 
                   and exceed expectations.
@@ -419,10 +527,11 @@ import Typewriter from 'typewriter-effect';
                     'Set industry benchmarks for quality and innovation'
                   ].map((item, index) => (
                     <li key={index} className="flex items-start group">
-                      <div className="p-2 rounded-full bg-gray-100 mr-4 mt-1 group-hover:silver-gradient transition-all duration-300">
-                        <Star size={16} className="text-gray-600 group-hover:text-gray-900" />
+                      <div className="p-2 rounded-full bg-gray-800/50 mr-4 mt-1 group-hover:silver-gradient transition-all duration-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        <Star size={16} className="text-gray-400 group-hover:text-gray-900 relative z-10" />
                       </div>
-                      <span className="text-gray-700 group-hover:text-gray-900 transition-colors">{item}</span>
+                      <span className="text-gray-300 group-hover:text-white transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -430,15 +539,17 @@ import Typewriter from 'typewriter-effect';
             </div>
 
             <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-200 overflow-hidden relative">
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-gray-100 rounded-full translate-y-16 -translate-x-16"></div>
+              <div className="bg-white/5 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-700 relative overflow-hidden group">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-gray-800/30 rounded-full translate-y-16 -translate-x-16"></div>
                 <div className="flex items-center mb-8 relative z-10">
-                  <div className="p-3 rounded-xl silver-gradient mr-4">
-                    <Target className="text-gray-900" size={32} />
+                  <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                    <Target className="text-gray-900 relative z-10" size={32} />
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Our Mission</h2>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white">Our Mission</h2>
                 </div>
-                <p className="text-lg text-gray-700 mb-8 leading-relaxed relative z-10">
+                <p className="text-lg text-gray-300 mb-8 leading-relaxed relative z-10">
                   To deliver world-class services and solutions for all porcelain and ceramic tile 
                   requirements with uncompromising quality, technical excellence, and customer-centric 
                   innovation.
@@ -453,10 +564,11 @@ import Typewriter from 'typewriter-effect';
                     'Continuous innovation in design and technology'
                   ].map((item, index) => (
                     <li key={index} className="flex items-start group">
-                      <div className="p-2 rounded-full bg-gray-100 mr-4 mt-1 group-hover:silver-gradient transition-all duration-300">
-                        <Target size={16} className="text-gray-600 group-hover:text-gray-900" />
+                      <div className="p-2 rounded-full bg-gray-800/50 mr-4 mt-1 group-hover:silver-gradient transition-all duration-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        <Target size={16} className="text-gray-400 group-hover:text-gray-900 relative z-10" />
                       </div>
-                      <span className="text-gray-700 group-hover:text-gray-900 transition-colors">{item}</span>
+                      <span className="text-gray-300 group-hover:text-white transition-colors">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -466,17 +578,19 @@ import Typewriter from 'typewriter-effect';
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-on-scroll">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold border border-gray-300">
-                <TrendingUp size={18} className="mr-2" /> Our Expertise
+              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                <TrendingUp size={18} className="mr-2 relative z-10" /> 
+                <span className="relative z-10">Our Expertise</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Comprehensive <span className="divisions-text">Divisions</span>
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+              <p className="text-gray-400 max-w-2xl mx-auto text-lg">
                 Specialized solutions for every architectural and design requirement
               </p>
             </div>
@@ -485,26 +599,29 @@ import Typewriter from 'typewriter-effect';
               {divisions.map((division, index) => (
                 <div
                   key={index}
-                  className="group animate-on-scroll bg-white rounded-2xl p-6 shadow-lg border border-gray-200 hover:shadow-2xl card-hover cursor-pointer"
+                  className="group animate-on-scroll bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-gray-700 hover:border-gray-600 hover:bg-white/10 transition-all duration-300 card-hover relative overflow-hidden cursor-pointer"
                   style={{ animationDelay: `${index * 0.03}s` }}
                 >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-lg silver-gradient flex items-center justify-center">
-                      <Award size={20} className="text-gray-900" />
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-center justify-between mb-4 relative z-10">
+                    <div className="w-10 h-10 rounded-lg silver-gradient flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Award size={20} className="text-gray-900 relative z-10" />
                     </div>
-                    <div className="p-2 rounded-full bg-gray-100 group-hover:silver-gradient transition-all duration-300">
-                      <ChevronRight size={18} className="text-gray-600 group-hover:text-gray-900 transition-colors" />
+                    <div className="p-2 rounded-full bg-gray-800/50 group-hover:silver-gradient transition-all duration-300 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                      <ChevronRight size={18} className="text-gray-400 group-hover:text-gray-900 relative z-10 transition-colors" />
                     </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors">
+                  <h3 className="text-lg font-semibold text-white group-hover:text-gray-300 transition-colors relative z-10">
                     {division}
                   </h3>
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <div className="flex items-center text-sm text-gray-500">
-                      <div className="w-full bg-gray-100 rounded-full h-2">
+                  <div className="mt-4 pt-4 border-t border-gray-700 relative z-10">
+                    <div className="flex items-center text-sm text-gray-400">
+                      <div className="w-full bg-gray-800/50 rounded-full h-2">
                         <div className="silver-gradient h-2 rounded-full w-0 group-hover:w-full transition-all duration-500"></div>
                       </div>
-                      <span className="ml-2 group-hover:text-gray-700 transition-colors">View Details</span>
+                      <span className="ml-2 group-hover:text-gray-300 transition-colors">View Details</span>
                     </div>
                   </div>
                 </div>
@@ -514,14 +631,19 @@ import Typewriter from 'typewriter-effect';
         </div>
       </section>
 
-      <section className="py-24 dark-gradient">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-on-scroll">
             <div className="text-center mb-16">
+              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                <Users size={18} className="mr-2 relative z-10" /> 
+                <span className="relative z-10">Our Leadership</span>
+              </div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Meet Our <span className="text-gray-300">Leadership</span>
+                Meet Our <span className="team-text">Leadership</span>
               </h2>
-              <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+              <p className="text-gray-400 max-w-2xl mx-auto text-lg">
                 Experienced professionals dedicated to excellence and innovation
               </p>
             </div>
@@ -530,23 +652,27 @@ import Typewriter from 'typewriter-effect';
               {team.map((member, index) => (
                 <div
                   key={index}
-                  className="animate-on-scroll group bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-gray-600 hover:border-gray-500 hover:bg-white/10 transition-all duration-300 card-hover"
+                  className="group animate-on-scroll bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 hover:border-gray-600 hover:bg-white/10 transition-all duration-300 card-hover relative overflow-hidden"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="flex items-center mb-4">
-                    <div className="w-16 h-16 rounded-full silver-gradient flex items-center justify-center mr-4">
-                      <span className="text-gray-900 text-xl font-bold">{member.name.split(' ')[0][0]}{member.name.split(' ')[1][0]}</span>
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-center mb-4 relative z-10">
+                    <div className="w-16 h-16 rounded-full silver-gradient flex items-center justify-center mr-4 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <span className="text-gray-900 text-xl font-bold relative z-10">
+                        {member.name.split(' ')[0][0]}{member.name.split(' ')[1][0]}
+                      </span>
                     </div>
                     <div>
                       <div className="text-lg font-semibold text-white">{member.name}</div>
                       <div className="text-sm text-gray-400">{member.role}</div>
                     </div>
                   </div>
-                  <div className="mb-4">
+                  <div className="mb-4 relative z-10">
                     <div className="text-sm text-gray-400">Experience</div>
                     <div className="text-lg font-semibold text-white">{member.experience}</div>
                   </div>
-                  <div className="pt-4 border-t border-gray-700">
+                  <div className="pt-4 border-t border-gray-700 relative z-10">
                     <div className="flex items-center text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
                       <span>View Profile</span>
                       <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
@@ -559,17 +685,19 @@ import Typewriter from 'typewriter-effect';
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="animate-on-scroll">
             <div className="text-center mb-16">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-100 text-gray-700 text-sm font-semibold border border-gray-300">
-                <Globe size={18} className="mr-2" /> Our Partners
+              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                <Globe size={18} className="mr-2 relative z-10" /> 
+                <span className="relative z-10">Our Partners</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Trusted <span className="partners-text">Global Partners</span>
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+              <p className="text-gray-400 max-w-2xl mx-auto text-lg">
                 Collaborating with world-renowned brands to deliver unparalleled quality and innovation
               </p>
             </div>
@@ -578,18 +706,20 @@ import Typewriter from 'typewriter-effect';
               {partners.map((partner, index) => (
                 <div
                   key={index}
-                  className="partner-card animate-on-scroll bg-white rounded-xl p-6 text-center border border-gray-200 hover:border-gray-400 hover:shadow-xl transition-all duration-300 card-hover group"
+                  className="partner-card animate-on-scroll bg-white/5 backdrop-blur-md rounded-xl p-6 text-center border border-gray-700 hover:border-gray-600 hover:bg-white/10 transition-all duration-300 card-hover group relative overflow-hidden"
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                  <div className="h-16 flex items-center justify-center mb-4">
-                    <div className="w-12 h-12 rounded-full silver-gradient flex items-center justify-center group-hover:scale-110 transition-transform">
-                      <span className="text-gray-900 font-bold">{partner.logo}</span>
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="h-16 flex items-center justify-center mb-4 relative z-10">
+                    <div className="w-12 h-12 rounded-full silver-gradient flex items-center justify-center group-hover:scale-110 transition-transform relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <span className="text-gray-900 font-bold relative z-10">{partner.logo}</span>
                     </div>
                   </div>
-                  <span className="text-gray-800 group-hover:text-gray-700 transition-colors font-semibold">
+                  <span className="text-white group-hover:text-gray-300 transition-colors font-semibold relative z-10">
                     {partner.name}
                   </span>
-                  <div className="mt-3 text-xs text-gray-500 group-hover:text-gray-600 transition-colors">
+                  <div className="mt-3 text-xs text-gray-400 group-hover:text-gray-300 transition-colors relative z-10">
                     Premium Partner
                   </div>
                 </div>
@@ -597,22 +727,24 @@ import Typewriter from 'typewriter-effect';
             </div>
 
             <div className="mt-16 text-center">
-              <button className="group inline-flex items-center px-8 py-4 dark-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700">
-                <span>View All Partnerships</span>
-                <ChevronRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
+              <button className="group inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                <span className="relative z-10">View All Partnerships</span>
+                <ChevronRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 dark-gradient">
+      <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 animate-on-scroll">
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 text-white border border-gray-600">
-                <h3 className="text-2xl font-bold mb-6 text-gray-300">Contact Our Team</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 relative overflow-hidden group">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Contact Our Team</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                   <div className="flex items-start">
                     <MapPin size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" />
                     <div>
@@ -654,13 +786,18 @@ import Typewriter from 'typewriter-effect';
             </div>
             
             <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="silver-gradient-dark rounded-2xl p-8 h-full border border-gray-600">
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">Quick Contact</h3>
-                <p className="text-gray-700 mb-6">Get in touch with our team for expert advice</p>
-                <button className="group w-full px-6 py-4 dark-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700">
-                  <span>Schedule a Consultation</span>
-                </button>
-                <div className="mt-6 text-center">
+              <div className="silver-gradient-dark rounded-2xl p-8 h-full border border-gray-700 relative overflow-hidden group">
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <h3 className="text-2xl font-bold mb-6 text-gray-900 relative z-10">Quick Contact</h3>
+                <p className="text-gray-700 mb-6 relative z-10">Get in touch with our team for expert advice</p>
+                <Link
+                  to="/contact"
+                  className="group w-full px-6 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
+                >
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                  <span className="relative z-10">Schedule a Consultation</span>
+                </Link>
+                <div className="mt-6 text-center relative z-10">
                   <div className="text-sm text-gray-600">Response within 24 hours</div>
                 </div>
               </div>
@@ -672,4 +809,4 @@ import Typewriter from 'typewriter-effect';
   );
 }
 
-export default About
+export default About;
