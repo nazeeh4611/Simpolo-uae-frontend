@@ -10,6 +10,7 @@ import  Services  from "../Pages/User/Services";
 import Portfolio from "../Pages/User/Portfolio"
 import Gallery from "../Pages/User/Gallery";
 import Contact from "../Pages/User/Contact";
+import Maintenance from "../Pages/Mainatance";
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -55,6 +56,8 @@ function UserRoutes() {
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/maintenance" element={<Maintenance />} />
+
       </Routes>
 
       <Footer />

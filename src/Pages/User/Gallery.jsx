@@ -2,212 +2,101 @@ import React, { useState, useEffect } from 'react';
 import { ImageWithFallback } from '../../util/Fallback';
 import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock, Users, Star, Heart, Share2, Download, Grid, List, X, ArrowRight, Play, ImageIcon, Eye, Tag, Layers, ChevronLeft, ChevronRight as ChevronRightIcon, CheckCircle } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
+import { baseurl } from '../../Util/Base';
 
 function Gallery() {
-  const gallery = [
-    {
-      id: 1,
-      title: 'Modern Bathroom Tiles',
-      category: 'Porcelain Tiles',
-      tags: ['Bathroom', 'Modern', 'Premium', 'Luxury'],
-      location: 'Dubai Hills Villa',
-      date: 'Dec 2024',
-      likes: 142,
-      views: 2345,
-      featured: true,
-      images: [
-        'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
-        'https://images.unsplash.com/photo-1621680817805-d5d06ea2d3bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80'
-      ]
-    },
-    {
-      id: 2,
-      title: 'Marble Texture Showcase',
-      category: 'Marble & Granite',
-      tags: ['Luxury', 'Natural', 'Elegant', 'Classic'],
-      location: 'Emirates Palace',
-      date: 'Nov 2024',
-      likes: 189,
-      views: 3120,
-      featured: true,
-      images: [
-        'https://images.unsplash.com/photo-1669643219984-2ff3eea887a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80',
-        'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80'
-      ]
-    },
-    {
-      id: 3,
-      title: 'Swimming Pool Tiles',
-      category: 'Pool Tiles',
-      tags: ['Outdoor', 'Waterproof', 'Safety', 'Durable'],
-      location: 'Jumeirah Beach Resort',
-      date: 'Oct 2024',
-      likes: 156,
-      views: 2890,
-      images: [
-        'https://images.unsplash.com/photo-1753723907358-c1d346aff7a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80'
-      ]
-    },
-    {
-      id: 4,
-      title: 'Construction Materials',
-      category: 'Building Materials',
-      tags: ['Industrial', 'Durable', 'Technical', 'Commercial'],
-      location: 'Dubai Marina Tower',
-      date: 'Sep 2024',
-      likes: 98,
-      views: 1870,
-      images: [
-        'https://images.unsplash.com/photo-1637241612956-b7309005288b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'
-      ]
-    },
-    {
-      id: 5,
-      title: 'Luxury Showroom Display',
-      category: 'Showroom',
-      tags: ['Display', 'Premium', 'Showcase', 'Collection'],
-      location: 'Our Showroom',
-      date: 'Aug 2024',
-      likes: 210,
-      views: 4210,
-      featured: true,
-      images: [
-        'https://images.unsplash.com/photo-1728486885790-1454260d9246?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&q=80'
-      ]
-    },
-    {
-      id: 6,
-      title: 'Dubai Architecture Project',
-      category: 'Projects',
-      tags: ['Architecture', 'Urban', 'Modern', 'Skyscraper'],
-      location: 'Downtown Dubai',
-      date: 'Jul 2024',
-      likes: 245,
-      views: 5230,
-      images: [
-        'https://images.unsplash.com/photo-1531586024505-b040066c2d5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'
-      ]
-    },
-    {
-      id: 7,
-      title: 'Kitchen Backsplash Design',
-      category: 'Ceramic Tiles',
-      tags: ['Kitchen', 'Pattern', 'Design', 'Colorful'],
-      location: 'Al Barsha Villa',
-      date: 'Jun 2024',
-      likes: 167,
-      views: 2980,
-      images: [
-        'https://images.unsplash.com/photo-1636491427623-f9813e4c3b12?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80'
-      ]
-    },
-    {
-      id: 8,
-      title: 'Commercial Flooring Solution',
-      category: 'Outdoor Tiles',
-      tags: ['Commercial', 'Heavy Duty', 'Flooring', 'Durable'],
-      location: 'Mall of Emirates',
-      date: 'May 2024',
-      likes: 134,
-      views: 2760,
-      images: [
-        'https://images.unsplash.com/photo-1615529328331-f8917597711f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'
-      ]
-    },
-    {
-      id: 9,
-      title: 'Pattern Mosaic Artwork',
-      category: 'Mosaic Fabrications',
-      tags: ['Artistic', 'Custom', 'Pattern', 'Unique'],
-      location: 'Dubai Opera',
-      date: 'Apr 2024',
-      likes: 189,
-      views: 3450,
-      featured: true,
-      images: [
-        'https://images.unsplash.com/photo-1621680817805-d5d06ea2d3bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
-        'https://images.unsplash.com/photo-1564078516393-cf04bd966897?w=800&q=80'
-      ]
-    },
-    {
-      id: 10,
-      title: 'Living Room Elegance',
-      category: 'Porcelain Tiles',
-      tags: ['Living Room', 'Elegant', 'Spacious', 'Modern'],
-      location: 'Palm Jumeirah Villa',
-      date: 'Mar 2024',
-      likes: 178,
-      views: 3120,
-      images: [
-        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80'
-      ]
-    },
-    {
-      id: 11,
-      title: 'Luxury Hotel Lobby',
-      category: 'Marble & Granite',
-      tags: ['Hotel', 'Lobby', 'Luxury', 'Grand'],
-      location: 'Burj Al Arab',
-      date: 'Feb 2024',
-      likes: 256,
-      views: 4890,
-      featured: true,
-      images: [
-        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80',
-        'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
-        'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80'
-      ]
-    },
-    {
-      id: 12,
-      title: 'Office Space Design',
-      category: 'Commercial Tiles',
-      tags: ['Office', 'Corporate', 'Professional', 'Modern'],
-      location: 'DIFC Tower',
-      date: 'Jan 2024',
-      likes: 145,
-      views: 2670,
-      images: [
-        'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80'
-      ]
-    }
+  const [gallery, setGallery] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const categories = [
+    'All',
+    'Porcelain Tiles',
+    'Porcelain Tiles Fabrications',
+    'Slab Tiles',
+    'Ceramic Tiles',
+    'Outdoor Heavy-Duty Tiles',
+    'Mosaic Fabrications from Tiles',
+    'Swimming Pool Tiles',
+    'Marble and Granite',
+    'Marble Countertops and Fabrications',
+    'Sanitary Ware',
+    'Bathroom Fittings'
   ];
-
-  const categories = ['All', 'Porcelain Tiles', 'Marble & Granite', 'Pool Tiles', 'Ceramic Tiles', 'Outdoor Tiles', 'Mosaic Fabrications', 'Commercial Tiles', 'Showroom', 'Projects'];
+  
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
-  const [filteredGallery, setFilteredGallery] = useState(gallery);
+  const [filteredGallery, setFilteredGallery] = useState([]);
   const [viewMode, setViewMode] = useState('grid');
   const [likedItems, setLikedItems] = useState({});
   const [sortBy, setSortBy] = useState('date');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
+  const location = useLocation();
+  
   useEffect(() => {
-    let filtered = gallery.filter(item => {
-      const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
-      const matchesSearch = searchQuery === '' || 
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchesCategory && matchesSearch;
-    });
+    const queryParams = new URLSearchParams(location.search);
+    const categoryFromUrl = queryParams.get('category');
+    
+    if (categoryFromUrl && categories.includes(categoryFromUrl)) {
+      setSelectedCategory(categoryFromUrl);
+    }
+  }, [location.search]);
 
-    filtered.sort((a, b) => {
-      if (sortBy === 'date') return new Date(b.date) - new Date(a.date);
-      if (sortBy === 'likes') return b.likes - a.likes;
-      if (sortBy === 'views') return b.views - a.views;
-      if (sortBy === 'title') return a.title.localeCompare(b.title);
-      return 0;
-    });
+  useEffect(() => {
+    const fetchGalleryData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${baseurl}gallery`);
+        console.log("resposnseee")
+        const galleryData = Array.isArray(response.data) ? response.data : [];
+        setGallery(galleryData);
+        setFilteredGallery(galleryData);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load gallery. Please try again later.');
+        console.error('Error fetching gallery:', err);
+        setGallery([]);
+        setFilteredGallery([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    setFilteredGallery(filtered);
-  }, [selectedCategory, searchQuery, sortBy]);
+    fetchGalleryData();
+  }, []);
+
+  useEffect(() => {
+    let filtered = [...gallery];
+
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(item => 
+        item.category === selectedCategory
+      );
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(item => {
+        return (
+          (item.title && item.title.toLowerCase().includes(query)) ||
+          (item.description && item.description.toLowerCase().includes(query)) ||
+          (item.category && item.category.toLowerCase().includes(query))
+        );
+      });
+    }
+
+    if (sortBy === 'title') {
+      filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    } else {
+      filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    }
+
+    setFilteredGallery(Array.isArray(filtered) ? filtered : []);
+  }, [gallery, selectedCategory, searchQuery, sortBy]);
 
   const handleLike = (id) => {
     setLikedItems(prev => ({
@@ -252,6 +141,197 @@ function Gallery() {
     document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
+
+  const renderGalleryContent = () => {
+    const itemsToRender = Array.isArray(filteredGallery) ? filteredGallery : [];
+    
+    if (loading) {
+      return (
+        <div className="text-center py-24">
+          <div className="w-24 h-24 silver-gradient rounded-full flex items-center justify-center mx-auto mb-6 relative overflow-hidden">
+            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+            <div className="text-gray-900 relative z-10 text-sm">Loading...</div>
+          </div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="text-center py-24">
+          <div className="w-24 h-24 silver-gradient rounded-full flex items-center justify-center mx-auto mb-6 relative overflow-hidden">
+            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+            <div className="text-gray-900 relative z-10 text-sm">Error</div>
+          </div>
+          <h3 className="text-3xl font-bold text-white mb-4">Failed to Load Gallery</h3>
+          <p className="text-gray-400 max-w-md mx-auto mb-8">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="group px-6 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
+          >
+            <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+            <span className="relative z-10">Retry</span>
+          </button>
+        </div>
+      );
+    }
+
+    if (itemsToRender.length === 0) {
+      return (
+        <div className="text-center py-24">
+          <div className="w-24 h-24 silver-gradient rounded-full flex items-center justify-center mx-auto mb-6 relative overflow-hidden">
+            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+            <Search className="text-gray-900 relative z-10" size={32} />
+          </div>
+          <h3 className="text-3xl font-bold text-white mb-4">No Projects Found</h3>
+          <p className="text-gray-400 max-w-md mx-auto mb-8">
+            {selectedCategory !== 'All' 
+              ? `No items found in category "${selectedCategory}"`
+              : 'Try adjusting your search or filter criteria to find what you\'re looking for'}
+          </p>
+          <button
+            onClick={() => {
+              setSelectedCategory('All');
+              setSearchQuery('');
+            }}
+            className="group px-6 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
+          >
+            <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+            <span className="relative z-10">Reset Filters</span>
+          </button>
+        </div>
+      );
+    }
+
+    if (viewMode === 'grid') {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {itemsToRender.map((item) => (
+            <div
+              key={item._id || item.id}
+              onClick={() => handleOpenModal(item)}
+              className="animate-on-scroll grid-item group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer card-hover bg-white/5 backdrop-blur-md border border-gray-700 hover:border-gray-500"
+            >
+              <div className="relative h-96 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+                <ImageWithFallback
+                  src={item.images?.[0]?.url || 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'}
+                  alt={item.images?.[0]?.altText || item.title || 'Gallery image'}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                
+                {item.featured && (
+                  <div className="absolute top-4 left-4 z-20">
+                    <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <span className="relative z-10">Featured</span>
+                    </span>
+                  </div>
+                )}
+                
+                <div className="absolute top-4 right-4 z-20">
+                  <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLike(item._id);
+                        }}
+                        className="p-2 bg-white/10 backdrop-blur-sm rounded-full shadow-sm hover:bg-white/20 transition-colors border border-gray-600"
+                      >
+                        <Heart 
+                          size={18} 
+                          className={likedItems[item._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
+                        />
+                      </button>
+                    </div>
+                    
+                    <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+                      <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors uppercase tracking-wide">
+                        {item.title || 'Untitled Project'}
+                      </h3>
+                      <div className="flex items-center text-gray-300 text-sm font-medium">
+                        <span className="uppercase tracking-wider">{item.category || 'Uncategorized'}</span>
+                        <span className="mx-2">•</span>
+                        <span>{(item.images && item.images.length) || 0} images</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        } else {
+          return (
+            <div className="space-y-6">
+              {itemsToRender.map((item) => (
+                <div
+                  key={item._id || item.id}
+                  onClick={() => handleOpenModal(item)}
+                  className="animate-on-scroll group bg-white/5 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-700 hover:border-gray-500 overflow-hidden card-hover cursor-pointer"
+                >
+                  <div className="flex flex-col md:flex-row">
+                    <div className="md:w-64 h-64 md:h-auto relative flex-shrink-0">
+                      <ImageWithFallback
+                        src={item.images?.[0]?.url || 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'}
+                        alt={item.images?.[0]?.altText || item.title || 'Gallery image'}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      {item.featured && (
+                        <div className="absolute top-4 left-4">
+                          <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                            <span className="relative z-10">Featured</span>
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex-1 p-8">
+                      <div className="flex items-start justify-between mb-4">
+                        <div>
+                          <span className="px-3 py-1 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                            {item.category || 'Uncategorized'}
+                          </span>
+                          <h3 className="text-2xl font-bold text-white mt-4 mb-2 group-hover:text-gray-300 transition-colors">{item.title || 'Untitled Project'}</h3>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleLike(item._id);
+                          }}
+                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-gray-700"
+                        >
+                          <Heart 
+                            size={20} 
+                            className={likedItems[item._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
+                          />
+                        </button>
+                      </div>
+                      
+                      <p className="text-gray-300 mb-6 leading-relaxed">
+                        {item.description || 'Premium installation showcasing exceptional craftsmanship and design excellence.'}
+                      </p>
+                      
+                      <div className="flex items-center justify-between pt-6 border-t border-gray-700">
+                        <div className="flex items-center gap-6 text-sm text-gray-500">
+                          <div className="flex items-center">
+                            <ImageIcon size={16} className="mr-1.5" />
+                            {(item.images && item.images.length) || 0} images
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center text-sm text-gray-300 font-semibold">
+                          View Details
+                          <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        }
+      };
 
   return (
     <div className="min-h-screen bg-black">
@@ -478,7 +558,7 @@ function Gallery() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {[
-              { value: '500+', label: 'Projects Completed', icon: Layers },
+              { value: gallery.length, label: 'Gallery Items', icon: Layers },
               { value: '100%', label: 'Client Satisfaction', icon: Award },
               { value: '15+', label: 'Years Experience', icon: Clock },
               { value: '300+', label: 'Happy Clients', icon: Users }
@@ -523,8 +603,6 @@ function Gallery() {
                     className="px-3 py-2 bg-white/5 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-700"
                   >
                     <option value="date" className="bg-gray-900">Latest</option>
-                    <option value="likes" className="bg-gray-900">Most Liked</option>
-                    <option value="views" className="bg-gray-900">Most Viewed</option>
                     <option value="title" className="bg-gray-900">Title</option>
                   </select>
                 </div>
@@ -573,7 +651,7 @@ function Gallery() {
 
             <div className="flex items-center justify-between pt-4 border-t border-gray-700">
               <div className="text-sm text-gray-400">
-                Showing <span className="font-bold text-white">{filteredGallery.length}</span> of {gallery.length} projects
+                Showing <span className="font-bold text-white">{filteredGallery.length}</span> items
               </div>
               <div className="flex items-center text-sm text-gray-500">
                 <ImageIcon size={16} className="mr-1" />
@@ -582,189 +660,7 @@ function Gallery() {
             </div>
           </div>
 
-          {filteredGallery.length === 0 ? (
-            <div className="text-center py-24">
-              <div className="w-24 h-24 silver-gradient rounded-full flex items-center justify-center mx-auto mb-6 relative overflow-hidden">
-                <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                <Search className="text-gray-900 relative z-10" size={32} />
-              </div>
-              <h3 className="text-3xl font-bold text-white mb-4">No Projects Found</h3>
-              <p className="text-gray-400 max-w-md mx-auto mb-8">
-                Try adjusting your search or filter criteria to find what you're looking for
-              </p>
-              <button
-                onClick={() => {
-                  setSelectedCategory('All');
-                  setSearchQuery('');
-                }}
-                className="group px-6 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                <span className="relative z-10">Reset Filters</span>
-              </button>
-            </div>
-          ) : viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredGallery.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => handleOpenModal(item)}
-                  className="animate-on-scroll grid-item group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl cursor-pointer card-hover bg-white/5 backdrop-blur-md border border-gray-700 hover:border-gray-500"
-                >
-                  <div className="relative h-96 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-                    <ImageWithFallback
-                      src={item.images[0]}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    
-                    {item.featured && (
-                      <div className="absolute top-4 left-4 z-20">
-                        <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
-                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                          <span className="relative z-10">Featured</span>
-                        </span>
-                      </div>
-                    )}
-                    
-                    <div className="absolute top-4 right-4 z-20">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleLike(item.id);
-                        }}
-                        className="p-2 bg-white/10 backdrop-blur-sm rounded-full shadow-sm hover:bg-white/20 transition-colors border border-gray-600"
-                      >
-                        <Heart 
-                          size={18} 
-                          className={likedItems[item.id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
-                        />
-                      </button>
-                    </div>
-                    
-                    <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-                      <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors uppercase tracking-wide">
-                        {item.title}
-                      </h3>
-                      <div className="flex items-center text-gray-300 text-sm font-medium">
-                        <span className="uppercase tracking-wider">{item.category}</span>
-                        <span className="mx-2">•</span>
-                        <span>{item.images.length} images</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {filteredGallery.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => handleOpenModal(item)}
-                  className="animate-on-scroll group bg-white/5 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-700 hover:border-gray-500 overflow-hidden card-hover cursor-pointer"
-                >
-                  <div className="flex flex-col md:flex-row">
-                    <div className="md:w-64 h-64 md:h-auto relative flex-shrink-0">
-                      <ImageWithFallback
-                        src={item.images[0]}
-                        alt={item.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      {item.featured && (
-                        <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
-                            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                            <span className="relative z-10">Featured</span>
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex-1 p-8">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <span className="px-3 py-1 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
-                            {item.category}
-                          </span>
-                          <h3 className="text-2xl font-bold text-white mt-4 mb-2 group-hover:text-gray-300 transition-colors">{item.title}</h3>
-                        </div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleLike(item.id);
-                          }}
-                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-gray-700"
-                        >
-                          <Heart 
-                            size={20} 
-                            className={likedItems[item.id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
-                          />
-                        </button>
-                      </div>
-                      
-                      <div className="flex items-center text-sm text-gray-400 mb-4">
-                        <MapPin size={16} className="mr-2" />
-                        {item.location}
-                        <span className="mx-3">•</span>
-                        <Calendar size={16} className="mr-2" />
-                        {item.date}
-                        <span className="mx-3">•</span>
-                        <ImageIcon size={16} className="mr-2" />
-                        {item.images.length} images
-                      </div>
-                      
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {item.tags.map((tag, tagIndex) => (
-                          <span
-                            key={tagIndex}
-                            className="px-3 py-1.5 bg-white/5 text-gray-300 text-sm font-medium rounded-full border border-gray-700"
-                          >
-                            <Tag size={12} className="inline mr-1.5" />
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      
-                      <p className="text-gray-400 mb-6 leading-relaxed">
-                        Premium installation showcasing exceptional craftsmanship and design excellence. 
-                        This project demonstrates our commitment to quality and attention to detail.
-                      </p>
-                      
-                      <div className="flex items-center justify-between pt-6 border-t border-gray-700">
-                        <div className="flex items-center gap-6 text-sm text-gray-500">
-                          <div className="flex items-center">
-                            <Heart size={16} className="mr-1.5" />
-                            {item.likes} likes
-                          </div>
-                          <div className="flex items-center">
-                            <Eye size={16} className="mr-1.5" />
-                            {item.views.toLocaleString()} views
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center text-sm text-gray-300 font-semibold">
-                          View Details
-                          <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {filteredGallery.length > 0 && (
-            <div className="text-center mt-16">
-              <button className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 inline-flex items-center card-hover relative overflow-hidden">
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <span className="relative z-10">Load More Projects</span>
-                <ChevronRight size={20} className="ml-2 relative z-10 group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-          )}
+          {renderGalleryContent()}
         </div>
       </section>
 
@@ -780,8 +676,8 @@ function Gallery() {
               <div className="lg:col-span-2 relative">
                 <div className="relative h-96 lg:h-[500px] bg-black">
                   <ImageWithFallback
-                    src={selectedImage.images[currentImageIndex]}
-                    alt={`${selectedImage.title} - Image ${currentImageIndex + 1}`}
+                    src={selectedImage.images[currentImageIndex]?.url || 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'}
+                    alt={selectedImage.images[currentImageIndex]?.altText || `${selectedImage.title} - Image ${currentImageIndex + 1}`}
                     className="w-full h-full object-cover"
                   />
                   
@@ -829,8 +725,8 @@ function Gallery() {
                         }`}
                       >
                         <ImageWithFallback
-                          src={img}
-                          alt={`Thumbnail ${index + 1}`}
+                          src={img.url}
+                          alt={img.altText || `Thumbnail ${index + 1}`}
                           className="w-full h-full object-cover"
                         />
                       </button>
@@ -858,97 +754,25 @@ function Gallery() {
                     {selectedImage.title}
                   </h2>
                   
-                  <div className="flex items-center text-gray-400 mb-4">
-                    <MapPin size={18} className="mr-2 text-gray-500" />
-                    <span className="font-medium">{selectedImage.location}</span>
-                    <span className="mx-3">•</span>
-                    <Calendar size={18} className="mr-2 text-gray-500" />
-                    <span>{selectedImage.date}</span>
+                  <div className="text-gray-400 mb-4">
+                    <span className="font-medium">Category: {selectedImage.category}</span>
                   </div>
-                </div>
-                
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {selectedImage.tags.map((tag, index) => (
-                    <span
-                      key={index}
-                      className="px-3 py-1.5 bg-white/5 text-gray-300 text-sm font-medium rounded-full border border-gray-700"
-                    >
-                      {tag}
-                    </span>
-                  ))}
                 </div>
                 
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-lg font-bold text-white mb-3">Project Overview</h4>
                     <p className="text-gray-300 leading-relaxed">
-                      This premium installation showcases exceptional craftsmanship and attention to detail. 
-                      Using only the finest materials, our team transformed this space into a masterpiece 
-                      of design and functionality. The project demonstrates our commitment to excellence 
-                      and our ability to deliver beyond expectations.
+                      {selectedImage.description || 'This premium installation showcases exceptional craftsmanship and attention to detail.'}
                     </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-gray-700 shadow-sm">
-                      <div className="flex items-center mb-3">
-                        <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
-                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                          <Award size={20} className="text-gray-900 relative z-10" />
-                        </div>
-                        <span className="font-semibold text-white">Materials Used</span>
-                      </div>
-                      <ul className="text-sm text-gray-300 space-y-2">
-                        <li className="flex items-center">
-                          <CheckCircle size={16} className="text-gray-500 mr-2" />
-                          Premium Grade Porcelain Tiles
-                        </li>
-                        <li className="flex items-center">
-                          <CheckCircle size={16} className="text-gray-500 mr-2" />
-                          Epoxy Grout System
-                        </li>
-                        <li className="flex items-center">
-                          <CheckCircle size={16} className="text-gray-500 mr-2" />
-                          Anti-slip Coating
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="bg-white/5 backdrop-blur-sm p-4 rounded-xl border border-gray-700 shadow-sm">
-                      <div className="flex items-center mb-3">
-                        <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
-                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                          <Clock size={20} className="text-gray-900 relative z-10" />
-                        </div>
-                        <span className="font-semibold text-white">Project Timeline</span>
-                      </div>
-                      <ul className="text-sm text-gray-300 space-y-2">
-                        <li className="flex items-center">
-                          <div className="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
-                          Design Phase: 2 weeks
-                        </li>
-                        <li className="flex items-center">
-                          <div className="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
-                          Installation: 3 weeks
-                        </li>
-                        <li className="flex items-center">
-                          <div className="w-2 h-2 rounded-full bg-gray-500 mr-2"></div>
-                          Finishing: 1 week
-                        </li>
-                      </ul>
-                    </div>
                   </div>
                   
                   <div className="pt-6 border-t border-gray-700">
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                       <div className="flex items-center gap-6">
                         <div className="text-center">
-                          <div className="text-2xl font-bold text-gray-300">{selectedImage.likes}</div>
-                          <div className="text-sm text-gray-500">Likes</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-gray-300">{selectedImage.views.toLocaleString()}</div>
-                          <div className="text-sm text-gray-500">Views</div>
+                          <div className="text-2xl font-bold text-gray-300">{selectedImage.images?.length || 0}</div>
+                          <div className="text-sm text-gray-500">Images</div>
                         </div>
                       </div>
                       
@@ -991,7 +815,7 @@ function Gallery() {
               <div className="grid grid-cols-2 gap-4 mb-8">
                 {[
                   { label: 'Showroom Size', value: '5,000 sq.ft.' },
-                  { label: 'Collections', value: '50+' },
+                  { label: 'Collections', value: categories.length - 1 },
                   { label: 'Design Experts', value: 'On-site' },
                   { label: 'Parking', value: 'Free' },
                 ].map((stat, index) => (
@@ -1129,8 +953,8 @@ function Gallery() {
                       </div>
                       <div className="text-center p-3 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
                         <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                        <div className="text-lg font-bold text-white relative z-10">500+</div>
-                        <div className="text-xs text-gray-300 relative z-10">Projects</div>
+                        <div className="text-lg font-bold text-white relative z-10">{gallery.length}</div>
+                        <div className="text-xs text-gray-300 relative z-10">Gallery Items</div>
                       </div>
                     </div>
                   </div>

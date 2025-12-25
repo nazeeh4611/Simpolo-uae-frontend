@@ -31,49 +31,71 @@ function HomePage() {
     }
   ];
 
-  const products = [
+  const categories = [
     {
-      src: 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiYXRocm9vbSUyMHRpbGVzfGVufDF8fHx8MTc2NjA3MjM0MHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+      src: 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiYXRocm9vbSUyMHRpbGVzfGVufDF8fHx8MTc2NjA3MjM0MHww&ixlib=rb-4.1.0&q=80&w=1080',
       title: 'Porcelain Tiles',
       description: 'Durable and non-porous tiles in various sizes and finishes',
-      link: '/services/porcelain-tiles',
+      link: '/gallery?category=Porcelain Tiles',
       tag: 'Premium'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1669643219984-2ff3eea887a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXJibGUlMjB0aWxlJTIwdGV4dHVyZXxlbnwxfHx8fDE3NjYxMjQ4MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-      title: 'Marble & Granite',
-      description: 'Natural stone with elegant patterns and timeless appeal',
-      link: '/services/marble-granite',
-      tag: 'Luxury'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1753723907358-c1d346aff7a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzd2ltbWluZyUyMHBvb2wlMjB0aWxlfGVufDF8fHx8MTc2NjEyNDgwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-      title: 'Swimming Pool Tiles',
-      description: 'Color-stable, water-resistant tiles for pools and spas',
-      link: '/services/pool-tiles',
-      tag: 'Specialty'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
-      title: 'Bathroom Fittings',
-      description: 'Premium sanitary ware and modern bathroom solutions',
-      link: '/services/bathroom-fittings',
-      tag: 'Luxury'
     },
     {
       src: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80',
-      title: 'Kitchen Tiles',
-      description: 'Heat-resistant and easy-to-clean kitchen solutions',
-      link: '/services/kitchen-tiles',
-      tag: 'Premium'
+      title: 'Porcelain Tiles Fabrications',
+      description: 'Custom-cut and fabricated porcelain solutions',
+      link: '/gallery?category=Porcelain Tiles Fabrications',
+      tag: 'Custom'
     },
     {
       src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
-      title: 'Commercial Tiles',
-      description: 'High-traffic resistant tiles for commercial spaces',
-      link: '/services/commercial-tiles',
-      tag: 'Commercial'
-    }
+      title: 'Slab Tiles',
+      description: 'Large format slabs for seamless installations',
+      link: '/gallery?category=Slab Tiles',
+      tag: 'Modern'
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1598928636135-d146006ff4be?w=800&q=80',
+      title: 'Ceramic Tiles',
+      description: 'Traditional and modern ceramic tile solutions',
+      link: '/gallery?category=Ceramic Tiles',
+      tag: 'Classic'
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=800&q=80',
+      title: 'Outdoor Heavy-Duty Tiles',
+      description: 'Weather-resistant tiles for outdoor applications',
+      link: '/gallery?category=Outdoor Heavy-Duty Tiles',
+      tag: 'Durable'
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&q=80',
+      title: 'Mosaic Fabrications from Tiles',
+      description: 'Custom mosaic patterns and fabrications',
+      link: '/gallery?category=Mosaic Fabrications from Tiles',
+      tag: 'Artistic'
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1753723907358-c1d346aff7a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzd2ltbWluZyUyMHBvb2wlMjB0aWxlfGVufDF8fHx8MTc2NjEyNDgwMnww&ixlib=rb-4.1.0&q=80&w=1080',
+      title: 'Swimming Pool Tiles',
+      description: 'Color-stable, water-resistant tiles for pools and spas',
+      link: '/gallery?category=Swimming Pool Tiles',
+      tag: 'Specialty'
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1669643219984-2ff3eea887a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXJibGUlMjB0aWxlJTIwdGV4dHVyZXxlbnwxfHx8fDE3NjYxMjQ4MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      title: 'Marble and Granite',
+      description: 'Natural stone with elegant patterns and timeless appeal',
+      link: '/gallery?category=Marble and Granite',
+      tag: 'Luxury'
+    },
+    {
+      src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
+      title: 'Marble Countertops and Fabrications',
+      description: 'Custom marble countertops and stone fabrications',
+      link: '/gallery?category=Marble Countertops and Fabrications',
+      tag: 'Premium'
+    },
+  
   ];
 
   const showcaseImages = [
@@ -608,72 +630,65 @@ function HomePage() {
       </section>
 
       <section className="py-24 bg-black">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-    {/* Section Header */}
-    <div className="text-center mb-16 animate-on-scroll">
-      <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-        Premium <span className="collections-text">Collections</span>
-      </h2>
-      <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-        Explore our curated selection of high-quality materials and innovative tile solutions for every space
-      </p>
-    </div>
-
-    {/* Image Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {products.map((product, index) => (
-        <Link
-          key={index}
-          to={product.link}
-          className="group animate-on-scroll relative overflow-hidden rounded-2xl cursor-pointer"
-          style={{ animationDelay: `${index * 0.1}s` }}
-        >
-          {/* Image */}
-          <div className="relative h-80 overflow-hidden">
-            <ImageWithFallback
-              src={product.src}
-              alt={product.title}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
-
-            {/* Dark Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-            {/* Category Name */}
-            <div className="absolute bottom-6 left-6">
-              <h3 className="text-white text-2xl font-semibold tracking-wide">
-                {product.title}
-              </h3>
-            </div>
-
-            {/* Optional Tag (top-right) */}
-            {product.tag && (
-              <div className="absolute top-4 right-4">
-                <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white/90 text-gray-900">
-                  {product.tag}
-                </span>
-              </div>
-            )}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 animate-on-scroll">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              Premium <span className="collections-text">Collections</span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+              Explore our comprehensive range of premium tile categories and solutions for every space
+            </p>
           </div>
-        </Link>
-      ))}
-    </div>
 
-    {/* CTA */}
-    <div className="text-center mt-14 animate-on-scroll">
-      <Link
-        to="/services"
-        className="inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-xl"
-      >
-        View All Product Categories
-        <ChevronRight size={20} className="ml-2" />
-      </Link>
-    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {categories.map((category, index) => (
+              <Link
+                key={index}
+                to={category.link}
+                className="group animate-on-scroll relative overflow-hidden rounded-2xl cursor-pointer"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="relative h-80 overflow-hidden">
+                  <ImageWithFallback
+                    src={category.src}
+                    alt={category.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
 
-  </div>
-</section>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
+                  <div className="absolute bottom-6 left-6">
+                    <h3 className="text-white text-2xl font-semibold tracking-wide">
+                      {category.title}
+                    </h3>
+                    <p className="text-gray-300 mt-2 text-sm">
+                      {category.description}
+                    </p>
+                  </div>
+
+                  {category.tag && (
+                    <div className="absolute top-4 right-4">
+                      <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white/90 text-gray-900">
+                        {category.tag}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center mt-14 animate-on-scroll">
+            <Link
+              to="/gallery"
+              className="inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-xl"
+            >
+              View All Categories
+              <ChevronRight size={20} className="ml-2" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -923,4 +938,4 @@ function HomePage() {
   );
 }
 
-export default HomePage
+export default HomePage;

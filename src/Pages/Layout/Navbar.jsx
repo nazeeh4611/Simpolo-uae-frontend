@@ -112,12 +112,29 @@ export function Navbar() {
 
             <Link to="/" className="flex items-center h-full relative">
               <img
-                src="/sim.webp"
+                src="/ts.png"
                 alt="Simpolo"
                 className={`max-h-[90px] w-auto object-contain transition-transform duration-300 ${scrolled ? 'scale-100' : 'scale-125'}`}
               />
               <div className="absolute -bottom-2 left-0 right-0 h-[2px] sword-shimmer rounded-full"></div>
             </Link>
+
+
+            {/* <Link to="/" className="flex items-center h-full relative">
+  <img
+    src="/tes.png"
+    alt="Simpolo"
+    className={`
+      h-[80px] 
+      w-auto 
+      object-contain 
+      transition-all 
+      duration-300
+      ${scrolled ? 'scale-100' : 'scale-110'}
+    `}
+  />
+  <div className="absolute -bottom-2 left-0 right-0 h-[2px] sword-shimmer rounded-full"></div>
+</Link> */}
 
             <div className="hidden lg:flex items-center space-x-1">
               {navLinks.map((link) => (

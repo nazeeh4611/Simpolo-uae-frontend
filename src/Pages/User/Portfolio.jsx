@@ -1,96 +1,74 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Star, ArrowRight } from 'lucide-react';
+import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Star, ArrowRight, X, Download, Share2, ChevronLeft, ChevronRight as ChevronRightIcon, Heart, Calendar, Play, Eye, Tag, ImageIcon, Filter, Search, Grid, List, Layers } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
+import axios from 'axios';
+import { baseurl } from '../../Util/Base';
+import { ImageWithFallback } from '../../util/Fallback';
 
 function Portfolio() {
-  const projects = [
-    { 
-      name: 'Sharjah Budaiya Suburb', 
-      location: 'Sharjah', 
-      type: 'Residential',
-      category: 'iconic',
-      date: '2024',
-      image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80',
-      description: 'Premium residential community featuring luxury finishes'
-    },
-    { 
-      name: 'Sharjah Link Investment', 
-      location: 'Sharjah', 
-      type: 'Commercial',
-      category: 'premium',
-      date: '2024',
-      image: 'https://images.unsplash.com/photo-1487956382158-bb926046304a?w=800&q=80',
-      description: 'Modern commercial complex with innovative design'
-    },
-    { 
-      name: 'DSSCB', 
-      location: 'Abu Dhabi', 
-      type: 'Government',
-      category: 'premium',
-      date: '2023',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
-      description: 'Government infrastructure project with premium materials'
-    },
-    { 
-      name: 'La Clé Residential', 
-      location: 'Al Furjan, Dubai', 
-      type: 'Residential',
-      category: 'luxury',
-      date: '2023',
-      image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
-      description: 'Luxury residential towers with bespoke finishes'
-    },
-    { 
-      name: 'Fairmont Ajman', 
-      location: 'Ajman', 
-      type: 'Hospitality',
-      category: 'luxury',
-      date: '2023',
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80',
-      description: '5-star hotel with exclusive tile installations'
-    },
-    { 
-      name: 'Five Palm Dubai', 
-      location: 'Dubai', 
-      type: 'Hospitality',
-      category: 'luxury',
-      date: '2022',
-      image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
-      description: 'Iconic hospitality destination on Palm Jumeirah'
-    },
-    { 
-      name: 'Palace Beach Resort', 
-      location: 'Fujairah', 
-      type: 'Hospitality',
-      category: 'luxury',
-      date: '2022',
-      image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&q=80',
-      description: 'Beachfront resort with custom tile designs'
-    },
-    { 
-      name: 'Aveline Residences', 
-      location: 'JVC, Dubai', 
-      type: 'Residential',
-      category: 'premium',
-      date: '2022',
-      image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
-      description: 'Contemporary residential development'
-    },
-    { 
-      name: 'Aldar Mamsha Palm', 
-      location: 'Saadiyat Island', 
-      type: 'Residential',
-      category: 'luxury',
-      date: '2021',
-      image: 'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=800&q=80',
-      description: 'Exclusive beachfront residences'
-    },
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [likedItems, setLikedItems] = useState({});
+  const [viewMode, setViewMode] = useState('grid');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('date');
+  
+  const categories = [
+    'All',
+    'Residential',
+    'Commercial',
+    'Hospitality',
+    'Government',
+    'Pool & Villa'
   ];
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`${baseurl}projects`);
+        const projectsData = Array.isArray(response.data) ? response.data : [];
+        setProjects(projectsData);
+        setError(null);
+      } catch (err) {
+        setError('Failed to load projects. Please try again later.');
+        console.error('Error fetching projects:', err);
+        setProjects([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const filteredProjects = projects.filter(project => {
+    if (selectedCategory !== 'All' && project.category !== selectedCategory) return false;
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      return (
+        (project.title && project.title.toLowerCase().includes(query)) ||
+        (project.description && project.description.toLowerCase().includes(query)) ||
+        (project.category && project.category.toLowerCase().includes(query)) ||
+        (project.location && project.location.toLowerCase().includes(query))
+      );
+    }
+    return true;
+  }).sort((a, b) => {
+    if (sortBy === 'title') {
+      return (a.title || '').localeCompare(b.title || '');
+    }
+    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+  });
 
   const stats = [
     { 
-      value: '50+', 
+      value: projects.length, 
       label: 'Completed Projects',
       icon: CheckCircle2,
     },
@@ -116,25 +94,25 @@ function Portfolio() {
       icon: Building2,
       title: 'Residential',
       description: 'Villas, apartments, and residential complexes',
-      projects: 28,
+      count: projects.filter(p => p.category === 'Residential').length,
     },
     {
       icon: Building2,
       title: 'Commercial',
       description: 'Offices, retail spaces, and business centers',
-      projects: 12,
+      count: projects.filter(p => p.category === 'Commercial').length,
     },
     {
       icon: Building2,
       title: 'Hospitality',
       description: 'Hotels, resorts, and service apartments',
-      projects: 8,
+      count: projects.filter(p => p.category === 'Hospitality').length,
     },
     {
       icon: Building2,
       title: 'Government',
       description: 'Public sector and infrastructure projects',
-      projects: 5,
+      count: projects.filter(p => p.category === 'Government').length,
     }
   ];
 
@@ -159,6 +137,34 @@ function Portfolio() {
     }
   ];
 
+  const handleLike = (id) => {
+    setLikedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const handleOpenModal = (project) => {
+    setSelectedProject(project);
+    setCurrentImageIndex(0);
+  };
+
+  const handleNextImage = () => {
+    if (selectedProject) {
+      setCurrentImageIndex((prev) => 
+        prev === selectedProject.images.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (selectedProject) {
+      setCurrentImageIndex((prev) => 
+        prev === 0 ? selectedProject.images.length - 1 : prev - 1
+      );
+    }
+  };
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -175,6 +181,191 @@ function Portfolio() {
     return () => observer.disconnect();
   }, []);
 
+  const renderProjects = () => {
+    if (loading) {
+      return (
+        <div className="text-center py-12">
+          <div className="w-16 h-16 silver-gradient rounded-full flex items-center justify-center mx-auto mb-4 relative overflow-hidden">
+            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+            <div className="text-gray-900 relative z-10 text-sm">Loading...</div>
+          </div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="text-center py-12">
+          <div className="w-16 h-16 silver-gradient rounded-full flex items-center justify-center mx-auto mb-4 relative overflow-hidden">
+            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+            <div className="text-gray-900 relative z-10 text-sm">Error</div>
+          </div>
+          <p className="text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="group px-4 py-2 sword-gradient text-white rounded-lg font-medium hover:shadow-lg transition-all card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
+          >
+            <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+            <span className="relative z-10">Retry</span>
+          </button>
+        </div>
+      );
+    }
+
+    if (filteredProjects.length === 0) {
+      return (
+        <div className="text-center py-12">
+          <div className="w-16 h-16 silver-gradient rounded-full flex items-center justify-center mx-auto mb-4 relative overflow-hidden">
+            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+            <Search className="text-gray-900 relative z-10" size={32} />
+          </div>
+          <p className="text-gray-400">
+            {selectedCategory !== 'All' 
+              ? `No projects found in "${selectedCategory}" category`
+              : 'No projects found'}
+          </p>
+        </div>
+      );
+    }
+
+    if (viewMode === 'grid') {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProjects.map((project, index) => (
+            <div
+              key={project._id || project.id || index}
+              onClick={() => handleOpenModal(project)}
+              className="animate-on-scroll project-card group relative overflow-hidden rounded-2xl shadow-lg card-hover border border-gray-700 hover:border-gray-500 cursor-pointer"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              <div className="relative h-96 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
+                <ImageWithFallback
+                  src={project.images?.[0]?.url || project.image || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'}
+                  alt={project.title || project.name || 'Project'}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                
+                {project.featured && (
+                  <div className="absolute top-4 left-4 z-20">
+                    <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <span className="relative z-10">Featured</span>
+                    </span>
+                  </div>
+                )}
+                
+                <div className="absolute top-4 right-4 z-20">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLike(project._id);
+                    }}
+                    className="p-2 bg-white/10 backdrop-blur-sm rounded-full shadow-sm hover:bg-white/20 transition-colors border border-gray-600"
+                  >
+                    <Heart 
+                      size={18} 
+                      className={likedItems[project._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
+                    />
+                  </button>
+                </div>
+                
+                <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+                  <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors uppercase tracking-wide">
+                    {project.title || project.name || 'Untitled Project'}
+                  </h3>
+                  <div className="flex items-center text-gray-300 text-sm font-medium">
+                    <span className="uppercase tracking-wider">{project.category || project.type || 'Project'}</span>
+                    <span className="mx-2">•</span>
+                    <span>{project.location || 'UAE'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    } else {
+      return (
+        <div className="space-y-6">
+          {filteredProjects.map((project, index) => (
+            <div
+              key={project._id || project.id || index}
+              onClick={() => handleOpenModal(project)}
+              className="animate-on-scroll group bg-white/5 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-700 hover:border-gray-500 overflow-hidden card-hover cursor-pointer"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-64 h-64 md:h-auto relative flex-shrink-0">
+                  <ImageWithFallback
+                    src={project.images?.[0]?.url || project.image || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'}
+                    alt={project.title || project.name || 'Project'}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {project.featured && (
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <span className="relative z-10">Featured</span>
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex-1 p-8">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <span className="px-3 py-1 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                        {project.category || project.type || 'Project'}
+                      </span>
+                      <h3 className="text-2xl font-bold text-white mt-4 mb-2 group-hover:text-gray-300 transition-colors">
+                        {project.title || project.name || 'Untitled Project'}
+                      </h3>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLike(project._id);
+                      }}
+                      className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-gray-700"
+                    >
+                      <Heart 
+                        size={20} 
+                        className={likedItems[project._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
+                      />
+                    </button>
+                  </div>
+                  
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    {project.description || 'Premium project showcasing exceptional craftsmanship and design excellence.'}
+                  </p>
+                  
+                  <div className="flex items-center justify-between pt-6 border-t border-gray-700">
+                    <div className="flex items-center gap-6 text-sm text-gray-500">
+                      <div className="flex items-center">
+                        <ImageIcon size={16} className="mr-1.5" />
+                        {(project.images && project.images.length) || 0} images
+                      </div>
+                      <div className="flex items-center">
+                        <MapPin size={16} className="mr-1.5" />
+                        {project.location || 'UAE'}
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center text-sm text-gray-300 font-semibold">
+                      View Details
+                      <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black">
       <style dangerouslySetInnerHTML={{__html: `
@@ -186,6 +377,16 @@ function Portfolio() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+        @keyframes scaleIn {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
           }
         }
         @keyframes float {
@@ -202,6 +403,9 @@ function Portfolio() {
         }
         .animate-fadeInUp {
           animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .animate-scaleIn {
+          animation: scaleIn 0.3s ease-out forwards;
         }
         .animate-float {
           animation: float 3s ease-in-out infinite;
@@ -318,6 +522,13 @@ function Portfolio() {
           0% { left: -60%; }
           100% { left: 140%; }
         }
+        .category-btn {
+          transition: all 0.3s ease;
+        }
+        .category-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(255, 255, 255, 0.05);
+        }
       `}} />
 
       <section className="relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black text-white py-24">
@@ -391,50 +602,86 @@ function Portfolio() {
 
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12">
-            <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
-                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
-                <Award size={18} className="mr-2 relative z-10" /> 
-                <span className="relative z-10">Featured Projects</span>
+          <div className="bg-white/5 backdrop-blur-md rounded-3xl shadow-xl p-8 mb-12 border border-gray-700">
+            <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between mb-6">
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search projects, categories, or locations..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3.5 bg-white/5 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-700"
+                />
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
-                Our <span className="prestigious-text">Prestigious</span> Projects
-              </h2>
-              <p className="text-gray-400 max-w-2xl">
-                A showcase of our most prestigious and challenging projects across the UAE
-              </p>
+
+              <div className="flex items-center gap-4">
+                <div className="hidden md:flex items-center gap-2">
+                  <label className="text-sm text-gray-400">Sort by:</label>
+                  <select 
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="px-3 py-2 bg-white/5 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-700"
+                  >
+                    <option value="date" className="bg-gray-900">Latest</option>
+                    <option value="title" className="bg-gray-900">Title</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`p-2.5 rounded-lg category-btn ${viewMode === 'grid' ? 'silver-gradient text-gray-900 border border-gray-300' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-gray-700'}`}
+                  >
+                    <Grid size={20} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`p-2.5 rounded-lg category-btn ${viewMode === 'list' ? 'silver-gradient text-gray-900 border border-gray-300' : 'bg-white/5 text-gray-400 hover:bg-white/10 border border-gray-700'}`}
+                  >
+                    <List size={20} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <div className="flex flex-wrap gap-2">
+                {categories.map((category, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`category-btn px-4 py-2.5 rounded-full text-sm font-medium transition-all flex items-center ${
+                      selectedCategory === category
+                        ? 'silver-gradient text-gray-900 border border-gray-300'
+                        : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-300 border border-gray-700'
+                    }`}
+                  >
+                    {category === 'All' ? (
+                      <>
+                        <Filter size={14} className="mr-2" />
+                        {category}
+                      </>
+                    ) : (
+                      category
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+              <div className="text-sm text-gray-400">
+                Showing <span className="font-bold text-white">{filteredProjects.length}</span> projects
+              </div>
+              <div className="flex items-center text-sm text-gray-500">
+                <ImageIcon size={16} className="mr-1" />
+                High-quality images
+              </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
-              <Link
-                key={index}
-                to={`/gallery?project=${project.name.toLowerCase().replace(/\s+/g, '-')}`}
-                className="animate-on-scroll project-card group relative overflow-hidden rounded-2xl shadow-lg card-hover border border-gray-700 hover:border-gray-500"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="relative h-96 overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-                  <img
-                    src={project.image}
-                    alt={project.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  
-                  <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-                    <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors uppercase tracking-wide">
-                      {project.name}
-                    </h3>
-                    <div className="flex items-center text-gray-300 text-sm font-medium">
-                      <span className="uppercase tracking-wider">{project.type}</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+          {renderProjects()}
 
           <div className="text-center mt-12 animate-on-scroll">
             <Link
@@ -448,6 +695,145 @@ function Portfolio() {
           </div>
         </div>
       </section>
+
+      {selectedProject && (
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 animate-scaleIn">
+          <div className="absolute inset-0" onClick={() => {
+            setSelectedProject(null);
+            setCurrentImageIndex(0);
+          }}></div>
+          
+          <div className="relative max-w-7xl w-full max-h-[90vh] overflow-hidden rounded-2xl bg-gray-900 z-10 border border-gray-700">
+            <div className="grid lg:grid-cols-3 h-full">
+              <div className="lg:col-span-2 relative">
+                <div className="relative h-96 lg:h-[500px] bg-black">
+                  <ImageWithFallback
+                    src={selectedProject.images?.[currentImageIndex]?.url || selectedProject.image || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'}
+                    alt={selectedProject.images?.[currentImageIndex]?.altText || `${selectedProject.title || selectedProject.name} - Image ${currentImageIndex + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  
+                  <button
+                    onClick={handlePrevImage}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/10 backdrop-blur-sm rounded-full shadow-xl hover:bg-white/20 transition-all duration-300 z-20 group border border-gray-600"
+                  >
+                    <ChevronLeft size={24} className="text-gray-300 group-hover:text-white group-hover:scale-110 transition-transform" />
+                  </button>
+                  
+                  <button
+                    onClick={handleNextImage}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-white/10 backdrop-blur-sm rounded-full shadow-xl hover:bg-white/20 transition-all duration-300 z-20 group border border-gray-600"
+                  >
+                    <ChevronRightIcon size={24} className="text-gray-300 group-hover:text-white group-hover:scale-110 transition-transform" />
+                  </button>
+                  
+                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-20">
+                    <div className="flex items-center gap-2">
+                      <button className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg">
+                        <Download size={18} />
+                        Download
+                      </button>
+                      <button className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg">
+                        <Share2 size={18} />
+                        Share
+                      </button>
+                    </div>
+                    <div className="text-white text-sm bg-black/60 px-4 py-2 rounded-full backdrop-blur-sm font-medium border border-gray-600">
+                      {currentImageIndex + 1} / {(selectedProject.images && selectedProject.images.length) || 1}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-4 bg-gray-800/50 border-t border-gray-700">
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    {selectedProject.images && selectedProject.images.length > 0 ? (
+                      selectedProject.images.map((img, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentImageIndex(index)}
+                          className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                            currentImageIndex === index 
+                              ? 'border-gray-300 ring-2 ring-gray-300/20 scale-105' 
+                              : 'border-gray-600 hover:border-gray-400'
+                          }`}
+                        >
+                          <ImageWithFallback
+                            src={img.url}
+                            alt={img.altText || `Thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      ))
+                    ) : (
+                      <button
+                        onClick={() => setCurrentImageIndex(0)}
+                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300 border-gray-300 ring-2 ring-gray-300/20 scale-105`}
+                      >
+                        <ImageWithFallback
+                          src={selectedProject.image || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'}
+                          alt={selectedProject.title || selectedProject.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="p-6 md:p-8 overflow-y-auto bg-gradient-to-b from-gray-900 to-black">
+                <button
+                  onClick={() => {
+                    setSelectedProject(null);
+                    setCurrentImageIndex(0);
+                  }}
+                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg"
+                >
+                  <X size={20} />
+                </button>
+                
+                <div className="mb-6">
+                  <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                    {selectedProject.category || selectedProject.type || 'Project'}
+                  </span>
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-4 mb-3">
+                    {selectedProject.title || selectedProject.name}
+                  </h2>
+                  
+                  <div className="flex items-center text-gray-400 mb-4">
+                    <MapPin size={18} className="mr-2" />
+                    <span className="font-medium">{selectedProject.location || 'UAE'}</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="text-lg font-bold text-white mb-3">Project Overview</h4>
+                    <p className="text-gray-300 leading-relaxed">
+                      {selectedProject.description || 'This premium project showcases exceptional craftsmanship and attention to detail.'}
+                    </p>
+                  </div>
+                  
+                  <div className="pt-6 border-t border-gray-700">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div className="flex items-center gap-6">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-gray-300">{(selectedProject.images && selectedProject.images.length) || 1}</div>
+                          <div className="text-sm text-gray-500">Images</div>
+                        </div>
+                      </div>
+                      
+                      <button className="group px-6 py-3 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine w-full sm:w-auto">
+                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        <span className="relative z-10">Request Similar Project</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -479,7 +865,7 @@ function Portfolio() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-3 group-hover:text-gray-300 transition-colors relative z-10">{type.title}</h3>
                 <p className="text-gray-400 mb-4 text-sm relative z-10">{type.description}</p>
-                <div className="text-2xl font-bold text-gray-300 mb-2 relative z-10">{type.projects}</div>
+                <div className="text-2xl font-bold text-gray-300 mb-2 relative z-10">{type.count}</div>
                 <div className="text-sm text-gray-500 relative z-10">Completed Projects</div>
               </div>
             ))}
@@ -589,7 +975,7 @@ function Portfolio() {
                         </div>
                         <div className="text-center p-3 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
                           <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                          <div className="text-lg font-bold text-white relative z-10">50+</div>
+                          <div className="text-lg font-bold text-white relative z-10">{projects.length}</div>
                           <div className="text-xs text-gray-300 relative z-10">Projects</div>
                         </div>
                       </div>
