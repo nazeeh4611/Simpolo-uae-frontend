@@ -1,8 +1,9 @@
 // src/api/axiosInstance.js
 import axios from 'axios';
+import { baseurl } from './Base';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.simpolotrading.com',
+  baseURL: baseurl,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
