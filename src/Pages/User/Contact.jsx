@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Clock, Send, ChevronRight, MessageSquare, Building, User, Globe, Calendar, Shield, CheckCircle, ArrowRight, Sparkles, Award, Target, Users, Home, ChevronLeft, Package } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, Send, ChevronRight, MessageSquare, Building, User, Globe, Calendar, Shield, CheckCircle, ArrowRight, Sparkles, Award, Target, Users, ChevronLeft, Package, Home } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 
 function Contact() {
@@ -268,7 +268,6 @@ function Contact() {
                 Let's Connect
               </span>
             </div>
-
             <h1 className="mb-6 leading-tight text-white">
               <div className="relative inline-block">
                 <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
@@ -482,7 +481,7 @@ function Contact() {
             </div>
 
             <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }} id="form">
-              <div className="bg-white/5 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-700 relative overflow-hidden">
+              <div className="bg-white/5 backdrop-blur-md rounded-3xl shadow-2xl p-8 md:p-10 card-hover border border-gray-700 relative overflow-hidden group">
                 <div className="absolute top-0 left-0 w-full h-1 silver-gradient"></div>
                 <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-10 transition-opacity"></div>
                 <div className="flex items-center mb-8 relative z-10">
@@ -801,6 +800,74 @@ function Contact() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 relative overflow-hidden">
+        <div className="absolute inset-0 sword-gradient"></div>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+          </div>
+        </div>
+        
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="animate-on-scroll">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              Ready to Start Your <span className="touch-text">Project?</span>
+            </h2>
+            <p className="text-xl mb-10 text-gray-300 max-w-2xl mx-auto leading-relaxed">
+              Get in touch with our team today for expert consultation, project estimates, 
+              and personalized solutions for your tile requirements.
+            </p>
+            
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link
+                to="/contact#form"
+                className="group px-8 py-4 silver-gradient text-gray-900 rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden silver-button-shine"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                <span className="relative z-10">Request Free Quote</span>
+                <Send size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+              </Link>
+              
+              <a
+                href="tel:+971557234180"
+                className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <Phone size={20} className="mr-2 relative z-10" />
+                <span className="relative z-10">Call Now: +971 55 723 4180</span>
+              </a>
+              
+              <Link
+                to="/services"
+                className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                <span className="relative z-10">Browse Products</span>
+                <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="mt-16 pt-12 border-t border-gray-800">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-white">
+                {[
+                  { value: '24/7', label: 'Support Available' },
+                  { value: '2 Hours', label: 'Response Time' },
+                  { value: 'Free', label: 'Consultation' },
+                  { value: '500+', label: 'Projects Completed' }
+                ].map((stat, index) => (
+                  <div key={index} className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">{stat.value}</div>
+                    <div className="text-sm text-gray-400 font-medium relative z-10">{stat.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
