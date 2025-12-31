@@ -18,12 +18,14 @@ import {
 } from 'lucide-react';
 
 const createAxiosInstance = () => {
+  const token = localStorage.getItem('adminToken');
   const instance = axios.create({
     baseURL: baseurl,
     timeout: 10000,
     headers: {
       'Content-Type': 'application/json',
     },
+    withCredentials: true
   });
 
   instance.interceptors.request.use(
