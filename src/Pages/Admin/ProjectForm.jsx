@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { baseurl } from '../../util/Base';
+import { ImageWithFallback } from '../../util/Fallback';
 
 const projectCategories = [
   'Residential',
@@ -10,6 +11,56 @@ const projectCategories = [
   'Government',
   'Pool & Villa'
 ];
+
+const getFullImageUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  const cleanBaseUrl = baseurl.endsWith('/') ? baseurl.slice(0, -1) : baseurl;
+  const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+  return `${cleanBaseUrl}${cleanUrl}`;
+};
+
+const isVideoFile = (url) => {
+  if (!url) return false;
+  const videoExtensions = ['.mp4', '.mpg', '.mpeg', '.mov', '.avi', '.wmv', '.flv', '.webm'];
+  return videoExtensions.some(ext => url.toLowerCase().endsWith(ext));
+};
+
+const VideoPreview = ({ src, alt, className }) => {
+  const [error, setError] = useState(false);
+
+  if (error) {
+    return (
+      <div className={`flex flex-col items-center justify-center bg-gray-200 ${className}`}>
+        <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        <p className="text-xs text-gray-500 px-2 text-center mt-1">Video</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`relative ${className}`}>
+      <video
+        src={src}
+        className="w-full h-full object-cover"
+        onError={() => setError(true)}
+        muted
+        playsInline
+      />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center">
+          <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCancel }) => {
   const [loading, setLoading] = useState(false);
@@ -26,15 +77,25 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
     featured: false
   });
   const [productsUsed, setProductsUsed] = useState([{ name: '', category: '', quantity: '' }]);
-  const token = localStorage.getItem('adminToken'); 
-
-
+  const token = localStorage.getItem('adminToken');
+  const imageUrlsRef = useRef(new Map());
 
   useEffect(() => {
     if (isEditMode && projectData) {
       loadProjectData();
     }
   }, [isEditMode, projectData]);
+
+  useEffect(() => {
+    return () => {
+      imageUrlsRef.current.forEach((url) => {
+        if (url && typeof url === 'string' && url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+        }
+      });
+      imageUrlsRef.current.clear();
+    };
+  }, []);
 
   const loadProjectData = () => {
     setFormData({
@@ -47,11 +108,40 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
       completionDate: projectData.completionDate ? new Date(projectData.completionDate).toISOString().split('T')[0] : '',
       featured: projectData.featured || false
     });
-    
-    setExistingImages(Array.isArray(projectData.images) ? projectData.images : []);
+
+    if (projectData.images && Array.isArray(projectData.images)) {
+      const processedImages = projectData.images.map((img, idx) => {
+        let imageUrl = '';
+        let caption = '';
+        let imageId = '';
+
+        if (typeof img === 'string') {
+          imageUrl = img;
+          imageId = `img-${Date.now()}-${idx}`;
+        } else if (img && typeof img === 'object') {
+          imageUrl = img.url || '';
+          caption = img.caption || '';
+          imageId = img._id || `img-${Date.now()}-${idx}`;
+        }
+        
+        return {
+          url: imageUrl,
+          caption: caption,
+          id: imageId,
+          key: img.key || '',
+          original: img,
+          type: isVideoFile(imageUrl) ? 'video' : 'image'
+        };
+      });
+      
+      setExistingImages(processedImages);
+    } else {
+      setExistingImages([]);
+    }
+
     setProductsUsed(
-      Array.isArray(projectData.productsUsed) && projectData.productsUsed.length > 0 
-        ? projectData.productsUsed 
+      Array.isArray(projectData.productsUsed) && projectData.productsUsed.length > 0
+        ? projectData.productsUsed
         : [{ name: '', category: '', quantity: '' }]
     );
   };
@@ -89,65 +179,111 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    
     if (files.length === 0) return;
 
-    const validFiles = files.filter(file => 
-      file.type.startsWith('image/') && file.size <= 10 * 1024 * 1024
+    const validFiles = files.filter(file =>
+      (file.type.startsWith('image/') || file.type.startsWith('video/')) && 
+      file.size <= 50 * 1024 * 1024
     );
 
     if (validFiles.length !== files.length) {
-      toast.error('Some files were rejected. Only images under 10MB are allowed.');
+      toast.error('Some files were rejected. Only images/videos under 50MB are allowed.');
     }
 
     const currentTotal = images.length + existingImages.length;
     const remainingSlots = 10 - currentTotal;
 
     if (remainingSlots <= 0) {
-      toast.error('Maximum 10 images allowed per project');
+      toast.error('Maximum 10 media files allowed per project');
       return;
     }
 
     const filesToAdd = validFiles.slice(0, remainingSlots);
-
     if (filesToAdd.length < validFiles.length) {
-      toast.error(`Only ${remainingSlots} more image(s) can be added`);
+      toast.error(`Only ${remainingSlots} more file(s) can be added`);
     }
 
-    const newImages = filesToAdd.map(file => ({
-      file,
-      preview: URL.createObjectURL(file),
-      caption: ''
-    }));
+    const newImages = filesToAdd.map(file => {
+      let previewUrl = imageUrlsRef.current.get(file);
+      if (!previewUrl) {
+        previewUrl = URL.createObjectURL(file);
+        imageUrlsRef.current.set(file, previewUrl);
+      }
+      return {
+        file,
+        preview: previewUrl,
+        caption: '',
+        id: Date.now() + Math.random(),
+        type: file.type.startsWith('video/') ? 'video' : 'image'
+      };
+    });
 
     setImages(prev => [...prev, ...newImages]);
+    e.target.value = '';
   };
 
   const removeImage = (index) => {
-    const image = images[index];
-    if (image.preview) {
-      URL.revokeObjectURL(image.preview);
-    }
-    setImages(prev => prev.filter((_, i) => i !== index));
+    setImages(prev => {
+      const imageToRemove = prev[index];
+      if (imageToRemove.preview && imageToRemove.file) {
+        const url = imageUrlsRef.current.get(imageToRemove.file);
+        if (url && typeof url === 'string' && url.startsWith('blob:')) {
+          URL.revokeObjectURL(url);
+          imageUrlsRef.current.delete(imageToRemove.file);
+        }
+      }
+      return prev.filter((_, i) => i !== index);
+    });
   };
 
   const removeExistingImage = async (imageIndex) => {
     if (!isEditMode || !projectData) return;
-    
-    if (window.confirm('Are you sure you want to delete this image?')) {
-      try {
-        await axios.delete(`/api/admin/projects/${projectData._id}/images/${imageIndex}`);
-        setExistingImages(prev => prev.filter((_, i) => i !== imageIndex));
-        toast.success('Image deleted successfully');
-      } catch (error) {
-        console.error('Error deleting image:', error);
-        toast.error(error.response?.data?.message || 'Failed to delete image');
-      }
-    }
+
+    toast.custom((t) => (
+      <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+        <div className="flex-1 w-0 p-4">
+          <div className="flex items-start">
+            <div className="ml-3 flex-1">
+              <p className="text-sm font-medium text-gray-900">Delete Media File</p>
+              <p className="mt-1 text-sm text-gray-500">Are you sure you want to delete this media file? This action cannot be undone.</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex border-l border-gray-200">
+          <button
+            onClick={async () => {
+              try {
+                await axios.delete(`${baseurl}admin/projects/${projectData._id}/images/${imageIndex}`, {
+                  headers: { Authorization: `Bearer ${token}` }
+                });
+                setExistingImages(prev => prev.filter((_, i) => i !== imageIndex));
+                toast.success('Media file deleted successfully');
+                toast.dismiss(t.id);
+              } catch (error) {
+                console.error('Error deleting media file:', error);
+                toast.error(error.response?.data?.message || 'Failed to delete media file');
+                toast.dismiss(t.id);
+              }
+            }}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-red-600 hover:text-red-500 focus:outline-none"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity,
+    });
   };
 
   const handleCaptionChange = (index, value) => {
-    setImages(prev => prev.map((img, i) => 
+    setImages(prev => prev.map((img, i) =>
       i === index ? { ...img, caption: value } : img
     ));
   };
@@ -174,7 +310,7 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
       return false;
     }
     if (images.length + existingImages.length === 0) {
-      toast.error('At least one image is required');
+      toast.error('At least one image or video is required');
       return false;
     }
     return true;
@@ -182,14 +318,12 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
-    
-    setLoading(true);
 
+    setLoading(true);
     try {
       const formDataToSend = new FormData();
-      
+
       Object.keys(formData).forEach(key => {
         if (formData[key] !== undefined && formData[key] !== null && formData[key] !== '') {
           formDataToSend.append(key, formData[key]);
@@ -204,20 +338,30 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
         formDataToSend.append(`caption_${index}`, image.caption || '');
       });
 
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        }
+      };
+
       if (isEditMode && projectData) {
-        await axios.put(`${baseurl}/admin/projects/${projectData._id}`, formDataToSend, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        await axios.put(`${baseurl}admin/projects/${projectData._id}`, formDataToSend, config);
         toast.success('Project updated successfully');
       } else {
-        await axios.post(`${baseurl}admin/projects`, formDataToSend, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`
-          }
-        });
+        await axios.post(`${baseurl}admin/projects`, formDataToSend, config);
         toast.success('Project created successfully');
       }
+
+      images.forEach(image => {
+        if (image.preview && image.file) {
+          const url = imageUrlsRef.current.get(image.file);
+          if (url && typeof url === 'string' && url.startsWith('blob:')) {
+            URL.revokeObjectURL(url);
+            imageUrlsRef.current.delete(image.file);
+          }
+        }
+      });
 
       onSuccess();
     } catch (error) {
@@ -234,9 +378,9 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
-      <div className="space-y-6">
-        <h2 className="text-xl font-semibold text-gray-900">Basic Information</h2>
+    <form onSubmit={handleSubmit} className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg p-8">
+      <div className="border-b pb-6 mb-8">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">Basic Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -247,9 +391,9 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              required
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter project title"
+              required
             />
           </div>
 
@@ -262,9 +406,9 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
               name="client"
               value={formData.client}
               onChange={handleInputChange}
-              required
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Enter client name"
+              required
             />
           </div>
 
@@ -277,9 +421,9 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
               name="location"
               value={formData.location}
               onChange={handleInputChange}
-              required
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="e.g., Dubai, UAE"
+              placeholder="Enter project location"
+              required
             />
           </div>
 
@@ -291,14 +435,12 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
               name="category"
               value={formData.category}
               onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Select Category</option>
               {getCategoriesFromProjects().map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
+                <option key={category} value={category}>{category}</option>
               ))}
             </select>
           </div>
@@ -316,14 +458,14 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
             />
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center pt-8">
             <input
               type="checkbox"
               name="featured"
               id="featured"
               checked={formData.featured}
               onChange={handleInputChange}
-              className="h-5 w-5 text-blue-600 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
             <label htmlFor="featured" className="ml-2 text-sm font-medium text-gray-700">
               Mark as Featured Project
@@ -331,7 +473,7 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
           </div>
         </div>
 
-        <div>
+        <div className="mt-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Project Description <span className="text-red-500">*</span>
           </label>
@@ -339,10 +481,10 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
             name="description"
             value={formData.description}
             onChange={handleInputChange}
-            required
             rows={4}
             className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Describe the project..."
+            placeholder="Describe the project in detail..."
+            required
           />
         </div>
 
@@ -373,7 +515,7 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
             + Add Product
           </button>
         </div>
-        
+
         <div className="space-y-4">
           {productsUsed.map((product, index) => (
             <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-lg bg-gray-50">
@@ -389,6 +531,7 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
                   placeholder="Product name"
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Category
@@ -401,6 +544,7 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
                   placeholder="e.g., Porcelain Tiles"
                 />
               </div>
+
               <div className="flex items-end space-x-2">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -434,19 +578,19 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
 
       <div className="border-t pt-8">
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          Project Images <span className="text-red-500">*</span>
+          Project Media Files <span className="text-red-500">*</span>
         </h2>
-        
+
         {(images.length + existingImages.length) < 10 && (
           <div className="mb-8">
             <label className="block text-sm font-medium text-gray-700 mb-4">
-              Upload Images (Max 10 images, 10MB each)
+              Upload Images/Videos (Max 10 files, 50MB each)
             </label>
             <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
               <input
                 type="file"
                 multiple
-                accept="image/*"
+                accept="image/*,video/*"
                 onChange={handleImageUpload}
                 className="hidden"
                 id="project-image-upload"
@@ -456,8 +600,8 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
                   <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  <p className="text-gray-600 font-medium">Click to upload images</p>
-                  <p className="text-sm text-gray-500 mt-1">PNG, JPG, JPEG up to 10MB</p>
+                  <p className="text-gray-600 font-medium">Click to upload images or videos</p>
+                  <p className="text-sm text-gray-500 mt-1">Images (PNG, JPG, JPEG) or Videos (MP4, MPG, MOV) up to 50MB</p>
                   <p className="text-xs text-blue-600 mt-2">
                     {10 - (images.length + existingImages.length)} slot(s) remaining
                   </p>
@@ -470,30 +614,49 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
         <div className="space-y-8">
           {existingImages.length > 0 && (
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Existing Images</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">
+                Existing Media Files ({existingImages.length})
+              </h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {existingImages.map((image, index) => (
-                  <div key={`existing-${index}`} className="relative group">
-                    <img
-                      src={image.url}
-                      alt={image.caption || `Image ${index + 1}`}
-                      className="w-full h-40 object-cover rounded-lg"
-                    />
-                    {image.caption && (
-                      <p className="text-xs text-gray-600 mt-2 truncate">{image.caption}</p>
+                {existingImages.map((media, index) => (
+                  <div key={`existing-${media.id || index}`} className="relative group">
+                    <div className="relative w-full h-40 rounded-lg overflow-hidden border border-gray-200 bg-gray-100">
+                      {media.type === 'video' ? (
+                        <VideoPreview
+                          src={getFullImageUrl(media.url)}
+                          alt={media.caption || `Video ${index + 1}`}
+                          className="w-full h-full"
+                        />
+                      ) : (
+                        <ImageWithFallback
+                          src={getFullImageUrl(media.url)}
+                          alt={media.caption || `Image ${index + 1}`}
+                          className="w-full h-full object-cover relative z-0"
+                        />
+                      )}
+                    </div>
+                    {media.caption && (
+                      <p className="text-xs text-gray-600 mt-2 truncate">{media.caption}</p>
                     )}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity rounded-lg flex items-center justify-center">
+                    <div className="absolute top-2 left-2 z-10">
+                      <span className="px-2 py-1 bg-black/70 text-white text-xs rounded">
+                        {media.type === 'video' ? 'VIDEO' : 'IMAGE'}
+                      </span>
+                    </div>
+                    <div className="absolute inset-0 pointer-events-none">
                       {isEditMode && (
-                        <button
-                          type="button"
-                          onClick={() => removeExistingImage(index)}
-                          className="opacity-0 group-hover:opacity-100 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-all"
-                          title="Delete image"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                        </button>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition pointer-events-auto">
+                          <button
+                            type="button"
+                            onClick={() => removeExistingImage(index)}
+                            className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
+                            title="Delete media file"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7" />
+                            </svg>
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -504,21 +667,36 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
 
           {images.length > 0 && (
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4">New Images</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">New Media Files ({images.length})</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {images.map((image, index) => (
-                  <div key={`new-${index}`} className="border rounded-lg p-3 bg-white">
+                {images.map((media, index) => (
+                  <div key={`new-${media.id || index}`} className="border rounded-lg p-3 bg-white">
                     <div className="relative mb-3">
-                      <img
-                        src={image.preview}
-                        alt="Preview"
-                        className="w-full h-32 object-cover rounded"
-                      />
+                      <div className="w-full h-32 rounded overflow-hidden bg-gray-100">
+                        {media.type === 'video' ? (
+                          <VideoPreview
+                            src={media.preview}
+                            alt="Video preview"
+                            className="w-full h-full"
+                          />
+                        ) : (
+                          <ImageWithFallback
+                            src={media.preview}
+                            alt="Image preview"
+                            className="w-full h-full object-cover"
+                          />
+                        )}
+                      </div>
+                      <div className="absolute top-2 left-2 z-10">
+                        <span className="px-2 py-1 bg-black/70 text-white text-xs rounded">
+                          {media.type === 'video' ? 'VIDEO' : 'IMAGE'}
+                        </span>
+                      </div>
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
-                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
-                        title="Remove image"
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors z-10"
+                        title="Remove media file"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -527,9 +705,9 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
                     </div>
                     <input
                       type="text"
-                      value={image.caption}
+                      value={media.caption}
                       onChange={(e) => handleCaptionChange(index, e.target.value)}
-                      placeholder="Image caption (optional)"
+                      placeholder="Caption (optional)"
                       className="w-full text-sm border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -540,7 +718,7 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
 
           {(images.length + existingImages.length) === 0 && (
             <div className="text-center py-8 text-gray-500">
-              <p>No images uploaded yet. Please upload at least one image.</p>
+              <p>No media files uploaded yet. Please upload at least one image or video.</p>
             </div>
           )}
         </div>

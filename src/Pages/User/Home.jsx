@@ -1,11 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight, Sparkles, Award, Clock, Shield, Star, TrendingUp, Users, Zap, Package, Globe, Truck, CheckCircle, Home, Building, Hotel, ShoppingBag, Phone, Mail, MapPin } from 'lucide-react';
+import { ArrowRight, ChevronRight, Sparkles, Award, Clock, Shield, Star, TrendingUp, Users, Zap, Package, Globe, Truck, CheckCircle, Home, Building, Hotel, ShoppingBag, Phone, Mail, MapPin, Eye, Grid3x3 } from 'lucide-react';
 import { ImageWithFallback } from '../../util/Fallback';
 import Typewriter from 'typewriter-effect';
+import { baseurl } from '../../util/Base';
 
 function HomePage() {
   const [loaded, setLoaded] = useState(false);
+  const [featuredProjects, setFeaturedProjects] = useState([]);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const videoRef = useRef(null);
 
   const features = [
@@ -33,112 +37,68 @@ function HomePage() {
 
   const categories = [
     {
-      src: 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBiYXRocm9vbSUyMHRpbGVzfGVufDF8fHx8MTc2NjA3MjM0MHww&ixlib=rb-4.1.0&q=80&w=1080',
+      src: '/1.webp',
       title: 'Porcelain Tiles',
       description: 'Durable and non-porous tiles in various sizes and finishes',
       link: '/gallery?category=Porcelain Tiles',
       tag: 'Premium'
     },
     {
-      src: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80',
+      src: '/2.webp',
       title: 'Porcelain Tiles Fabrications',
       description: 'Custom-cut and fabricated porcelain solutions',
       link: '/gallery?category=Porcelain Tiles Fabrications',
       tag: 'Custom'
     },
     {
-      src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
+      src: '/3.webp',
       title: 'Slab Tiles',
       description: 'Large format slabs for seamless installations',
       link: '/gallery?category=Slab Tiles',
       tag: 'Modern'
     },
     {
-      src: 'https://images.unsplash.com/photo-1598928636135-d146006ff4be?w=800&q=80',
+      src: '/4.webp',
       title: 'Ceramic Tiles',
       description: 'Traditional and modern ceramic tile solutions',
       link: '/gallery?category=Ceramic Tiles',
       tag: 'Classic'
     },
     {
-      src: 'https://images.unsplash.com/photo-1565538810643-b5bdb714032a?w=800&q=80',
+      src: '/5.webp',
       title: 'Outdoor Heavy-Duty Tiles',
       description: 'Weather-resistant tiles for outdoor applications',
       link: '/gallery?category=Outdoor Heavy-Duty Tiles',
       tag: 'Durable'
     },
     {
-      src: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=800&q=80',
+      src: '/6.webp',
       title: 'Mosaic Fabrications from Tiles',
       description: 'Custom mosaic patterns and fabrications',
       link: '/gallery?category=Mosaic Fabrications from Tiles',
       tag: 'Artistic'
     },
     {
-      src: 'https://images.unsplash.com/photo-1753723907358-c1d346aff7a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzd2ltbWluZyUyMHBvb2wlMjB0aWxlfGVufDF8fHx8MTc2NjEyNDgwMnww&ixlib=rb-4.1.0&q=80&w=1080',
+      src: '/7.webp',
       title: 'Swimming Pool Tiles',
       description: 'Color-stable, water-resistant tiles for pools and spas',
       link: '/gallery?category=Swimming Pool Tiles',
       tag: 'Specialty'
     },
     {
-      src: 'https://images.unsplash.com/photo-1669643219984-2ff3eea887a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXJibGUlMjB0aWxlJTIwdGV4dHVyZXxlbnwxfHx8fDE3NjYxMjQ4MDJ8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      src: '/8.webp',
       title: 'Marble and Granite',
       description: 'Natural stone with elegant patterns and timeless appeal',
       link: '/gallery?category=Marble and Granite',
       tag: 'Luxury'
     },
     {
-      src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
+      src: '/9.webp',
       title: 'Marble Countertops and Fabrications',
       description: 'Custom marble countertops and stone fabrications',
       link: '/gallery?category=Marble Countertops and Fabrications',
       tag: 'Premium'
     },
-  
-  ];
-
-  const showcaseImages = [
-    {
-      src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80',
-      title: 'Modern Living Spaces',
-      category: 'Residential'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80',
-      title: 'Luxury Bathroom Design',
-      category: 'Premium'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80',
-      title: 'Commercial Excellence',
-      category: 'Commercial'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80',
-      title: 'Kitchen Elegance',
-      category: 'Interior'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
-      title: 'Hotel Lobby',
-      category: 'Hospitality'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&q=80',
-      title: 'Office Spaces',
-      category: 'Corporate'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1564078516393-cf04bd966897?w=800&q=80',
-      title: 'Shopping Mall',
-      category: 'Retail'
-    },
-    {
-      src: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
-      title: 'Luxury Villa',
-      category: 'Premium'
-    }
   ];
 
   const stats = [
@@ -207,6 +167,141 @@ function HomePage() {
       });
     }
   }, []);
+
+  useEffect(() => {
+    fetchFeaturedProjects();
+  }, []);
+
+  const fetchFeaturedProjects = async () => {
+    try {
+      const response = await fetch(`${baseurl}projects?featured=true`);
+      const data = await response.json();
+      setFeaturedProjects(data.slice(0, 8));
+    } catch (error) {
+      console.error('Error fetching featured projects:', error);
+    }
+  };
+
+  const handleProjectClick = (project) => {
+    setSelectedProject(project);
+    setShowModal(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedProject(null);
+    document.body.style.overflow = 'auto';
+  };
+
+  const ProjectModal = () => {
+    if (!selectedProject) return null;
+
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-900 rounded-2xl shadow-2xl">
+          <button
+            onClick={closeModal}
+            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+          >
+            <ChevronRight className="rotate-45" size={24} />
+          </button>
+          
+          {selectedProject.images && selectedProject.images.length > 0 && (
+            <div className="relative h-64 md:h-80 overflow-hidden rounded-t-2xl">
+              <ImageWithFallback
+                src={selectedProject.images[0].url}
+                alt={selectedProject.title}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            </div>
+          )}
+
+          <div className="p-6 md:p-8">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+              {selectedProject.title}
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <p className="text-gray-400 mb-2">
+                  <span className="font-semibold text-gray-300">Client:</span> {selectedProject.client}
+                </p>
+                <p className="text-gray-400 mb-2">
+                  <span className="font-semibold text-gray-300">Location:</span> {selectedProject.location}
+                </p>
+                <p className="text-gray-400">
+                  <span className="font-semibold text-gray-300">Category:</span> {selectedProject.category}
+                </p>
+              </div>
+              
+              {selectedProject.completionDate && (
+                <div>
+                  <p className="text-gray-400">
+                    <span className="font-semibold text-gray-300">Completed:</span>{' '}
+                    {new Date(selectedProject.completionDate).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold text-white mb-3">Project Description</h4>
+              <p className="text-gray-300 leading-relaxed">{selectedProject.description}</p>
+            </div>
+
+            {selectedProject.scope && (
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold text-white mb-3">Project Scope</h4>
+                <p className="text-gray-300 leading-relaxed">{selectedProject.scope}</p>
+              </div>
+            )}
+
+            {selectedProject.productsUsed && selectedProject.productsUsed.length > 0 && (
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold text-white mb-3">Products Used</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {selectedProject.productsUsed.map((product, index) => (
+                    <div key={index} className="bg-gray-800/50 rounded-lg p-3">
+                      <p className="font-medium text-white">{product.name}</p>
+                      {product.category && (
+                        <p className="text-sm text-gray-400">Category: {product.category}</p>
+                      )}
+                      {product.quantity && (
+                        <p className="text-sm text-gray-400">Quantity: {product.quantity}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {selectedProject.images && selectedProject.images.length > 1 && (
+              <div>
+                <h4 className="text-lg font-semibold text-white mb-3">More Images</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {selectedProject.images.slice(1).map((image, index) => (
+                    <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
+                      <ImageWithFallback
+                        src={image.url}
+                        alt={`${selectedProject.title} - ${index + 2}`}
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-black">
@@ -517,7 +612,7 @@ function HomePage() {
     </div>
   </div>
 </section>
-
+{/* 
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
@@ -627,7 +722,7 @@ function HomePage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -692,6 +787,66 @@ function HomePage() {
 
       <section className="py-24 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16 animate-on-scroll">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+              Featured <span className="showcase-text">Projects</span>
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+              Discover our exceptional work across residential, commercial, and hospitality sectors
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredProjects.map((project, index) => (
+              <div
+                key={project._id}
+                className="group animate-on-scroll relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer card-hover"
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => handleProjectClick(project)}
+              >
+                <div className="image-card-overlay"></div>
+                {project.images && project.images.length > 0 ? (
+                  <ImageWithFallback
+                    src={project.images[0].url}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                    <Grid3x3 size={48} className="text-gray-600" />
+                  </div>
+                )}
+                <div className="absolute bottom-0 left-0 right-0 p-6 image-card-content text-white">
+                  <div className="text-xs font-semibold text-gray-300 mb-2">
+                    {project.category}
+                  </div>
+                  <div className="text-lg font-bold group-hover:text-gray-300 transition-colors">
+                    {project.title}
+                  </div>
+                  <div className="text-sm text-gray-400 mt-2">{project.client}</div>
+                  <div className="absolute top-4 right-4 p-2 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Eye size={20} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12 animate-on-scroll">
+            <Link
+              to="/portfolio"
+              className="group inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
+            >
+              <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+              <span className="relative z-10">View All Projects</span>
+              <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
             <div className="animate-on-scroll">
               <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
@@ -744,51 +899,6 @@ function HomePage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Our <span className="showcase-text">Showcase</span>
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Witness the transformation of spaces with our premium tile solutions across various sectors
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {showcaseImages.map((image, index) => (
-              <div
-                key={index}
-                className="group animate-on-scroll relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer card-hover"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="image-card-overlay"></div>
-                <ImageWithFallback
-                  src={image.src}
-                  alt={image.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-6 image-card-content text-white">
-                  <div className="text-xs font-semibold text-gray-300 mb-2">{image.category}</div>
-                  <div className="text-lg font-bold group-hover:text-gray-300 transition-colors">{image.title}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12 animate-on-scroll">
-            <Link
-              to="/gallery"
-              className="group inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
-            >
-              <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-              <span className="relative z-10">View Full Gallery</span>
-              <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
-            </Link>
           </div>
         </div>
       </section>
@@ -889,7 +999,7 @@ function HomePage() {
               </Link>
               
               <Link
-                to="/gallery"
+                to="/portfolio"
                 className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
               >
                 <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
@@ -934,6 +1044,8 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {showModal && <ProjectModal />}
     </div>
   );
 }

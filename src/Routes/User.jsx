@@ -18,7 +18,7 @@ import Maintenance from "../Pages/Maintenance";
 /* ===============================
    TOGGLE MAINTENANCE MODE HERE
 ================================= */
-const MAINTENANCE_MODE = true; // true = maintenance ON
+const MAINTENANCE_MODE = false; // true = maintenance ON
 
 function ScrollToTop() {
   const { pathname } = useLocation();

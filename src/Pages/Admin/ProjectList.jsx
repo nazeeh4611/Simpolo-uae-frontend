@@ -1,4 +1,3 @@
-// src/components/admin/ProjectsList.jsx
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ProjectForm from './ProjectForm';
@@ -32,6 +31,16 @@ const ProjectsList = () => {
 
   const token = localStorage.getItem('adminToken'); 
 
+  const getFullImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    const cleanBaseUrl = baseurl.endsWith('/') ? baseurl.slice(0, -1) : baseurl;
+    const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+    return `${cleanBaseUrl}${cleanUrl}`;
+  };
+
   useEffect(() => {
     fetchProjects();
   }, [pagination.page, selectedCategory, showFeatured, search]);
@@ -50,11 +59,10 @@ const ProjectsList = () => {
   const fetchProjects = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${baseurl}admin/projects`,{
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${token}`
-          }}, {
+      const response = await axios.get(`${baseurl}admin/projects`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
         params: {
           page: pagination.page,
           limit: pagination.limit,
@@ -63,6 +71,7 @@ const ProjectsList = () => {
           search: search || undefined
         }
       });
+      
       setProjects(Array.isArray(response.data.projects) ? response.data.projects : []);
       setPagination(prev => ({
         ...prev,
@@ -104,7 +113,9 @@ const ProjectsList = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
       try {
-        await axios.delete(`${baseurl}admin/projects/${id}`);
+        await axios.delete(`${baseurl}admin/projects/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         toast.success('Project deleted successfully');
         fetchProjects();
       } catch (error) {
@@ -134,7 +145,10 @@ const ProjectsList = () => {
       formData.append('featured', !currentStatus);
 
       await axios.put(`${baseurl}admin/projects/${id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        }
       });
 
       toast.success(`Project ${!currentStatus ? 'marked as featured' : 'removed from featured'}`);
@@ -292,89 +306,103 @@ const ProjectsList = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {projects.map((project) => (
-                    <tr key={project._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center">
-                          {project.images?.[0] && (
-                            <div className="relative h-12 w-12 flex-shrink-0">
-                              <img
-                                src={project.images[0].url}
-                                alt={project.title}
-                                className="h-12 w-12 object-cover rounded-lg"
-                              />
-                              {project.featured && (
-                                <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-                                  ★
-                                </span>
-                              )}
-                            </div>
-                          )}
-                          <div className="ml-4">
-                            <div className="font-medium text-gray-900 line-clamp-1">{project.title}</div>
-                            <div className="text-sm text-gray-500 line-clamp-1">{project.scope || 'No scope defined'}</div>
+                  {projects.map((project) => {
+                    const imageUrl = project.images?.[0]?.url || project.images?.[0];
+                    return (
+                      <tr key={project._id} className="hover:bg-gray-50 transition-colors">
+<td className="px-6 py-4">
+  <div className="flex items-center">
+    {imageUrl && (
+      <div className="relative h-12 w-12 flex-shrink-0">
+        <img
+          src={getFullImageUrl(imageUrl)}
+          alt={project.title}
+          className="h-12 w-12 object-cover rounded-lg"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            // Show fallback
+            e.target.parentElement.innerHTML = `
+              <div class="h-12 w-12 flex items-center justify-center bg-gray-100 rounded-lg">
+                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+            `;
+          }}
+        />
+        {project.featured && (
+          <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+            ★
+          </span>
+        )}
+      </div>
+    )}
+    <div className="ml-4">
+      <div className="font-medium text-gray-900 line-clamp-1">{project.title}</div>
+      <div className="text-sm text-gray-500 line-clamp-1">{project.scope || 'No scope defined'}</div>
+    </div>
+  </div>
+</td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-900">{project.client}</div>
+                          <div className="text-sm text-gray-500">{project.location}</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {project.category}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{formatDate(project.completionDate)}</div>
+                          <div className="text-xs text-gray-500">Added: {formatDate(project.createdAt)}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <button
+                            onClick={() => toggleFeatured(project._id, project.featured)}
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                              project.featured
+                                ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
+                                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                            }`}
+                          >
+                            {project.featured ? 'Featured' : 'Standard'}
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center space-x-3">
+                            <button
+                              onClick={() => handleOpenEditModal(project)}
+                              className="text-blue-500 hover:text-blue-600 p-1.5 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => window.open(`/portfolio/${project._id}`, '_blank')}
+                              className="text-green-500 hover:text-green-600 p-1.5 hover:bg-green-50 rounded-lg transition-colors"
+                              title="View"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => handleDelete(project._id)}
+                              className="text-red-500 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-sm font-medium text-gray-900">{project.client}</div>
-                        <div className="text-sm text-gray-500">{project.location}</div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          {project.category}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{formatDate(project.completionDate)}</div>
-                        <div className="text-xs text-gray-500">Added: {formatDate(project.createdAt)}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <button
-                          onClick={() => toggleFeatured(project._id, project.featured)}
-                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                            project.featured
-                              ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200'
-                              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-                          }`}
-                        >
-                          {project.featured ? 'Featured' : 'Standard'}
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center space-x-3">
-                          <button
-                            onClick={() => handleOpenEditModal(project)}
-                            className="text-blue-500 hover:text-blue-600 p-1.5 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Edit"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={() => window.open(`/portfolio/${project._id}`, '_blank')}
-                            className="text-green-500 hover:text-green-600 p-1.5 hover:bg-green-50 rounded-lg transition-colors"
-                            title="View"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={() => handleDelete(project._id)}
-                            className="text-red-500 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

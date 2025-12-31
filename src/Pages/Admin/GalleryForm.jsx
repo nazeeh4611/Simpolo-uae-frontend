@@ -113,21 +113,50 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
   const removeExistingImage = async (imageIndex) => {
     if (!isEditMode || !itemData) return;
     
-    if (window.confirm('Are you sure you want to delete this image?')) {
-      try {
-        await axios.delete(`${baseurl}admin/gallery/${itemData._id}/images/${imageIndex}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setExistingImages(prev => prev.filter((_, i) => i !== imageIndex));
-        toast.success('Image deleted successfully');
-      } catch (error) {
-        console.error('Error deleting image:', error);
-        toast.error(error.response?.data?.message || 'Failed to delete image');
-      }
-    }
+    toast.custom((t) => (
+      <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+        <div className="flex-1 w-0 p-4">
+          <div className="flex items-start">
+            <div className="ml-3 flex-1">
+              <p className="text-sm font-medium text-gray-900">Delete Image</p>
+              <p className="mt-1 text-sm text-gray-500">Are you sure you want to delete this image? This action cannot be undone.</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex border-l border-gray-200">
+          <button
+            onClick={async () => {
+              try {
+                await axios.delete(`${baseurl}admin/gallery/${itemData._id}/images/${imageIndex}`, {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                  }
+                });
+                setExistingImages(prev => prev.filter((_, i) => i !== imageIndex));
+                toast.success('Image deleted successfully');
+                toast.dismiss(t.id);
+              } catch (error) {
+                console.error('Error deleting image:', error);
+                toast.error(error.response?.data?.message || 'Failed to delete image');
+                toast.dismiss(t.id);
+              }
+            }}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-red-600 hover:text-red-500 focus:outline-none"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity,
+    });
   };
 
   const handleAltTextChange = (index, value) => {
@@ -390,7 +419,7 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
                     {image.altText && (
                       <p className="text-xs text-gray-600 mt-2 truncate">{image.altText}</p>
                     )}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity rounded-lg flex items-center justify-center">
+                    <div className="absolute inset-0 bg-opacity-0 group-hover:bg-opacity-50 transition-opacity rounded-lg flex items-center justify-center">
                       {isEditMode && (
                         <button
                           type="button"

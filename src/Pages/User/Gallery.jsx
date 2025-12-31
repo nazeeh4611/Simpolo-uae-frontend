@@ -183,7 +183,7 @@ function Gallery() {
             <div className="absolute inset-0 sword-shimmer opacity-30"></div>
             <Search className="text-gray-900 relative z-10" size={32} />
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">No Projects Found</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">No Products Found</h3>
           <p className="text-gray-400 max-w-md mx-auto mb-8">
             {selectedCategory !== 'All' 
               ? `No items found in category "${selectedCategory}"`
@@ -504,7 +504,7 @@ function Gallery() {
             </div>
 
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white">
-              Project <span className="gallery-text">Gallery</span>
+              Product <span className="gallery-text">Gallery</span>
             </h1>
 
             <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
@@ -842,63 +842,7 @@ function Gallery() {
               </div>
             </div>
             
-            <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
-              <div className="silver-gradient-dark rounded-2xl p-1 card-hover relative overflow-hidden">
-                <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                <div className="bg-gray-900 rounded-xl p-8 text-white relative z-10">
-                  <div className="text-center mb-8">
-                    <div className="w-20 h-20 silver-gradient rounded-full flex items-center justify-center mx-auto mb-6 animate-float relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                      <Play className="text-gray-900 relative z-10" size={32} />
-                    </div>
-                    <h3 className="text-2xl font-bold mb-2">Virtual Tour Available</h3>
-                    <p className="text-gray-300">Explore our showroom from anywhere</p>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-lg silver-gradient flex items-center justify-center mr-4 relative overflow-hidden">
-                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                        <Star className="text-gray-900 relative z-10" size={24} />
-                      </div>
-                      <div>
-                        <div className="font-semibold">Live Demonstrations</div>
-                        <div className="text-sm text-gray-300">Tile installation techniques</div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-lg silver-gradient flex items-center justify-center mr-4 relative overflow-hidden">
-                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                        <Users className="text-gray-900 relative z-10" size={24} />
-                      </div>
-                      <div>
-                        <div className="font-semibold">Expert Consultations</div>
-                        <div className="text-sm text-gray-300">Free design advice</div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-lg silver-gradient flex items-center justify-center mr-4 relative overflow-hidden">
-                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                        <Award className="text-gray-900 relative z-10" size={24} />
-                      </div>
-                      <div>
-                        <div className="font-semibold">Sample Collection</div>
-                        <div className="text-sm text-gray-300">Take home material samples</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8 text-center">
-                    <button className="group px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-xl font-medium hover:bg-white/20 transition-all card-hover border border-gray-600 relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <span className="relative z-10">Start Virtual Tour</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+         
           </div>
         </div>
       </section>
