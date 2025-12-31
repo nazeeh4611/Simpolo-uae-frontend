@@ -10,6 +10,7 @@ import GalleryList from '../Pages/Admin/GalleryManage';
 import ProjectsList from '../Pages/Admin/ProjectList';
 
 import { AuthProvider } from '../Pages/Admin/Auth';
+import Settings from '../Pages/Admin/Settings';
 
 function AdminRoutes() {
   return (
@@ -29,6 +30,7 @@ function AdminRoutes() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="gallery" element={<GalleryList />} />
           <Route path="projects" element={<ProjectsList />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>
     </AuthProvider>

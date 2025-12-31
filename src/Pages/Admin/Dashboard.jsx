@@ -5,15 +5,15 @@ import { baseurl } from '../../util/Base';
 import { 
   TrendingUp, 
   Users, 
-  Calendar, 
-  Activity,
   Image as ImageIcon,
   Briefcase,
   Upload,
   FileText,
+  Activity,
   ArrowUpRight,
-  Clock,
   Eye,
+  Calendar,
+  Clock,
   CheckCircle
 } from 'lucide-react';
 
@@ -39,41 +39,6 @@ const createAxiosInstance = () => {
     }
   );
 
-  instance.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const originalRequest = error.config;
-
-      if (error.response?.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-
-        try {
-          const refreshToken = localStorage.getItem('refreshToken');
-          if (refreshToken) {
-            const response = await axios.post(
-              'https://api.simpolotrading.com/api/auth/refresh',
-              { refreshToken }
-            );
-
-            if (response.data.token) {
-              localStorage.setItem('token', response.data.token);
-              instance.defaults.headers.common['Authorization'] = 
-                `Bearer ${response.data.token}`;
-              return instance(originalRequest);
-            }
-          }
-        } catch (refreshError) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          window.location.href = '/admin/login';
-          return Promise.reject(refreshError);
-        }
-      }
-
-      return Promise.reject(error);
-    }
-  );
-
   return instance;
 };
 
@@ -83,19 +48,16 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     galleryCount: 0,
     projectsCount: 0,
-    categoriesCount: 0,
-    totalViews: 0,
-    recentGallery: [],
-    recentProjects: [],
-    monthlyGrowth: {
-      gallery: 0,
-      projects: 0,
-      views: 0
-    }
+    adminsCount: 0,
+    galleryGrowth: 0,
+    projectsGrowth: 0,
+    viewsGrowth: 15
   });
+  const [recentGallery, setRecentGallery] = useState([]);
+  const [recentProjects, setRecentProjects] = useState([]);
+  const [recentActivity, setRecentActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [recentActivity, setRecentActivity] = useState([]);
 
   useEffect(() => {
     fetchDashboardData();
@@ -104,66 +66,16 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
-      setError(null);
+      const response = await axiosInstance.get('admin/dashboard');
+      const data = response.data;
       
-      const [galleryRes, projectsRes, categoriesRes, analyticsRes, activityRes] = await Promise.all([
-        axiosInstance.get('/api/admin/gallery?limit=5'),
-        axiosInstance.get('/api/admin/projects?limit=5'),
-        axiosInstance.get('/api/admin/categories'),
-        axiosInstance.get('/api/admin/analytics'),
-        axiosInstance.get('/api/admin/activity?limit=5')
-      ]);
-
-      const galleryData = Array.isArray(galleryRes.data) 
-        ? galleryRes.data 
-        : galleryRes.data.galleryItems || galleryRes.data.items || [];
-        
-      const projectsData = Array.isArray(projectsRes.data) 
-        ? projectsRes.data 
-        : projectsRes.data.projects || projectsRes.data.items || [];
-
-      const categoriesData = Array.isArray(categoriesRes.data)
-        ? categoriesRes.data
-        : categoriesRes.data.categories || [];
-
-      const analyticsData = analyticsRes.data || {};
-      const activityData = activityRes.data?.activities || [];
-
-      setStats({
-        galleryCount: galleryRes.data?.totalCount || galleryData.length || 0,
-        projectsCount: projectsRes.data?.totalCount || projectsData.length || 0,
-        categoriesCount: categoriesData.length || 0,
-        totalViews: analyticsData.totalViews || 45200,
-        recentGallery: galleryData.slice(0, 5),
-        recentProjects: projectsData.slice(0, 5),
-        monthlyGrowth: {
-          gallery: analyticsData.monthlyGrowth?.gallery || 12,
-          projects: analyticsData.monthlyGrowth?.projects || 8,
-          views: analyticsData.monthlyGrowth?.views || 15
-        }
-      });
-
-      setRecentActivity(activityData.slice(0, 5));
+      setStats(data.stats);
+      setRecentGallery(data.recent.gallery || []);
+      setRecentProjects(data.recent.projects || []);
+      setRecentActivity(data.activity || []);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
-      
-      if (error.response?.status === 401) {
-        setError('Session expired. Please login again.');
-      } else if (error.response?.status === 404) {
-        setStats(prev => ({
-          ...prev,
-          galleryCount: 0,
-          projectsCount: 0,
-          categoriesCount: 0,
-          recentGallery: [],
-          recentProjects: []
-        }));
-        setRecentActivity([]);
-      } else if (error.message === 'Network Error') {
-        setError('Network error. Please check your internet connection.');
-      } else {
-        setError('Failed to load dashboard data. Please try again.');
-      }
+      setError('Failed to load dashboard data');
     } finally {
       setLoading(false);
     }
@@ -235,8 +147,8 @@ const Dashboard = () => {
           icon={<ImageIcon className="w-5 h-5 lg:w-6 lg:h-6" />}
           color="blue"
           link="/admin/gallery"
-          trend={`+${stats.monthlyGrowth.gallery}%`}
-          trendLabel="vs last month"
+          trend={`+${stats.galleryGrowth}%`}
+          trendLabel="this month"
         />
         <StatCard
           title="Projects"
@@ -244,25 +156,25 @@ const Dashboard = () => {
           icon={<Briefcase className="w-5 h-5 lg:w-6 lg:h-6" />}
           color="green"
           link="/admin/projects"
-          trend={`+${stats.monthlyGrowth.projects}%`}
-          trendLabel="vs last month"
+          trend={`+${stats.projectsGrowth}%`}
+          trendLabel="this month"
         />
         <StatCard
-          title="Categories"
-          value={stats.categoriesCount}
-          icon={<FileText className="w-5 h-5 lg:w-6 lg:h-6" />}
+          title="Admins"
+          value={stats.adminsCount}
+          icon={<Users className="w-5 h-5 lg:w-6 lg:h-6" />}
           color="purple"
-          link="/admin/categories"
-          trend="+2"
-          trendLabel="new this month"
+          link="/admin/settings"
+          trend=""
+          trendLabel="total users"
         />
         <StatCard
-          title="Total Views"
-          value={stats.totalViews.toLocaleString()}
+          title="Views Growth"
+          value={`+${stats.viewsGrowth}%`}
           icon={<Activity className="w-5 h-5 lg:w-6 lg:h-6" />}
           color="yellow"
-          trend={`+${stats.monthlyGrowth.views}%`}
-          trendLabel="vs last month"
+          trend=""
+          trendLabel="monthly increase"
         />
       </div>
 
@@ -284,11 +196,11 @@ const Dashboard = () => {
             link="/admin/projects/add"
           />
           <QuickActionCard
-            title="View Analytics"
-            description="Check performance metrics"
-            icon={<TrendingUp className="w-6 h-6 lg:w-7 lg:h-7" />}
+            title="Manage Admins"
+            description="View and manage admin users"
+            icon={<Users className="w-6 h-6 lg:w-7 lg:h-7" />}
             color="bg-purple-500"
-            link="/admin/analytics"
+            link="/admin/settings"
           />
         </div>
       </div>
@@ -296,12 +208,12 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentItems
           title="Recent Gallery Items"
-          items={stats.recentGallery}
+          items={recentGallery}
           type="gallery"
         />
         <RecentItems
           title="Recent Projects"
-          items={stats.recentProjects}
+          items={recentProjects}
           type="projects"
         />
       </div>
@@ -417,31 +329,12 @@ const RecentItems = ({ title, items, type }) => {
                     <h3 className="font-medium text-gray-900 text-sm lg:text-base truncate">
                       {item.title || item.name || 'Untitled'}
                     </h3>
-                    {type === 'projects' && item.status && (
-                      <span className={`text-xs px-2 py-0.5 lg:py-1 rounded-full ${
-                        item.status === 'completed' ? 'bg-green-100 text-green-800' : 
-                        item.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
-                        item.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>
-                        {item.status}
-                      </span>
-                    )}
                   </div>
                   <p className="text-xs lg:text-sm text-gray-600 truncate">
-                    {type === 'gallery' 
-                      ? `${item.category || 'Uncategorized'} • ${formatDate(item.createdAt || item.date)}`
-                      : `${item.client || 'No client'} • ${item.location || 'No location'}`
-                    }
+                    {formatDate(item.createdAt || item.date)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
-                  {type === 'gallery' && item.views !== undefined && (
-                    <span className="text-xs text-gray-500 flex items-center gap-1">
-                      <Eye className="w-3 h-3" />
-                      {item.views}
-                    </span>
-                  )}
                   <Link
                     to={`/admin/${type}/edit/${item._id || item.id}`}
                     className="ml-2 lg:ml-4 text-blue-600 hover:text-blue-700 text-xs lg:text-sm font-medium whitespace-nowrap px-3 lg:px-4 py-1.5 lg:py-2 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors group-hover:shadow-sm"
@@ -461,9 +354,6 @@ const RecentItems = ({ title, items, type }) => {
               }
             </div>
             <p className="text-gray-500 font-medium text-sm lg:text-base">No {type} yet</p>
-            <p className="text-xs lg:text-sm text-gray-400 mt-1">
-              Create your first {type === 'gallery' ? 'gallery item' : 'project'} to get started
-            </p>
           </div>
         )}
         
@@ -483,17 +373,13 @@ const RecentItems = ({ title, items, type }) => {
   );
 };
 
-const ActivityItem = ({ action, item, time, color, type, user }) => {
+const ActivityItem = ({ action, item, time, color, type }) => {
   const getActionIcon = () => {
     switch (type) {
       case 'gallery':
         return <ImageIcon className="w-4 h-4" />;
       case 'project':
         return <Briefcase className="w-4 h-4" />;
-      case 'user':
-        return <Users className="w-4 h-4" />;
-      case 'login':
-        return <CheckCircle className="w-4 h-4" />;
       default:
         return <Activity className="w-4 h-4" />;
     }
@@ -507,10 +393,6 @@ const ActivityItem = ({ action, item, time, color, type, user }) => {
         return 'bg-green-500';
       case 'purple':
         return 'bg-purple-500';
-      case 'yellow':
-        return 'bg-yellow-500';
-      case 'red':
-        return 'bg-red-500';
       default:
         return 'bg-gray-500';
     }
@@ -532,14 +414,9 @@ const ActivityItem = ({ action, item, time, color, type, user }) => {
           </p>
         </div>
         <p className="text-xs lg:text-sm text-gray-600 mt-1">{item}</p>
-        <div className="flex items-center justify-between mt-2">
-          <div className="flex items-center gap-1 text-xs text-gray-500">
-            <Clock className="w-3 h-3" />
-            {time}
-          </div>
-          {user && (
-            <span className="text-xs text-gray-500">by {user}</span>
-          )}
+        <div className="flex items-center gap-1 text-xs text-gray-500 mt-2">
+          <Clock className="w-3 h-3" />
+          {time}
         </div>
       </div>
     </div>
@@ -565,60 +442,18 @@ const ActivityTimeline = ({ activities }) => {
     }
   };
 
-  const defaultActivities = [
-    {
-      _id: '1',
-      action: 'Added new gallery item',
-      item: 'Modern Kitchen Design',
-      createdAt: new Date(Date.now() - 7200000).toISOString(),
-      type: 'gallery',
-      color: 'blue',
-      user: 'Admin'
-    },
-    {
-      _id: '2',
-      action: 'Updated project status',
-      item: 'Villa Renovation Project',
-      createdAt: new Date(Date.now() - 18000000).toISOString(),
-      type: 'project',
-      color: 'green',
-      user: 'Manager'
-    },
-    {
-      _id: '3',
-      action: 'Modified gallery category',
-      item: 'Bathroom Collections',
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-      type: 'gallery',
-      color: 'purple',
-      user: 'Admin'
-    },
-    {
-      _id: '4',
-      action: 'Completed project',
-      item: 'Hotel Interior Design',
-      createdAt: new Date(Date.now() - 172800000).toISOString(),
-      type: 'project',
-      color: 'yellow',
-      user: 'Designer'
-    }
-  ];
-
-  const displayActivities = activities.length > 0 ? activities : defaultActivities;
-
-  if (displayActivities.length === 0) {
+  if (activities.length === 0) {
     return (
       <div className="text-center py-8">
         <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-3" />
         <p className="text-gray-500 font-medium">No recent activity</p>
-        <p className="text-sm text-gray-400 mt-1">Activity will appear here as you use the system</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {displayActivities.map((activity) => (
+      {activities.map((activity) => (
         <ActivityItem
           key={activity._id}
           action={activity.action}
@@ -626,7 +461,6 @@ const ActivityTimeline = ({ activities }) => {
           time={formatTimeAgo(activity.createdAt)}
           color={activity.color}
           type={activity.type}
-          user={activity.user}
         />
       ))}
     </div>

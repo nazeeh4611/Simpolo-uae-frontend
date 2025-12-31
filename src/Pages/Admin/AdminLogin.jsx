@@ -1,9 +1,7 @@
-// src/components/admin/AdminLogin.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
-import { baseurl } from '../../util/Base';
+import { useAuth } from '../Admin/Auth';
 
 const AdminLogin = () => {
   const [credentials, setCredentials] = useState({
@@ -12,6 +10,15 @@ const AdminLogin = () => {
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      const from = location.state?.from?.pathname || '/admin/dashboard';
+      navigate(from, { replace: true });
+    }
+  }, [navigate, location, isAuthenticated]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -29,21 +36,17 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(`${baseurl}admin/login`, credentials);
-      console.log("clg",response)
+      const result = await login(credentials.username, credentials.password);
       
-      const { token, user } = response.data;
-      
-      localStorage.setItem('adminToken', token);
-      localStorage.setItem('adminUser', JSON.stringify(user));
-      
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      
-      toast.success('Login successful!');
-      navigate('/admin/dashboard');
+      if (result.success) {
+        toast.success('Login successful!');
+        navigate('/admin/dashboard', { replace: true });
+      } else {
+        toast.error(result.error || 'Login failed');
+      }
     } catch (error) {
       console.error('Login error:', error);
-      toast.error(error.response?.data?.message || 'Invalid credentials');
+      toast.error('An error occurred during login');
     } finally {
       setLoading(false);
     }
@@ -53,7 +56,6 @@ const AdminLogin = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-2xl shadow-xl p-8">
-          {/* Logo */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mb-4">
               <span className="text-white text-2xl font-bold">ST</span>
@@ -62,7 +64,6 @@ const AdminLogin = () => {
             <p className="text-gray-600 mt-2">Sign in to your dashboard</p>
           </div>
 
-          {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -111,7 +112,6 @@ const AdminLogin = () => {
             </button>
           </form>
 
-          {/* Note */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <p className="text-center text-sm text-gray-600">
               For security reasons, this panel is restricted to authorized personnel only.

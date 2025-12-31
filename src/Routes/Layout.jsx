@@ -23,6 +23,7 @@ const Layout = () => {
     { path: '/admin/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
     { path: '/admin/gallery', label: 'Gallery', icon: <Image size={20} /> },
     { path: '/admin/projects', label: 'Projects', icon: <Briefcase size={20} /> },
+    { path: '/admin/settings', label: 'Settings', icon: <Settings size={20} /> },
   ];
 
   const handleLogout = () => {
@@ -86,7 +87,7 @@ const Layout = () => {
                 <User size={18} className="text-gray-300" />
               </div>
               <div className="flex-1">
-                <p className="font-medium text-sm text-white">Admin</p>
+                <p className="font-medium text-sm text-white">{user?.name || 'Admin'}</p>
                 <p className="text-xs text-gray-400">Administrator</p>
               </div>
             </div>
@@ -121,14 +122,6 @@ const Layout = () => {
           </nav>
 
           <div className="p-4 border-t border-gray-800 space-y-2 flex-shrink-0">
-            <Link
-              to="/admin/settings"
-              className="flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-gray-800 text-gray-300 hover:text-white"
-            >
-              <Settings size={20} className="text-gray-400" />
-              <span className="font-medium">Settings</span>
-            </Link>
-            
             <button
               onClick={handleLogout}
               className="flex items-center justify-center space-x-2 w-full px-4 py-3 bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800 text-white rounded-xl transition-all duration-200 font-medium shadow-lg hover:shadow-xl border border-gray-700"
@@ -153,7 +146,7 @@ const Layout = () => {
               
               <div className="hidden md:block">
                 <h2 className="text-base lg:text-lg font-semibold text-gray-800">
-                  Welcome back, <span className="text-gray-700">Admin</span>
+                  Welcome back, <span className="text-gray-700">{user?.name || 'Admin'}</span>
                 </h2>
                 <p className="text-xs lg:text-sm text-gray-500">Manage your content and projects</p>
               </div>

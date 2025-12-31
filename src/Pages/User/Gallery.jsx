@@ -45,27 +45,64 @@ function Gallery() {
       setSelectedCategory(categoryFromUrl);
     }
   }, [location.search]);
-
   useEffect(() => {
     const fetchGalleryData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${baseurl}gallery`);
-        console.log("resposnseee")
-        const galleryData = Array.isArray(response.data) ? response.data : [];
+        console.log('=== FETCH GALLERY DEBUG ===');
+        console.log('Fetch URL:', `${baseurl}gallery`);
+        
+        const response = await axios.get(`${baseurl}gallery`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          timeout: 10000,
+          withCredentials: false
+        });
+        
+        console.log('✅ Response received');
+        console.log('Response status:', response.status);
+        console.log('Response data:', JSON.stringify(response.data, null, 2));
+        
+        // Check if response.data is an array
+        if (!Array.isArray(response.data)) {
+          console.error('❌ Response data is not an array:', typeof response.data);
+          throw new Error('Invalid response format: expected array');
+        }
+        
+        const galleryData = response.data;
+        console.log('✅ Gallery items:', galleryData.length);
+        
+        // Log first item structure
+        if (galleryData.length > 0) {
+          console.log('✅ First item structure:');
+          console.log('Title:', galleryData[0].title);
+          console.log('Category:', galleryData[0].category);
+          console.log('Images array:', galleryData[0].images);
+          console.log('Images length:', galleryData[0].images?.length);
+          console.log('First image URL:', galleryData[0].images?.[0]?.url);
+        }
+        
         setGallery(galleryData);
         setFilteredGallery(galleryData);
         setError(null);
       } catch (err) {
+        console.error('=== FETCH ERROR ===');
+        console.error('Error:', err.message);
+        
+        if (err.response) {
+          console.error('Response error:', err.response.status, err.response.data);
+        }
+        
         setError('Failed to load gallery. Please try again later.');
-        console.error('Error fetching gallery:', err);
         setGallery([]);
         setFilteredGallery([]);
       } finally {
         setLoading(false);
       }
     };
-
+    
     fetchGalleryData();
   }, []);
 

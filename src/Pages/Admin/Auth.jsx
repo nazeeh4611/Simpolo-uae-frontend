@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import axios from 'axios';
+import { baseurl } from '../../util/Base';
 
 const AuthContext = createContext();
 
@@ -15,110 +17,85 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const userData = localStorage.getItem('user');
+    const adminToken = localStorage.getItem('adminToken');
+    const adminUser = localStorage.getItem('adminUser');
     
-    if (token && userData) {
+    if (adminToken && adminUser) {
       try {
-        const parsedUser = JSON.parse(userData);
+        const parsedUser = JSON.parse(adminUser);
         setUser(parsedUser);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${adminToken}`;
       } catch (error) {
-        console.error('Error parsing user data:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        console.error('Error parsing admin user data:', error);
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        delete axios.defaults.headers.common['Authorization'];
       }
     }
     
     setLoading(false);
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (username, password) => {
     try {
-      const response = await fetch('https://api.simpolotrading.com/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post(`${baseurl}admin/login`, {
+        username,
+        password
       });
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
 
-      const data = await response.json();
+      const { token, admin: admin } = response.data;
       
-      if (data.token && data.user) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setUser(data.user);
-        return { success: true, user: data.user };
+      if (token && admin) {
+        localStorage.setItem('adminToken', token);
+        localStorage.setItem('adminUser', JSON.stringify(admin));
+        setUser(admin);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        return { success: true, admin: admin };
       } else {
         throw new Error('Invalid response from server');
       }
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, error: error.message };
+      return { 
+        success: false, 
+        error: error.response?.data?.message || error.message || 'Login failed' 
+      };
     }
   };
 
-  const register = async (userData) => {
-    try {
-      const response = await fetch('https://api.simpolotrading.com/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
-      }
-
-      const data = await response.json();
-      
-      if (data.token && data.user) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        setUser(data.user);
-        return { success: true, user: data.user };
-      } else {
-        throw new Error('Invalid response from server');
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      return { success: false, error: error.message };
-    }
+  const adminLogin = async (username, password) => {
+    return login(username, password);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('adminToken');
+    localStorage.removeItem('adminUser');
     setUser(null);
-  };
-
-  const updateUser = (updatedUser) => {
-    const currentUser = JSON.parse(localStorage.getItem('user'));
-    const mergedUser = { ...currentUser, ...updatedUser };
-    localStorage.setItem('user', JSON.stringify(mergedUser));
-    setUser(mergedUser);
+    delete axios.defaults.headers.common['Authorization'];
   };
 
   const getToken = () => {
-    return localStorage.getItem('token');
+    return localStorage.getItem('adminToken');
   };
 
   const isAuthenticated = () => {
-    return !!user && !!localStorage.getItem('token');
+    const token = localStorage.getItem('adminToken');
+    const userData = localStorage.getItem('adminUser');
+    return !!token && !!userData;
+  };
+
+  const updateUser = (updatedUser) => {
+    const currentUser = JSON.parse(localStorage.getItem('adminUser') || '{}');
+    const mergedUser = { ...currentUser, ...updatedUser };
+    localStorage.setItem('adminUser', JSON.stringify(mergedUser));
+    setUser(mergedUser);
   };
 
   const value = {
     user,
     loading,
-    login,
-    register,
+    login: adminLogin,
     logout,
     updateUser,
     getToken,
