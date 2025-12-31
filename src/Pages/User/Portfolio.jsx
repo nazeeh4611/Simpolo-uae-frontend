@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Star, ArrowRight, X, Download, Share2, ChevronLeft, ChevronRight as ChevronRightIcon, Heart, Calendar, Play, Eye, Tag, ImageIcon, Filter, Search, Grid, List, Layers } from 'lucide-react';
+import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Star, ArrowRight, X, Download, Share2, ChevronLeft, ChevronRight as ChevronRightIcon, Heart, Calendar, Play, Eye, Tag, ImageIcon, Filter, Search, Grid, List, Layers, Ruler, Package, Home, CheckCircle, Info, Wrench, Briefcase, User, Phone, Mail, ExternalLink, Copy, Check } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 import { baseurl } from '../../util/Base';
@@ -17,6 +17,7 @@ function Portfolio() {
   const [viewMode, setViewMode] = useState('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('date');
+  const [copied, setCopied] = useState(false);
   
   const categories = [
     'All',
@@ -55,7 +56,9 @@ function Portfolio() {
         (project.title && project.title.toLowerCase().includes(query)) ||
         (project.description && project.description.toLowerCase().includes(query)) ||
         (project.category && project.category.toLowerCase().includes(query)) ||
-        (project.location && project.location.toLowerCase().includes(query))
+        (project.location && project.location.toLowerCase().includes(query)) ||
+        (project.client && project.client.toLowerCase().includes(query)) ||
+        (project.scope && project.scope.toLowerCase().includes(query))
       );
     }
     return true;
@@ -163,6 +166,35 @@ function Portfolio() {
         prev === 0 ? selectedProject.images.length - 1 : prev - 1
       );
     }
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleDownload = (imageUrl, imageName) => {
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = imageName || 'project-image.jpg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   useEffect(() => {
@@ -349,6 +381,10 @@ function Portfolio() {
                       <div className="flex items-center">
                         <MapPin size={16} className="mr-1.5" />
                         {project.location || 'UAE'}
+                      </div>
+                      <div className="flex items-center">
+                        <User size={16} className="mr-1.5" />
+                        {project.client || 'N/A'}
                       </div>
                     </div>
                     
@@ -729,13 +765,35 @@ function Portfolio() {
                   
                   <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-20">
                     <div className="flex items-center gap-2">
-                      <button className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg">
+                      <button 
+                        onClick={() => handleDownload(
+                          selectedProject.images?.[currentImageIndex]?.url || selectedProject.image,
+                          `${selectedProject.title}-${currentImageIndex + 1}.jpg`
+                        )}
+                        className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg"
+                      >
                         <Download size={18} />
                         Download
                       </button>
-                      <button className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg">
-                        <Share2 size={18} />
-                        Share
+                      <button 
+                        onClick={handleShare}
+                        className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg"
+                      >
+                        {copied ? <Check size={18} className="text-green-500" /> : <Share2 size={18} />}
+                        {copied ? 'Copied!' : 'Share'}
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLike(selectedProject._id);
+                        }}
+                        className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg"
+                      >
+                        <Heart 
+                          size={18} 
+                          className={likedItems[selectedProject._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
+                        />
+                        {likedItems[selectedProject._id] ? 'Liked' : 'Like'}
                       </button>
                     </div>
                     <div className="text-white text-sm bg-black/60 px-4 py-2 rounded-full backdrop-blur-sm font-medium border border-gray-600">
@@ -786,45 +844,134 @@ function Portfolio() {
                     setSelectedProject(null);
                     setCurrentImageIndex(0);
                   }}
-                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg"
+                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg z-30"
                 >
                   <X size={20} />
                 </button>
                 
                 <div className="mb-6">
-                  <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
-                    {selectedProject.category || selectedProject.type || 'Project'}
-                  </span>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-4 mb-3">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                      {selectedProject.category || selectedProject.type || 'Project'}
+                    </span>
+                    {selectedProject.featured && (
+                      <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <span className="relative z-10">Featured</span>
+                      </span>
+                    )}
+                  </div>
+                  
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-2 mb-3">
                     {selectedProject.title || selectedProject.name}
                   </h2>
                   
-                  <div className="flex items-center text-gray-400 mb-4">
-                    <MapPin size={18} className="mr-2" />
-                    <span className="font-medium">{selectedProject.location || 'UAE'}</span>
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center text-gray-400">
+                      <MapPin size={18} className="mr-2" />
+                      <span className="font-medium">{selectedProject.location || 'UAE'}</span>
+                    </div>
+                    <div className="flex items-center text-gray-400">
+                      <User size={18} className="mr-2" />
+                      <span className="font-medium">Client: {selectedProject.client || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-center text-gray-400">
+                      <Calendar size={18} className="mr-2" />
+                      <span>
+                        {selectedProject.completionDate 
+                          ? `Completed: ${formatDate(selectedProject.completionDate)}`
+                          : 'Completion Date: N/A'}
+                      </span>
+                    </div>
+                    <div className="flex items-center text-gray-400">
+                      <Calendar size={18} className="mr-2" />
+                      <span>Added on {formatDate(selectedProject.createdAt)}</span>
+                    </div>
                   </div>
                 </div>
                 
                 <div className="space-y-6">
+                  {selectedProject.description && (
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                        <Info size={20} className="mr-2" />
+                        Project Overview
+                      </h4>
+                      <p className="text-gray-300 leading-relaxed">
+                        {selectedProject.description}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {selectedProject.scope && (
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                        <Briefcase size={20} className="mr-2" />
+                        Project Scope
+                      </h4>
+                      <p className="text-gray-300 leading-relaxed">
+                        {selectedProject.scope}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {selectedProject.productsUsed && selectedProject.productsUsed.length > 0 && (
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                        <Package size={20} className="mr-2" />
+                        Products Used
+                      </h4>
+                      <div className="space-y-3">
+                        {selectedProject.productsUsed.map((product, index) => (
+                          <div key={index} className="bg-white/5 p-3 rounded-lg border border-gray-700">
+                            <div className="flex justify-between items-center mb-1">
+                              <div className="text-gray-300 font-medium">{product.name || 'Product Name'}</div>
+                              {product.quantity && (
+                                <div className="text-gray-400 text-sm">Qty: {product.quantity}</div>
+                              )}
+                            </div>
+                            {product.category && (
+                              <div className="text-gray-400 text-sm">Category: {product.category}</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
                   <div>
-                    <h4 className="text-lg font-bold text-white mb-3">Project Overview</h4>
-                    <p className="text-gray-300 leading-relaxed">
-                      {selectedProject.description || 'This premium project showcases exceptional craftsmanship and attention to detail.'}
-                    </p>
+                    <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                      <ImageIcon size={20} className="mr-2" />
+                      Media Details
+                    </h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="bg-white/5 p-3 rounded-lg border border-gray-700">
+                        <div className="text-sm text-gray-400">Total Images</div>
+                        <div className="text-gray-300 font-semibold">{(selectedProject.images && selectedProject.images.length) || 1}</div>
+                      </div>
+                      <div className="bg-white/5 p-3 rounded-lg border border-gray-700">
+                        <div className="text-sm text-gray-400">Current Image</div>
+                        <div className="text-gray-300 font-semibold">#{currentImageIndex + 1}</div>
+                      </div>
+                    </div>
+                    {selectedProject.images?.[currentImageIndex]?.caption && (
+                      <div className="mt-3 p-3 bg-white/5 rounded-lg border border-gray-700">
+                        <div className="text-sm text-gray-400 mb-1">Image Caption</div>
+                        <div className="text-gray-300">{selectedProject.images[currentImageIndex].caption}</div>
+                      </div>
+                    )}
                   </div>
                   
                   <div className="pt-6 border-t border-gray-700">
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                      <div className="flex items-center gap-6">
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-gray-300">{(selectedProject.images && selectedProject.images.length) || 1}</div>
-                          <div className="text-sm text-gray-500">Images</div>
-                        </div>
-                      </div>
-                      
-                      <button className="group px-6 py-3 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine w-full sm:w-auto">
+                    <h4 className="text-lg font-bold text-white mb-4">Project Actions</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button className="group px-4 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
                         <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
                         <span className="relative z-10">Request Similar Project</span>
+                      </button>
+                      <button className="group px-4 py-3 bg-white/5 text-white rounded-xl font-medium hover:bg-white/10 transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        <span className="relative z-10">Contact Project Manager</span>
                       </button>
                     </div>
                   </div>

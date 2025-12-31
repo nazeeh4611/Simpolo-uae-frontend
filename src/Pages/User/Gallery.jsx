@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ImageWithFallback } from '../../util/Fallback';
-import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock, Users, Star, Heart, Share2, Download, Grid, List, X, ArrowRight, Play, ImageIcon, Eye, Tag, Layers, ChevronLeft, ChevronRight as ChevronRightIcon, CheckCircle } from 'lucide-react';
+import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock, Users, Star, Heart, Share2, Download, Grid, List, X, ArrowRight, Play, ImageIcon, Eye, Tag, Layers, ChevronLeft, ChevronRight as ChevronRightIcon, CheckCircle, Ruler, Package, Building, Home, Settings, Check, Info } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -34,6 +34,7 @@ function Gallery() {
   const [likedItems, setLikedItems] = useState({});
   const [sortBy, setSortBy] = useState('date');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [copied, setCopied] = useState(false);
 
   const location = useLocation();
   
@@ -45,13 +46,11 @@ function Gallery() {
       setSelectedCategory(categoryFromUrl);
     }
   }, [location.search]);
+  
   useEffect(() => {
     const fetchGalleryData = async () => {
       try {
         setLoading(true);
-        console.log('=== FETCH GALLERY DEBUG ===');
-        console.log('Fetch URL:', `${baseurl}gallery`);
-        
         const response = await axios.get(`${baseurl}gallery`, {
           headers: {
             'Content-Type': 'application/json',
@@ -61,40 +60,15 @@ function Gallery() {
           withCredentials: false
         });
         
-        console.log('✅ Response received');
-        console.log('Response status:', response.status);
-        console.log('Response data:', JSON.stringify(response.data, null, 2));
-        
-        // Check if response.data is an array
         if (!Array.isArray(response.data)) {
-          console.error('❌ Response data is not an array:', typeof response.data);
           throw new Error('Invalid response format: expected array');
         }
         
         const galleryData = response.data;
-        console.log('✅ Gallery items:', galleryData.length);
-        
-        // Log first item structure
-        if (galleryData.length > 0) {
-          console.log('✅ First item structure:');
-          console.log('Title:', galleryData[0].title);
-          console.log('Category:', galleryData[0].category);
-          console.log('Images array:', galleryData[0].images);
-          console.log('Images length:', galleryData[0].images?.length);
-          console.log('First image URL:', galleryData[0].images?.[0]?.url);
-        }
-        
         setGallery(galleryData);
         setFilteredGallery(galleryData);
         setError(null);
       } catch (err) {
-        console.error('=== FETCH ERROR ===');
-        console.error('Error:', err.message);
-        
-        if (err.response) {
-          console.error('Response error:', err.response.status, err.response.data);
-        }
-        
         setError('Failed to load gallery. Please try again later.');
         setGallery([]);
         setFilteredGallery([]);
@@ -161,6 +135,35 @@ function Gallery() {
         prev === 0 ? selectedImage.images.length - 1 : prev - 1
       );
     }
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleDownload = (imageUrl, imageName) => {
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = imageName || 'gallery-image.jpg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   useEffect(() => {
@@ -268,107 +271,111 @@ function Gallery() {
                 
                 <div className="absolute top-4 right-4 z-20">
                   <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleLike(item._id);
-                        }}
-                        className="p-2 bg-white/10 backdrop-blur-sm rounded-full shadow-sm hover:bg-white/20 transition-colors border border-gray-600"
-                      >
-                        <Heart 
-                          size={18} 
-                          className={likedItems[item._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
-                        />
-                      </button>
-                    </div>
-                    
-                    <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-                      <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors uppercase tracking-wide">
-                        {item.title || 'Untitled Project'}
-                      </h3>
-                      <div className="flex items-center text-gray-300 text-sm font-medium">
-                        <span className="uppercase tracking-wider">{item.category || 'Uncategorized'}</span>
-                        <span className="mx-2">•</span>
-                        <span>{(item.images && item.images.length) || 0} images</span>
-                      </div>
-                    </div>
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleLike(item._id);
+                    }}
+                    className="p-2 bg-white/10 backdrop-blur-sm rounded-full shadow-sm hover:bg-white/20 transition-colors border border-gray-600"
+                  >
+                    <Heart 
+                      size={18} 
+                      className={likedItems[item._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
+                    />
+                  </button>
+                </div>
+                
+                <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+                  <h3 className="text-white text-xl font-bold mb-3 group-hover:text-gray-200 transition-colors uppercase tracking-wide">
+                    {item.title || 'Untitled Project'}
+                  </h3>
+                  <div className="flex items-center text-gray-300 text-sm font-medium">
+                    <span className="uppercase tracking-wider">{item.category || 'Uncategorized'}</span>
+                    <span className="mx-2">•</span>
+                    <span>{(item.images && item.images.length) || 0} images</span>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-          );
-        } else {
-          return (
-            <div className="space-y-6">
-              {itemsToRender.map((item) => (
-                <div
-                  key={item._id || item.id}
-                  onClick={() => handleOpenModal(item)}
-                  className="animate-on-scroll group bg-white/5 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-700 hover:border-gray-500 overflow-hidden card-hover cursor-pointer"
-                >
-                  <div className="flex flex-col md:flex-row">
-                    <div className="md:w-64 h-64 md:h-auto relative flex-shrink-0">
-                      <ImageWithFallback
-                        src={item.images?.[0]?.url || 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'}
-                        alt={item.images?.[0]?.altText || item.title || 'Gallery image'}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          ))}
+        </div>
+      );
+    } else {
+      return (
+        <div className="space-y-6">
+          {itemsToRender.map((item) => (
+            <div
+              key={item._id || item.id}
+              onClick={() => handleOpenModal(item)}
+              className="animate-on-scroll group bg-white/5 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-700 hover:border-gray-500 overflow-hidden card-hover cursor-pointer"
+            >
+              <div className="flex flex-col md:flex-row">
+                <div className="md:w-64 h-64 md:h-auto relative flex-shrink-0">
+                  <ImageWithFallback
+                    src={item.images?.[0]?.url || 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'}
+                    alt={item.images?.[0]?.altText || item.title || 'Gallery image'}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  {item.featured && (
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <span className="relative z-10">Featured</span>
+                      </span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex-1 p-8">
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <span className="px-3 py-1 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                        {item.category || 'Uncategorized'}
+                      </span>
+                      <h3 className="text-2xl font-bold text-white mt-4 mb-2 group-hover:text-gray-300 transition-colors">{item.title || 'Untitled Project'}</h3>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLike(item._id);
+                      }}
+                      className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-gray-700"
+                    >
+                      <Heart 
+                        size={20} 
+                        className={likedItems[item._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
                       />
-                      {item.featured && (
-                        <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
-                            <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                            <span className="relative z-10">Featured</span>
-                          </span>
-                        </div>
-                      )}
+                    </button>
+                  </div>
+                  
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    {item.description || 'Premium installation showcasing exceptional craftsmanship and design excellence.'}
+                  </p>
+                  
+                  <div className="flex items-center justify-between pt-6 border-t border-gray-700">
+                    <div className="flex items-center gap-6 text-sm text-gray-500">
+                      <div className="flex items-center">
+                        <ImageIcon size={16} className="mr-1.5" />
+                        {(item.images && item.images.length) || 0} images
+                      </div>
+                      <div className="flex items-center">
+                        <Calendar size={16} className="mr-1.5" />
+                        {item.createdAt ? formatDate(item.createdAt) : 'N/A'}
+                      </div>
                     </div>
                     
-                    <div className="flex-1 p-8">
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <span className="px-3 py-1 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
-                            {item.category || 'Uncategorized'}
-                          </span>
-                          <h3 className="text-2xl font-bold text-white mt-4 mb-2 group-hover:text-gray-300 transition-colors">{item.title || 'Untitled Project'}</h3>
-                        </div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleLike(item._id);
-                          }}
-                          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-gray-700"
-                        >
-                          <Heart 
-                            size={20} 
-                            className={likedItems[item._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
-                          />
-                        </button>
-                      </div>
-                      
-                      <p className="text-gray-300 mb-6 leading-relaxed">
-                        {item.description || 'Premium installation showcasing exceptional craftsmanship and design excellence.'}
-                      </p>
-                      
-                      <div className="flex items-center justify-between pt-6 border-t border-gray-700">
-                        <div className="flex items-center gap-6 text-sm text-gray-500">
-                          <div className="flex items-center">
-                            <ImageIcon size={16} className="mr-1.5" />
-                            {(item.images && item.images.length) || 0} images
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center text-sm text-gray-300 font-semibold">
-                          View Details
-                          <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </div>
+                    <div className="flex items-center text-sm text-gray-300 font-semibold">
+                      View Details
+                      <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform" />
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
-          );
-        }
-      };
+          ))}
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black">
@@ -734,13 +741,35 @@ function Gallery() {
                   
                   <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between z-20">
                     <div className="flex items-center gap-2">
-                      <button className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg">
+                      <button 
+                        onClick={() => handleDownload(
+                          selectedImage.images[currentImageIndex]?.url,
+                          `${selectedImage.title}-${currentImageIndex + 1}.jpg`
+                        )}
+                        className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg"
+                      >
                         <Download size={18} />
                         Download
                       </button>
-                      <button className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg">
-                        <Share2 size={18} />
-                        Share
+                      <button 
+                        onClick={handleShare}
+                        className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg"
+                      >
+                        {copied ? <Check size={18} className="text-green-500" /> : <Share2 size={18} />}
+                        {copied ? 'Copied!' : 'Share'}
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleLike(selectedImage._id);
+                        }}
+                        className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg"
+                      >
+                        <Heart 
+                          size={18} 
+                          className={likedItems[selectedImage._id] ? 'text-red-500 fill-red-500' : 'text-gray-400'}
+                        />
+                        {likedItems[selectedImage._id] ? 'Liked' : 'Like'}
                       </button>
                     </div>
                     <div className="text-white text-sm bg-black/60 px-4 py-2 rounded-full backdrop-blur-sm font-medium border border-gray-600">
@@ -778,44 +807,112 @@ function Gallery() {
                     setSelectedImage(null);
                     setCurrentImageIndex(0);
                   }}
-                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg"
+                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg z-30"
                 >
                   <X size={20} />
                 </button>
                 
                 <div className="mb-6">
-                  <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
-                    {selectedImage.category}
-                  </span>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-4 mb-3">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                      {selectedImage.category}
+                    </span>
+                    {selectedImage.featured && (
+                      <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <span className="relative z-10">Featured</span>
+                      </span>
+                    )}
+                    {selectedImage.status && (
+                      <span className={`px-3 py-1.5 text-xs font-semibold rounded-full border ${
+                        selectedImage.status === 'published' ? 'bg-green-900/20 text-green-400 border-green-700' :
+                        selectedImage.status === 'draft' ? 'bg-yellow-900/20 text-yellow-400 border-yellow-700' :
+                        'bg-gray-900/20 text-gray-400 border-gray-700'
+                      }`}>
+                        {selectedImage.status}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-2 mb-3">
                     {selectedImage.title}
                   </h2>
                   
-                  <div className="text-gray-400 mb-4">
-                    <span className="font-medium">Category: {selectedImage.category}</span>
+                  <div className="flex items-center text-gray-400 text-sm mb-4">
+                    <Calendar size={16} className="mr-2" />
+                    <span>Added on {formatDate(selectedImage.createdAt)}</span>
+                    {selectedImage.updatedAt && selectedImage.updatedAt !== selectedImage.createdAt && (
+                      <>
+                        <span className="mx-2">•</span>
+                        <span>Updated on {formatDate(selectedImage.updatedAt)}</span>
+                      </>
+                    )}
                   </div>
                 </div>
                 
                 <div className="space-y-6">
+                  {selectedImage.description && (
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                        <Info size={20} className="mr-2" />
+                        Project Description
+                      </h4>
+                      <p className="text-gray-300 leading-relaxed">
+                        {selectedImage.description}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {selectedImage.specifications && Object.keys(selectedImage.specifications).length > 0 && (
+                    <div>
+                      <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                        <Settings size={20} className="mr-2" />
+                        Specifications
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {Object.entries(selectedImage.specifications).map(([key, value], index) => (
+                          <div key={index} className="bg-white/5 p-3 rounded-lg border border-gray-700">
+                            <div className="text-sm text-gray-400 uppercase tracking-wider">{key}</div>
+                            <div className="text-gray-300 font-medium">{value}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
                   <div>
-                    <h4 className="text-lg font-bold text-white mb-3">Project Overview</h4>
-                    <p className="text-gray-300 leading-relaxed">
-                      {selectedImage.description || 'This premium installation showcases exceptional craftsmanship and attention to detail.'}
-                    </p>
+                    <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                      <ImageIcon size={20} className="mr-2" />
+                      Image Details
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="text-gray-400">Total Images</div>
+                        <div className="text-white font-semibold">{selectedImage.images?.length || 0}</div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="text-gray-400">Current Image</div>
+                        <div className="text-white font-semibold">#{currentImageIndex + 1}</div>
+                      </div>
+                      {selectedImage.images?.[currentImageIndex]?.altText && (
+                        <div className="mt-2 p-3 bg-white/5 rounded-lg border border-gray-700">
+                          <div className="text-sm text-gray-400 mb-1">Alt Text</div>
+                          <div className="text-gray-300">{selectedImage.images[currentImageIndex].altText}</div>
+                        </div>
+                      )}
+                    </div>
                   </div>
                   
                   <div className="pt-6 border-t border-gray-700">
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                      <div className="flex items-center gap-6">
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-gray-300">{selectedImage.images?.length || 0}</div>
-                          <div className="text-sm text-gray-500">Images</div>
-                        </div>
-                      </div>
-                      
-                      <button className="group px-6 py-3 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine w-full sm:w-auto">
+                    <h4 className="text-lg font-bold text-white mb-4">Quick Actions</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <button className="group px-4 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
                         <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
                         <span className="relative z-10">Request Similar Project</span>
+                      </button>
+                      <button className="group px-4 py-3 bg-white/5 text-white rounded-xl font-medium hover:bg-white/10 transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        <span className="relative z-10">Contact Sales</span>
                       </button>
                     </div>
                   </div>
