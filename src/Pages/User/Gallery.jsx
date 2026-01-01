@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ImageWithFallback } from '../../util/Fallback';
 import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock, Users, Star, Heart, Share2, Download, Grid, List, X, ArrowRight, Play, ImageIcon, Eye, Tag, Layers, ChevronLeft, ChevronRight as ChevronRightIcon, CheckCircle, Ruler, Package, Building, Home, Settings, Check, Info } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
@@ -35,6 +35,7 @@ function Gallery() {
   const [sortBy, setSortBy] = useState('date');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const modalContentRef = useRef(null);
 
   const location = useLocation();
   
@@ -709,21 +710,36 @@ function Gallery() {
       </section>
 
       {selectedImage && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 animate-scaleIn">
-          <div className="absolute inset-0" onClick={() => {
-            setSelectedImage(null);
-            setCurrentImageIndex(0);
-          }}></div>
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 animate-scaleIn overflow-y-auto">
+          <div 
+            className="absolute inset-0" 
+            onClick={() => {
+              setSelectedImage(null);
+              setCurrentImageIndex(0);
+            }}
+          ></div>
           
-          <div className="relative max-w-7xl w-full max-h-[90vh] overflow-hidden rounded-2xl bg-gray-900 z-10 border border-gray-700">
-            <div className="grid lg:grid-cols-3 h-full">
-              <div className="lg:col-span-2 relative">
-                <div className="relative h-96 lg:h-[500px] bg-black">
-                  <ImageWithFallback
-                    src={selectedImage.images[currentImageIndex]?.url || 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'}
-                    alt={selectedImage.images[currentImageIndex]?.altText || `${selectedImage.title} - Image ${currentImageIndex + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+          <div className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden rounded-2xl bg-gray-900 z-10 border border-gray-700 flex flex-col">
+            <button
+              onClick={() => {
+                setSelectedImage(null);
+                setCurrentImageIndex(0);
+              }}
+              className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg z-30"
+            >
+              <X size={24} />
+            </button>
+            
+            <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+              <div className="lg:w-2/3 flex flex-col border-r border-gray-700">
+                <div className="relative flex-1 bg-black flex items-center justify-center min-h-[400px] max-h-[500px]">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <ImageWithFallback
+                      src={selectedImage.images[currentImageIndex]?.url || 'https://images.unsplash.com/photo-1590880265945-6b43effeb599?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080'}
+                      alt={selectedImage.images[currentImageIndex]?.altText || `${selectedImage.title} - Image ${currentImageIndex + 1}`}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
                   
                   <button
                     onClick={handlePrevImage}
@@ -801,56 +817,51 @@ function Gallery() {
                 </div>
               </div>
               
-              <div className="p-6 md:p-8 overflow-y-auto bg-gradient-to-b from-gray-900 to-black">
-                <button
-                  onClick={() => {
-                    setSelectedImage(null);
-                    setCurrentImageIndex(0);
-                  }}
-                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg z-30"
-                >
-                  <X size={20} />
-                </button>
-                
-                <div className="mb-6">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
-                      {selectedImage.category}
-                    </span>
-                    {selectedImage.featured && (
-                      <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
-                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                        <span className="relative z-10">Featured</span>
+              <div className="lg:w-1/3 flex flex-col">
+                <div className="flex-shrink-0 p-6 bg-gradient-to-b from-gray-900 to-black">
+                  <div className="mb-6">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                        {selectedImage.category}
                       </span>
-                    )}
-                    {selectedImage.status && (
-                      <span className={`px-3 py-1.5 text-xs font-semibold rounded-full border ${
-                        selectedImage.status === 'published' ? 'bg-green-900/20 text-green-400 border-green-700' :
-                        selectedImage.status === 'draft' ? 'bg-yellow-900/20 text-yellow-400 border-yellow-700' :
-                        'bg-gray-900/20 text-gray-400 border-gray-700'
-                      }`}>
-                        {selectedImage.status}
-                      </span>
-                    )}
-                  </div>
-                  
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-2 mb-3">
-                    {selectedImage.title}
-                  </h2>
-                  
-                  <div className="flex items-center text-gray-400 text-sm mb-4">
-                    <Calendar size={16} className="mr-2" />
-                    <span>Added on {formatDate(selectedImage.createdAt)}</span>
-                    {selectedImage.updatedAt && selectedImage.updatedAt !== selectedImage.createdAt && (
-                      <>
-                        <span className="mx-2">•</span>
-                        <span>Updated on {formatDate(selectedImage.updatedAt)}</span>
-                      </>
-                    )}
+                      {selectedImage.featured && (
+                        <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                          <span className="relative z-10">Featured</span>
+                        </span>
+                      )}
+                      {selectedImage.status && (
+                        <span className={`px-3 py-1.5 text-xs font-semibold rounded-full border ${
+                          selectedImage.status === 'published' ? 'bg-green-900/20 text-green-400 border-green-700' :
+                          selectedImage.status === 'draft' ? 'bg-yellow-900/20 text-yellow-400 border-yellow-700' :
+                          'bg-gray-900/20 text-gray-400 border-gray-700'
+                        }`}>
+                          {selectedImage.status}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <h2 className="text-2xl font-bold text-white mt-2 mb-3">
+                      {selectedImage.title}
+                    </h2>
+                    
+                    <div className="flex items-center text-gray-400 text-sm mb-4">
+                      <Calendar size={16} className="mr-2" />
+                      <span>Added on {formatDate(selectedImage.createdAt)}</span>
+                      {selectedImage.updatedAt && selectedImage.updatedAt !== selectedImage.createdAt && (
+                        <>
+                          <span className="mx-2">•</span>
+                          <span>Updated on {formatDate(selectedImage.updatedAt)}</span>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
                 
-                <div className="space-y-6">
+                <div 
+                  ref={modalContentRef}
+                  className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-900 to-black"
+                >
                   {selectedImage.description && (
                     <div>
                       <h4 className="text-lg font-bold text-white mb-3 flex items-center">
@@ -869,7 +880,7 @@ function Gallery() {
                         <Settings size={20} className="mr-2" />
                         Specifications
                       </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="space-y-3">
                         {Object.entries(selectedImage.specifications).map(([key, value], index) => (
                           <div key={index} className="bg-white/5 p-3 rounded-lg border border-gray-700">
                             <div className="text-sm text-gray-400 uppercase tracking-wider">{key}</div>
@@ -905,7 +916,7 @@ function Gallery() {
                   
                   <div className="pt-6 border-t border-gray-700">
                     <h4 className="text-lg font-bold text-white mb-4">Quick Actions</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3">
                       <button className="group px-4 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
                         <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
                         <span className="relative z-10">Request Similar Project</span>
@@ -975,8 +986,6 @@ function Gallery() {
                 </button>
               </div>
             </div>
-            
-         
           </div>
         </div>
       </section>

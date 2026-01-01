@@ -110,18 +110,24 @@ const ProjectsList = () => {
     fetchProjects();
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
-      try {
-        await axios.delete(`${baseurl}admin/projects/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        toast.success('Project deleted successfully');
-        fetchProjects();
-      } catch (error) {
-        console.error('Error deleting project:', error);
-        toast.error('Failed to delete project');
-      }
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
+
+  const handleDelete = async () => {
+    if (!projectToDelete) return;
+    
+    try {
+      await axios.delete(`${baseurl}admin/projects/${projectToDelete}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Project deleted successfully');
+      fetchProjects();
+    } catch (error) {
+      console.error('Error deleting project:', error);
+      toast.error('Failed to delete project');
+    } finally {
+      setShowDeleteModal(false);
+      setProjectToDelete(null);
     }
   };
 
@@ -310,39 +316,38 @@ const ProjectsList = () => {
                     const imageUrl = project.images?.[0]?.url || project.images?.[0];
                     return (
                       <tr key={project._id} className="hover:bg-gray-50 transition-colors">
-<td className="px-6 py-4">
-  <div className="flex items-center">
-    {imageUrl && (
-      <div className="relative h-12 w-12 flex-shrink-0">
-        <img
-          src={getFullImageUrl(imageUrl)}
-          alt={project.title}
-          className="h-12 w-12 object-cover rounded-lg"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            // Show fallback
-            e.target.parentElement.innerHTML = `
-              <div class="h-12 w-12 flex items-center justify-center bg-gray-100 rounded-lg">
-                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-              </div>
-            `;
-          }}
-        />
-        {project.featured && (
-          <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-xs px-1.5 py-0.5 rounded-full">
-            ★
-          </span>
-        )}
-      </div>
-    )}
-    <div className="ml-4">
-      <div className="font-medium text-gray-900 line-clamp-1">{project.title}</div>
-      <div className="text-sm text-gray-500 line-clamp-1">{project.scope || 'No scope defined'}</div>
-    </div>
-  </div>
-</td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center">
+                            {imageUrl && (
+                              <div className="relative h-12 w-12 flex-shrink-0">
+                                <img
+                                  src={getFullImageUrl(imageUrl)}
+                                  alt={project.title}
+                                  className="h-12 w-12 object-cover rounded-lg"
+                                  onError={(e) => {
+                                    e.target.style.display = 'none';
+                                    e.target.parentElement.innerHTML = `
+                                      <div class="h-12 w-12 flex items-center justify-center bg-gray-100 rounded-lg">
+                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                      </div>
+                                    `;
+                                  }}
+                                />
+                                {project.featured && (
+                                  <span className="absolute -top-1 -right-1 bg-yellow-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                                    ★
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                            <div className="ml-4">
+                              <div className="font-medium text-gray-900 line-clamp-1">{project.title}</div>
+                              <div className="text-sm text-gray-500 line-clamp-1">{project.scope || 'No scope defined'}</div>
+                            </div>
+                          </div>
+                        </td>
                         <td className="px-6 py-4">
                           <div className="text-sm font-medium text-gray-900">{project.client}</div>
                           <div className="text-sm text-gray-500">{project.location}</div>
@@ -390,7 +395,10 @@ const ProjectsList = () => {
                               </svg>
                             </button>
                             <button
-                              onClick={() => handleDelete(project._id)}
+                              onClick={() => {
+                                setProjectToDelete(project._id);
+                                setShowDeleteModal(true);
+                              }}
                               className="text-red-500 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-lg transition-colors"
                               title="Delete"
                             >
@@ -568,6 +576,56 @@ const ProjectsList = () => {
                   onSuccess={handleSuccess}
                   onCancel={handleCloseModal}
                 />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div 
+          className="fixed inset-0 z-[9999] overflow-y-auto"
+          style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+        >
+          <div className="flex items-center justify-center min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+            <div 
+              className="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity"
+              onClick={() => setShowDeleteModal(false)}
+              style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
+            ></div>
+            
+            <div 
+              className="relative bg-white rounded-lg shadow-2xl w-full max-w-md mx-auto z-[10000]"
+              style={{ position: 'relative' }}
+            >
+              <div className="bg-white px-4 py-5 sm:p-6">
+                <div className="flex flex-col items-center">
+                  <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                    <svg className="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.07 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Delete Project</h3>
+                  <p className="text-sm text-gray-500 text-center mb-6">
+                    Are you sure you want to delete this project? This action cannot be undone.
+                  </p>
+                  <div className="flex space-x-3 w-full">
+                    <button
+                      type="button"
+                      onClick={() => setShowDeleteModal(false)}
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors font-medium"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleDelete}
+                      className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
