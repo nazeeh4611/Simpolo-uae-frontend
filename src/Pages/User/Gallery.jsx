@@ -914,7 +914,7 @@ function Gallery() {
                     </div>
                   </div>
                   
-                  <div className="pt-6 border-t border-gray-700">
+                  {/* <div className="pt-6 border-t border-gray-700">
                     <h4 className="text-lg font-bold text-white mb-4">Quick Actions</h4>
                     <div className="grid grid-cols-1 gap-3">
                       <button className="group px-4 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
@@ -926,7 +926,7 @@ function Gallery() {
                         <span className="relative z-10">Contact Sales</span>
                       </button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

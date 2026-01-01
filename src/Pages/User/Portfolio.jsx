@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Building2, MapPin, ChevronRight, Award, CheckCircle2, Users, Clock, Target, Sparkles, TrendingUp, Star, ArrowRight, X, Download, Share2, ChevronLeft, ChevronRight as ChevronRightIcon, Heart, Calendar, Play, Eye, Tag, ImageIcon, Filter, Search, Grid, List, Layers, Ruler, Package, Home, CheckCircle, Info, Wrench, Briefcase, User, Phone, Mail, ExternalLink, Copy, Check } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
@@ -18,6 +18,7 @@ function Portfolio() {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('date');
   const [copied, setCopied] = useState(false);
+  const modalContentRef = useRef(null);
   
   const categories = [
     'All',
@@ -733,21 +734,36 @@ function Portfolio() {
       </section>
 
       {selectedProject && (
-        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 animate-scaleIn">
-          <div className="absolute inset-0" onClick={() => {
-            setSelectedProject(null);
-            setCurrentImageIndex(0);
-          }}></div>
+        <div className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 animate-scaleIn overflow-y-auto">
+          <div 
+            className="absolute inset-0" 
+            onClick={() => {
+              setSelectedProject(null);
+              setCurrentImageIndex(0);
+            }}
+          ></div>
           
-          <div className="relative max-w-7xl w-full max-h-[90vh] overflow-hidden rounded-2xl bg-gray-900 z-10 border border-gray-700">
-            <div className="grid lg:grid-cols-3 h-full">
-              <div className="lg:col-span-2 relative">
-                <div className="relative h-96 lg:h-[500px] bg-black">
-                  <ImageWithFallback
-                    src={selectedProject.images?.[currentImageIndex]?.url || selectedProject.image || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'}
-                    alt={selectedProject.images?.[currentImageIndex]?.altText || `${selectedProject.title || selectedProject.name} - Image ${currentImageIndex + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+          <div className="relative w-full max-w-6xl max-h-[90vh] overflow-hidden rounded-2xl bg-gray-900 z-10 border border-gray-700 flex flex-col">
+            <button
+              onClick={() => {
+                setSelectedProject(null);
+                setCurrentImageIndex(0);
+              }}
+              className="absolute top-4 right-4 p-3 rounded-full bg-white/10 hover:bg-white/20 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg z-30"
+            >
+              <X size={24} />
+            </button>
+            
+            <div className="flex flex-col lg:flex-row flex-1 overflow-hidden">
+              <div className="lg:w-2/3 flex flex-col border-r border-gray-700">
+                <div className="relative flex-1 bg-black flex items-center justify-center min-h-[400px] max-h-[500px]">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <ImageWithFallback
+                      src={selectedProject.images?.[currentImageIndex]?.url || selectedProject.image || 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'}
+                      alt={selectedProject.images?.[currentImageIndex]?.altText || `${selectedProject.title || selectedProject.name} - Image ${currentImageIndex + 1}`}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </div>
                   
                   <button
                     onClick={handlePrevImage}
@@ -768,7 +784,7 @@ function Portfolio() {
                       <button 
                         onClick={() => handleDownload(
                           selectedProject.images?.[currentImageIndex]?.url || selectedProject.image,
-                          `${selectedProject.title}-${currentImageIndex + 1}.jpg`
+                          `${selectedProject.title || selectedProject.name}-${currentImageIndex + 1}.jpg`
                         )}
                         className="px-4 py-2.5 bg-white/10 backdrop-blur-sm rounded-xl text-sm font-medium hover:bg-white/20 text-gray-300 hover:text-white transition-all duration-300 border border-gray-600 flex items-center gap-2 hover:shadow-lg"
                       >
@@ -838,59 +854,54 @@ function Portfolio() {
                 </div>
               </div>
               
-              <div className="p-6 md:p-8 overflow-y-auto bg-gradient-to-b from-gray-900 to-black">
-                <button
-                  onClick={() => {
-                    setSelectedProject(null);
-                    setCurrentImageIndex(0);
-                  }}
-                  className="absolute top-4 right-4 p-2.5 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 border border-gray-600 transition-all duration-300 hover:shadow-lg z-30"
-                >
-                  <X size={20} />
-                </button>
-                
-                <div className="mb-6">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
-                      {selectedProject.category || selectedProject.type || 'Project'}
-                    </span>
-                    {selectedProject.featured && (
-                      <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
-                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                        <span className="relative z-10">Featured</span>
+              <div className="lg:w-1/3 flex flex-col">
+                <div className="flex-shrink-0 p-6 bg-gradient-to-b from-gray-900 to-black">
+                  <div className="mb-6">
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <span className="px-4 py-2 sword-gradient text-white text-sm font-semibold rounded-full border border-gray-700">
+                        {selectedProject.category || selectedProject.type || 'Project'}
                       </span>
-                    )}
-                  </div>
-                  
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mt-2 mb-3">
-                    {selectedProject.title || selectedProject.name}
-                  </h2>
-                  
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center text-gray-400">
-                      <MapPin size={18} className="mr-2" />
-                      <span className="font-medium">{selectedProject.location || 'UAE'}</span>
+                      {selectedProject.featured && (
+                        <span className="px-3 py-1.5 silver-gradient text-gray-900 text-xs font-semibold rounded-full shadow-sm border border-gray-300 relative overflow-hidden">
+                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                          <span className="relative z-10">Featured</span>
+                        </span>
+                      )}
                     </div>
-                    <div className="flex items-center text-gray-400">
-                      <User size={18} className="mr-2" />
-                      <span className="font-medium">Client: {selectedProject.client || 'N/A'}</span>
-                    </div>
-                    <div className="flex items-center text-gray-400">
-                      <Calendar size={18} className="mr-2" />
-                      <span>
-                        {selectedProject.completionDate 
-                          ? `Completed: ${formatDate(selectedProject.completionDate)}`
-                          : 'Completion Date: N/A'}
-                      </span>
-                    </div>
-                    <div className="flex items-center text-gray-400">
-                      <Calendar size={18} className="mr-2" />
-                      <span>Added on {formatDate(selectedProject.createdAt)}</span>
+                    
+                    <h2 className="text-2xl font-bold text-white mt-2 mb-3">
+                      {selectedProject.title || selectedProject.name}
+                    </h2>
+                    
+                    <div className="space-y-3 mb-4">
+                      <div className="flex items-center text-gray-400">
+                        <MapPin size={18} className="mr-2" />
+                        <span className="font-medium">{selectedProject.location || 'UAE'}</span>
+                      </div>
+                      <div className="flex items-center text-gray-400">
+                        <User size={18} className="mr-2" />
+                        <span className="font-medium">Client: {selectedProject.client || 'N/A'}</span>
+                      </div>
+                      <div className="flex items-center text-gray-400">
+                        <Calendar size={18} className="mr-2" />
+                        <span>
+                          {selectedProject.completionDate 
+                            ? `Completed: ${formatDate(selectedProject.completionDate)}`
+                            : 'Completion Date: N/A'}
+                        </span>
+                      </div>
+                      <div className="flex items-center text-gray-400">
+                        <Calendar size={18} className="mr-2" />
+                        <span>Added on {formatDate(selectedProject.createdAt)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="space-y-6">
+                <div 
+                  ref={modalContentRef}
+                  className="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-gray-900 to-black"
+                >
                   {selectedProject.description && (
                     <div>
                       <h4 className="text-lg font-bold text-white mb-3 flex items-center">
@@ -944,7 +955,7 @@ function Portfolio() {
                       <ImageIcon size={20} className="mr-2" />
                       Media Details
                     </h4>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-3">
                       <div className="bg-white/5 p-3 rounded-lg border border-gray-700">
                         <div className="text-sm text-gray-400">Total Images</div>
                         <div className="text-gray-300 font-semibold">{(selectedProject.images && selectedProject.images.length) || 1}</div>
@@ -962,9 +973,9 @@ function Portfolio() {
                     )}
                   </div>
                   
-                  <div className="pt-6 border-t border-gray-700">
+                  {/* <div className="pt-6 border-t border-gray-700">
                     <h4 className="text-lg font-bold text-white mb-4">Project Actions</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 gap-3">
                       <button className="group px-4 py-3 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover border border-gray-700 relative overflow-hidden silver-button-shine">
                         <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
                         <span className="relative z-10">Request Similar Project</span>
@@ -974,7 +985,7 @@ function Portfolio() {
                         <span className="relative z-10">Contact Project Manager</span>
                       </button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
