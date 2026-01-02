@@ -540,6 +540,7 @@ function HomePage() {
         <Typewriter
           options={{
             strings: [
+              'Crafted for quality designed for Delight',
               "Crafted for Excellence",
               "Designed for Perfection",
               "Premium Tile Solutions",

@@ -104,20 +104,29 @@ export function Navbar() {
       `}} />
       
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 sword-gradient transition-all duration-300 ${scrolled ? 'shadow-2xl shadow-black/50' : ''}`}
-        style={{ height: '80px' }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex justify-between items-center h-full">
+  className={`fixed top-0 left-0 right-0 z-50 sword-gradient transition-all duration-300 ${
+    scrolled ? 'shadow-2xl shadow-black/50' : ''
+  }`}
+  style={{ height: '90px' }}
+>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+    <div className="flex justify-between items-center h-full">
 
-            <Link to="/" className="flex items-center h-full relative">
-              <img
-                src="/ts.png"
-                alt="Simpolo"
-                className={`max-h-[90px] w-auto object-contain transition-transform duration-300 ${scrolled ? 'scale-100' : 'scale-125'}`}
-              />
-              <div className="absolute -bottom-2 left-0 right-0 h-[2px] sword-shimmer rounded-full"></div>
-            </Link>
+      <Link
+        to="/"
+        className="flex items-center h-full relative"
+      >
+        <img
+          src="/lc.webp"
+          alt="Simpolo"
+          className={`max-h-[90px] w-auto object-contain transition-transform duration-300 ${
+            scrolled ? 'scale-100' : 'scale-110'
+          }`}
+        />
+
+        {/* underline stays inside navbar */}
+        <div className="absolute bottom-1 left-0 right-0 h-[2px] sword-shimmer rounded-full"></div>
+      </Link>
 
 
             {/* <Link to="/" className="flex items-center h-full relative">
