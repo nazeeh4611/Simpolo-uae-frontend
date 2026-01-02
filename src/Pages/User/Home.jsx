@@ -4,8 +4,19 @@ import { ArrowRight, ChevronRight, Sparkles, Award, Clock, Shield, Star, Trendin
 import { ImageWithFallback } from '../../util/Fallback';
 import Typewriter from 'typewriter-effect';
 import { baseurl } from '../../util/Base';
+import { useSEO } from '../../util/SEO';
 
 function HomePage() {
+
+  useSEO({
+    title: "Home | Simpolo Trading",
+    description: "Explore premium tiles and slabs by Simpolo Trading.",
+  });
+  // SEO Metadata
+  const pageTitle = "Simpolo Trading LLC | Premium Tile Solutions & Sanitary Ware UAE";
+  const pageDescription = "Simpolo Trading LLC - UAE's leading supplier of premium porcelain tiles, ceramic tiles, marble, and sanitary ware. 15+ years expertise in luxury tile solutions across Emirates.";
+  const pageKeywords = "Simpolo Trading UAE, premium tiles Dubai, porcelain tiles UAE, ceramic tiles suppliers, marble tiles Dubai, bathroom fittings UAE, tile suppliers Sharjah, sanitary ware Abu Dhabi";
+
   const [loaded, setLoaded] = useState(false);
   const [featuredProjects, setFeaturedProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -142,9 +153,162 @@ function HomePage() {
     'After-sales support'
   ];
 
+  // Set SEO meta tags
   useEffect(() => {
+    // Update document title
+    document.title = pageTitle;
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.name = 'description';
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.content = pageDescription;
+    
+    // Update keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.name = 'keywords';
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.content = pageKeywords;
+    
+    // Add canonical link
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.rel = 'canonical';
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.href = window.location.href;
+    
+    // Add Open Graph meta tags
+    const ogTags = [
+      { property: 'og:title', content: pageTitle },
+      { property: 'og:description', content: pageDescription },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:url', content: window.location.href },
+      { property: 'og:image', content: `${window.location.origin}/ban.webp` },
+      { property: 'og:site_name', content: 'Simpolo Trading LLC' },
+      { property: 'og:locale', content: 'en_AE' },
+    ];
+    
+    ogTags.forEach(tag => {
+      let metaTag = document.querySelector(`meta[property="${tag.property}"]`);
+      if (!metaTag) {
+        metaTag = document.createElement('meta');
+        metaTag.setAttribute('property', tag.property);
+        document.head.appendChild(metaTag);
+      }
+      metaTag.content = tag.content;
+    });
+    
+    // Add Twitter Card meta tags
+    const twitterTags = [
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: pageTitle },
+      { name: 'twitter:description', content: pageDescription },
+      { name: 'twitter:image', content: `${window.location.origin}/ban.webp` },
+      { name: 'twitter:site', content: '@simpolotrading' },
+    ];
+    
+    twitterTags.forEach(tag => {
+      let metaTag = document.querySelector(`meta[name="${tag.name}"]`);
+      if (!metaTag) {
+        metaTag = document.createElement('meta');
+        metaTag.name = tag.name;
+        document.head.appendChild(metaTag);
+      }
+      metaTag.content = tag.content;
+    });
+    
+    // Add structured data for Homepage
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'HomeAndConstructionBusiness',
+      'name': 'Simpolo Trading LLC',
+      'description': pageDescription,
+      'url': window.location.origin,
+      'logo': `${window.location.origin}/simlogo.webp`,
+      'image': `${window.location.origin}/ban.webp`,
+      'address': {
+        '@type': 'PostalAddress',
+        'streetAddress': 'Sharjah Industrial Area',
+        'addressLocality': 'Sharjah',
+        'addressRegion': 'UAE',
+        'addressCountry': 'AE'
+      },
+      'telephone': '+971-4-123-4567',
+      'openingHours': [
+        'Mo-Th 08:00-18:00',
+        'Fr 09:00-13:00',
+        'Sa 09:00-13:00'
+      ],
+      'priceRange': '$$',
+      'currenciesAccepted': 'AED',
+      'paymentAccepted': 'Cash, Credit Card',
+      'areaServed': {
+        '@type': 'GeoCircle',
+        'geoMidpoint': {
+          '@type': 'GeoCoordinates',
+          'latitude': 25.2048,
+          'longitude': 55.2708
+        },
+        'geoRadius': '100000'
+      },
+      'makesOffer': [
+        {
+          '@type': 'Offer',
+          'itemOffered': {
+            '@type': 'Product',
+            'name': 'Porcelain Tiles',
+            'description': 'Premium porcelain tiles for residential and commercial use'
+          }
+        },
+        {
+          '@type': 'Offer',
+          'itemOffered': {
+            '@type': 'Product',
+            'name': 'Ceramic Tiles',
+            'description': 'High-quality ceramic tiles in various designs'
+          }
+        },
+        {
+          '@type': 'Offer',
+          'itemOffered': {
+            '@type': 'Product',
+            'name': 'Marble and Granite',
+            'description': 'Natural stone tiles and slabs'
+          }
+        }
+      ],
+      'aggregateRating': {
+        '@type': 'AggregateRating',
+        'ratingValue': '4.8',
+        'reviewCount': '300'
+      },
+      'founder': 'Mohammed Al Said',
+      'foundingDate': '2008',
+      'numberOfEmployees': '50'
+    };
+    
+    // Remove existing structured data
+    const existingScript = document.querySelector('script[type="application/ld+json"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+    
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+
     setLoaded(true);
     
+    // Intersection Observer for animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -203,8 +367,9 @@ function HomePage() {
           <button
             onClick={closeModal}
             className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+            aria-label="Close project modal"
           >
-            <ChevronRight className="rotate-45" size={24} />
+            <ChevronRight className="rotate-45" size={24} aria-hidden="true" />
           </button>
           
           {selectedProject.images && selectedProject.images.length > 0 && (
@@ -213,6 +378,8 @@ function HomePage() {
                 src={selectedProject.images[0].url}
                 alt={selectedProject.title}
                 className="w-full h-full object-cover"
+                width="800"
+                height="400"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             </div>
@@ -289,8 +456,10 @@ function HomePage() {
                     <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
                       <ImageWithFallback
                         src={image.url}
-                        alt={`${selectedProject.title} - ${index + 2}`}
+                        alt={`${selectedProject.title} - Image ${index + 2}`}
                         className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                        width="200"
+                        height="200"
                       />
                     </div>
                   ))}
@@ -304,750 +473,838 @@ function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
+    <>
+      {/* Hidden SEO content for search engines */}
+      <div className="sr-only" aria-hidden="true">
+        <h1>Simpolo Trading LLC - Premium Tile Solutions Provider in UAE</h1>
+        <p>Leading supplier of porcelain tiles, ceramic tiles, marble, granite, and sanitary ware across United Arab Emirates since 2008.</p>
+        
+        <h2>Our Services:</h2>
+        <ul>
+          <li>Porcelain Tiles Supply & Installation</li>
+          <li>Ceramic Tiles for Residential & Commercial</li>
+          <li>Marble and Granite Fabrication</li>
+          <li>Bathroom Fittings and Sanitary Ware</li>
+          <li>Custom Tile Fabrication Services</li>
+          <li>Swimming Pool Tiles Installation</li>
+          <li>Outdoor Heavy-Duty Tiles</li>
+          <li>Project Management Services</li>
+        </ul>
+        
+        <h2>Locations Served:</h2>
+        <ul>
+          <li>Dubai</li>
+          <li>Abu Dhabi</li>
+          <li>Sharjah</li>
+          <li>Ajman</li>
+          <li>Ras Al Khaimah</li>
+          <li>Fujairah</li>
+          <li>Umm Al Quwain</li>
+        </ul>
+        
+        <h2>Why Choose Us:</h2>
+        <ul>
+          <li>15+ Years Industry Experience</li>
+          <li>Direct Manufacturing Access</li>
+          <li>BS/EN and ANSI/ASTM Certified</li>
+          <li>UAE Fabrication Facility</li>
+          <li>Immediate Stock Availability</li>
+          <li>500+ Successful Projects</li>
+          <li>300+ Happy Clients</li>
+          <li>98% Client Satisfaction Rate</li>
+        </ul>
+        
+        <p>Contact us today for free consultation and samples: +971 4 123 4567 | info@simpolotrading.com</p>
+      </div>
+
+      <main className="min-h-screen bg-black">
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
           }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes swordShimmer {
-          0% { background-position: -100% 0; }
-          100% { background-position: 200% 0; }
-        }
-        @keyframes gradientShift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.6s ease-out forwards;
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        .sword-shimmer {
-          background: linear-gradient(90deg, 
-            transparent, 
-            rgba(192, 192, 192, 0.1), 
-            rgba(192, 192, 192, 0.3), 
-            rgba(192, 192, 192, 0.6), 
-            rgba(192, 192, 192, 0.3), 
-            rgba(192, 192, 192, 0.1), 
-            transparent
-          );
-          background-size: 200% 100%;
-          animation: swordShimmer 3s infinite linear;
-        }
-        .sword-gradient {
-          background: linear-gradient(135deg, 
-            #000000 0%, 
-            #1a1a1a 25%, 
-            #2d2d2d 50%, 
-            #1a1a1a 75%, 
-            #000000 100%
-          );
-          background-size: 200% 200%;
-          animation: gradientShift 4s ease infinite;
-        }
-        .silver-gradient {
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .silver-gradient-dark {
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
-        }
-        .dark-gradient {
-          background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
-        }
-        .hero-gradient {
-          background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #2d2d2d 70%, #1a1a1a 100%);
-        }
-        .card-hover {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
-        }
-        .grid-item {
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .grid-item:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
-        }
-        .trading-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          position: relative;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .collections-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 700;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .showcase-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 700;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .excellence-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 700;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .transform-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 700;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .typewriter-cursor {
-          display: inline-block;
-          width: 3px;
-          background: #c0c0c0;
-          margin-left: 4px;
-          animation: blink 1s infinite;
-        }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        .image-card-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.8) 100%);
-          z-index: 1;
-        }
-        .image-card-content {
-          position: relative;
-          z-index: 2;
-        }
-        .silver-button-shine {
-          position: relative;
-          overflow: hidden;
-        }
-        .silver-button-shine::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -60%;
-          width: 20%;
-          height: 200%;
-          background: linear-gradient(
-            rgba(255, 255, 255, 0.3), 
-            rgba(255, 255, 255, 0.1) 50%, 
-            rgba(255, 255, 255, 0.3)
-          );
-          transform: rotate(30deg);
-          animation: buttonShine 3s infinite linear;
-        }
-        @keyframes buttonShine {
-          0% { left: -60%; }
-          100% { left: 140%; }
-        }
-      `}} />
+          @keyframes swordShimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+          }
+          @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
+          .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out forwards;
+          }
+          .animate-float {
+            animation: float 3s ease-in-out infinite;
+          }
+          .sword-shimmer {
+            background: linear-gradient(90deg, 
+              transparent, 
+              rgba(192, 192, 192, 0.1), 
+              rgba(192, 192, 192, 0.3), 
+              rgba(192, 192, 192, 0.6), 
+              rgba(192, 192, 192, 0.3), 
+              rgba(192, 192, 192, 0.1), 
+              transparent
+            );
+            background-size: 200% 100%;
+            animation: swordShimmer 3s infinite linear;
+          }
+          .sword-gradient {
+            background: linear-gradient(135deg, 
+              #000000 0%, 
+              #1a1a1a 25%, 
+              #2d2d2d 50%, 
+              #1a1a1a 75%, 
+              #000000 100%
+            );
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+          }
+          .silver-gradient {
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .silver-gradient-dark {
+            background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          }
+          .dark-gradient {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
+          }
+          .hero-gradient {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 30%, #2d2d2d 70%, #1a1a1a 100%);
+          }
+          .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
+          }
+          .grid-item {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .grid-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
+          }
+          .trading-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .collections-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .showcase-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .excellence-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .transform-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            background: #c0c0c0;
+            margin-left: 4px;
+            animation: blink 1s infinite;
+          }
+          @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+          }
+          .image-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.3) 60%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+          }
+          .image-card-content {
+            position: relative;
+            z-index: 2;
+          }
+          .silver-button-shine {
+            position: relative;
+            overflow: hidden;
+          }
+          .silver-button-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: linear-gradient(
+              rgba(255, 255, 255, 0.3), 
+              rgba(255, 255, 255, 0.1) 50%, 
+              rgba(255, 255, 255, 0.3)
+            );
+            transform: rotate(30deg);
+            animation: buttonShine 3s infinite linear;
+          }
+          @keyframes buttonShine {
+            0% { left: -60%; }
+            100% { left: 140%; }
+          }
+          .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+          }
+        `}} />
 
-<section className="relative min-h-screen overflow-hidden text-white">
-  <div className="absolute inset-0 z-0">
-    <video
-      ref={videoRef}
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      poster="/ban.webp"
-      className="w-full h-full object-cover"
-    >
-      <source
-        src="https://pub-6070c66a49144147b12828af75c69a0c.r2.dev/IMG_3.mp4"
-        type="video/mp4"
-      />
-    </video>
+        <section className="relative min-h-screen overflow-hidden text-white" itemScope itemType="https://schema.org/Organization">
+          <meta itemProp="name" content="Simpolo Trading LLC" />
+          <meta itemProp="description" content="Premium tile solutions provider in UAE" />
+          <meta itemProp="url" content={window.location.href} />
+          
+          <div className="absolute inset-0 z-0">
+            <video
+              ref={videoRef}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/ban.webp"
+              className="w-full h-full object-cover"
+              aria-label="Simpolo Trading LLC - Premium tile solutions showcase video"
+            >
+              <source
+                src="https://pub-6070c66a49144147b12828af75c69a0c.r2.dev/IMG_3.mp4"
+                type="video/mp4"
+              />
+            </video>
 
-    <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/70 to-black/80" />
-  </div>
+            <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-black/80 via-black/70 to-black/80" />
+          </div>
 
-  <div className="absolute inset-0 z-10 pointer-events-none">
-    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800/20 rounded-full blur-3xl animate-float" />
-    <div
-      className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700/20 rounded-full blur-3xl animate-float"
-      style={{ animationDelay: "1.5s" }}
-    />
-  </div>
+          <div className="absolute inset-0 z-10 pointer-events-none">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800/20 rounded-full blur-3xl animate-float" />
+            <div
+              className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700/20 rounded-full blur-3xl animate-float"
+              style={{ animationDelay: "1.5s" }}
+            />
+          </div>
 
-  <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-32 pb-20">
-    <div className="max-w-3xl">
-      <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
-        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-        <Sparkles size={18} className="mr-2 text-gray-400 relative z-10" />
-        <span className="text-gray-400 font-medium relative z-10">
-          Premier Tile Solutions
-        </span>
-      </div>
-
-      <h1 className="mb-6 leading-tight text-white">
-        <div className="relative inline-block">
-          <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
-            SIMPOLO
-          </span>
-          <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
-            TRADING LLC
-          </span>
-        </div>
-      </h1>
-
-      <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
-        <div className="absolute inset-0 sword-shimmer"></div>
-      </div>
-
-      <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
-        <Typewriter
-          options={{
-            strings: [
-              'Crafted for quality designed for Delight',
-              "Crafted for Excellence",
-              "Designed for Perfection",
-              "Premium Tile Solutions",
-              "Your Trusted Partner",
-              "Innovative Designs",
-              "Quality Guaranteed",
-            ],
-            autoStart: true,
-            loop: true,
-            delay: 50,
-            deleteSpeed: 30,
-            cursorClassName: 'typewriter-cursor'
-          }}
-        />
-      </div>
-
-      <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl leading-relaxed">
-        Your trusted partner for premium tiles, sanitary ware, and bathroom
-        fittings across the UAE. Delivering exceptional quality through direct
-        manufacturing and innovative solutions with 15+ years of expertise in
-        transforming spaces.
-      </p>
-
-      <div className="flex flex-wrap gap-4">
-        <Link
-          to="/contact"
-          className="group px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
-        >
-          <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-          <span className="relative z-10">Get Free Consultation</span>
-          <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-        </Link>
-
-        <Link
-          to="/services"
-          className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/5 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
-        >
-          <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-          <span className="relative z-10">View Products</span>
-          <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-        </Link>
-      </div>
-    </div>
-  </div>
-
-  <div className="relative z-20 pb-12">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="bg-white/5 backdrop-blur-md p-5 rounded-xl hover:bg-white/10 transition-all duration-300 card-hover relative overflow-hidden group"
-          >
-            <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-            <div className="flex items-start space-x-3 relative z-10">
-              <div className="p-2.5 rounded-lg silver-gradient relative overflow-hidden">
+          <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-32 pb-20">
+            <div className="max-w-3xl">
+              <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
                 <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                <feature.icon className="text-gray-900 relative z-10" size={22} />
+                <Sparkles size={18} className="mr-2 text-gray-400 relative z-10" aria-hidden="true" />
+                <span className="text-gray-400 font-medium relative z-10">
+                  Premier Tile Solutions
+                </span>
               </div>
-              <div>
-                <div className="font-semibold mb-1 text-white">{feature.title}</div>
-                <div className="text-sm text-gray-400">
-                  {feature.description}
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
-{/* 
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-            {stats.map((stat, index) => (
-              <div 
-                key={index}
-                className="animate-on-scroll text-center p-6 rounded-2xl hover:shadow-2xl cursor-pointer card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4 relative overflow-hidden">
-                  <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                  <stat.icon className="text-gray-900 relative z-10" size={24} />
-                </div>
-                <div className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
-                <div className="text-sm text-gray-400 font-medium">{stat.label}</div>
-              </div>
-            ))}
-          </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
-                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
-                <Award size={18} className="mr-2 relative z-10" /> 
-                <span className="relative z-10">Our Story</span>
+              <h1 className="mb-6 leading-tight text-white">
+                <div className="relative inline-block">
+                  <span className="block text-5xl md:text-6xl lg:text-7xl font-extrabold">
+                    SIMPOLO
+                  </span>
+                  <span className="absolute right-0 -bottom-6 text-base md:text-lg tracking-widest text-gray-300 font-bold">
+                    TRADING LLC
+                  </span>
+                </div>
+              </h1>
+
+              <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer"></div>
               </div>
-              
-              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                Pioneering <span className="excellence-text">Excellence</span> in Tile Solutions
-              </h2>
-              
-              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
-                <p>
-                  Established in the heart of UAE, Simpolo Trading LLC has emerged as a leading provider 
-                  of premium tiles and sanitary solutions. With over 15 years of industry experience, 
-                  we combine traditional craftsmanship with modern technology.
-                </p>
-                <p>
-                  Our state-of-the-art manufacturing facility in India employs cutting-edge technology 
-                  and adheres to international standards (BS/EN, ANSI/ASTM), ensuring every product meets 
-                  the highest quality benchmarks.
-                </p>
-                <p>
-                  Our Abu Dhabi fabrication facility enables rapid customization and swift delivery 
-                  across all Emirates, making us the preferred choice for architects, contractors, 
-                  and interior designers.
-                </p>
-              </div>
-              
-              <div className="mt-8 grid grid-cols-2 gap-4">
-                {benefits.slice(0, 4).map((benefit, index) => (
-                  <div key={index} className="flex items-center text-gray-300">
-                    <CheckCircle size={18} className="text-gray-400 mr-2 flex-shrink-0" />
-                    <span className="text-sm">{benefit}</span>
-                  </div>
-                ))}
-              </div>
-              
-              <Link
-                to="/about"
-                className="group inline-flex items-center mt-8 px-6 py-3 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                <span className="relative z-10">Discover Our Journey</span>
-                <ChevronRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
-              </Link>
-            </div>
-            
-            <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
-              <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl card-hover group">
-                <ImageWithFallback
-                  src="https://images.unsplash.com/photo-1531586024505-b040066c2d5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                  alt="Dubai building"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+
+              <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
+                <Typewriter
+                  options={{
+                    strings: [
+                      'Crafted for quality designed for Delight',
+                      "Crafted for Excellence",
+                      "Designed for Perfection",
+                      "Premium Tile Solutions",
+                      "Your Trusted Partner",
+                      "Innovative Designs",
+                      "Quality Guaranteed",
+                    ],
+                    autoStart: true,
+                    loop: true,
+                    delay: 50,
+                    deleteSpeed: 30,
+                    cursorClassName: 'typewriter-cursor'
+                  }}
                 />
-                <div className="image-card-overlay"></div>
-                <div className="absolute bottom-0 left-0 right-0 p-8 image-card-content">
-                  <div className="text-xl font-semibold mb-2 text-white">Serving UAE Since 2008</div>
-                  <div className="text-sm text-gray-300">Transforming spaces across the Emirates</div>
-                </div>
               </div>
-              
-              <div className="absolute -bottom-6 -left-6 bg-white/5 backdrop-blur-md p-6 rounded-2xl shadow-2xl w-64 card-hover group relative overflow-hidden">
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <div className="flex items-center mb-4 relative z-10">
-                  <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
-                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                    <Package size={20} className="text-gray-900 relative z-10" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-white">24,000+ m²</div>
-                    <div className="text-sm text-gray-400">Annual Production</div>
-                  </div>
-                </div>
-                <div className="flex items-center relative z-10">
-                  <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
-                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                    <Globe size={20} className="text-gray-900 relative z-10" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-white">50+ Countries</div>
-                    <div className="text-sm text-gray-400">Global Reach</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
 
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Premium <span className="collections-text">Collections</span>
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Explore our comprehensive range of premium tile categories and solutions for every space
-            </p>
-          </div>
+              <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl leading-relaxed">
+                Your trusted partner for premium tiles, sanitary ware, and bathroom
+                fittings across the UAE. Delivering exceptional quality through direct
+                manufacturing and innovative solutions with 15+ years of expertise in
+                transforming spaces.
+              </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
-              <Link
-                key={index}
-                to={category.link}
-                className="group animate-on-scroll relative overflow-hidden rounded-2xl cursor-pointer"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="relative h-80 overflow-hidden">
-                  <ImageWithFallback
-                    src={category.src}
-                    alt={category.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-
-                  <div className="absolute bottom-6 left-6">
-                    <h3 className="text-white text-2xl font-semibold tracking-wide">
-                      {category.title}
-                    </h3>
-                    <p className="text-gray-300 mt-2 text-sm">
-                      {category.description}
-                    </p>
-                  </div>
-
-                  {category.tag && (
-                    <div className="absolute top-4 right-4">
-                      <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white/90 text-gray-900">
-                        {category.tag}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className="text-center mt-14 animate-on-scroll">
-            <Link
-              to="/gallery"
-              className="inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-xl"
-            >
-              View All Categories
-              <ChevronRight size={20} className="ml-2" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Featured <span className="showcase-text">Projects</span>
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Discover our exceptional work across residential, commercial, and hospitality sectors
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProjects.map((project, index) => (
-              <div
-                key={project._id}
-                className="group animate-on-scroll relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer card-hover"
-                style={{ animationDelay: `${index * 0.1}s` }}
-                onClick={() => handleProjectClick(project)}
-              >
-                <div className="image-card-overlay"></div>
-                {project.images && project.images.length > 0 ? (
-                  <ImageWithFallback
-                    src={project.images[0].url}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-800 flex items-center justify-center">
-                    <Grid3x3 size={48} className="text-gray-600" />
-                  </div>
-                )}
-                <div className="absolute bottom-0 left-0 right-0 p-6 image-card-content text-white">
-                  <div className="text-xs font-semibold text-gray-300 mb-2">
-                    {project.category}
-                  </div>
-                  <div className="text-lg font-bold group-hover:text-gray-300 transition-colors">
-                    {project.title}
-                  </div>
-                  <div className="text-sm text-gray-400 mt-2">{project.client}</div>
-                  <div className="absolute top-4 right-4 p-2 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Eye size={20} />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12 animate-on-scroll">
-            <Link
-              to="/portfolio"
-              className="group inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
-            >
-              <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-              <span className="relative z-10">View All Projects</span>
-              <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            <div className="animate-on-scroll">
-              <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
-                <div className="absolute inset-0 sword-shimmer opacity-20"></div>
-                <Building size={18} className="mr-2 relative z-10" /> 
-                <span className="relative z-10">Our Services</span>
-              </div>
-              
-              <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
-                Comprehensive <span className="showcase-text">Solutions</span>
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {services.map((service, index) => (
-                  <div key={index} className="p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group">
-                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4 relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                      <service.icon className="text-gray-900 relative z-10" size={24} />
-                    </div>
-                    <h3 className="text-lg font-bold text-white mb-2 relative z-10">{service.title}</h3>
-                    <p className="text-sm text-gray-400 relative z-10">{service.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="sword-gradient rounded-2xl p-8 text-white h-full card-hover relative overflow-hidden group">
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Why Choose Us?</h3>
-                <ul className="space-y-4 relative z-10">
-                  {benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-center">
-                      <CheckCircle size={18} className="text-gray-400 mr-3 flex-shrink-0" />
-                      <span className="text-gray-300">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <div className="mt-8 p-6 bg-white/5 rounded-xl card-hover relative overflow-hidden group">
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <div className="flex items-center mb-4 relative z-10">
-                    <Truck size={24} className="text-gray-400 mr-3" />
-                    <div>
-                      <div className="font-bold text-gray-300">Fast Delivery Across UAE</div>
-                      <div className="text-sm text-gray-400">24-48 hours for stock items</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 animate-on-scroll">
-              <div className="sword-gradient rounded-2xl p-8 text-white card-hover relative overflow-hidden group">
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Contact Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-                  <div className="flex items-start">
-                    <MapPin size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" />
-                    <div>
-                      <div className="font-bold mb-1 text-gray-300">Our Locations</div>
-                      <div className="text-gray-400 text-sm">Sharjah Industrial Area, UAE</div>
-                      <div className="text-gray-400 text-sm">ICAD, Abu Dhabi</div>
-                      <div className="text-gray-400 text-sm">Jebel Ali Free Zone, Dubai</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <Phone size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" />
-                    <div>
-                      <div className="font-bold mb-1 text-gray-300">Call Us</div>
-                      <div className="text-gray-400 text-sm">+971 4 123 4567</div>
-                      <div className="text-gray-400 text-sm">+971 50 123 4567</div>
-                      <div className="text-gray-400 text-sm">+971 2 345 6789</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <Mail size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" />
-                    <div>
-                      <div className="font-bold mb-1 text-gray-300">Email Us</div>
-                      <div className="text-gray-400 text-sm">info@simpolotrading.com</div>
-                      <div className="text-gray-400 text-sm">sales@simpolotrading.com</div>
-                      <div className="text-gray-400 text-sm">support@simpolotrading.com</div>
-                    </div>
-                  </div>
-                  <div className="flex items-start">
-                    <Clock size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" />
-                    <div>
-                      <div className="font-bold mb-1 text-gray-300">Working Hours</div>
-                      <div className="text-gray-400 text-sm">Sun - Thu: 8:00 AM - 6:00 PM</div>
-                      <div className="text-gray-400 text-sm">Fri: 9:00 AM - 1:00 PM</div>
-                      <div className="text-gray-400 text-sm">Sat: By Appointment</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="silver-gradient-dark rounded-2xl p-8 h-full card-hover relative overflow-hidden group">
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <h3 className="text-2xl font-bold mb-6 text-gray-900 relative z-10">Quick Inquiry</h3>
-                <p className="text-gray-700 mb-6 relative z-10">Get a free quote for your project</p>
+              <div className="flex flex-wrap gap-4">
                 <Link
                   to="/contact"
-                  className="group inline-flex items-center justify-center w-full px-6 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
+                  className="group px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-700 relative overflow-hidden silver-button-shine"
+                  aria-label="Get free tile consultation from Simpolo Trading"
                 >
                   <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                  <span className="relative z-10">Request a Quote</span>
-                  <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" />
+                  <span className="relative z-10">Get Free Consultation</span>
+                  <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                </Link>
+
+                <Link
+                  to="/services"
+                  className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/5 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+                  aria-label="View our tile products and collections"
+                >
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <span className="relative z-10">View Products</span>
+                  <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
                 </Link>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section className="py-24 relative overflow-hidden">
-        <div className="absolute inset-0 sword-gradient"></div>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+          <div className="relative z-20 pb-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {features.map((feature, index) => (
+                  <article
+                    key={index}
+                    className="bg-white/5 backdrop-blur-md p-5 rounded-xl hover:bg-white/10 transition-all duration-300 card-hover relative overflow-hidden group"
+                  >
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="flex items-start space-x-3 relative z-10">
+                      <div className="p-2.5 rounded-lg silver-gradient relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <feature.icon className="text-gray-900 relative z-10" size={22} aria-hidden="true" />
+                      </div>
+                      <div>
+                        <h2 className="font-semibold mb-1 text-white">{feature.title}</h2>
+                        <p className="text-sm text-gray-400">
+                          {feature.description}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-        
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="animate-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Ready to <span className="transform-text">Transform</span> Your Space?
-            </h2>
-            <p className="text-xl mb-10 text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Get in touch with our team today and let us help you bring your vision to life with premium tile solutions
-            </p>
-            
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link
-                to="/contact"
-                className="group px-8 py-4 silver-gradient text-gray-900 rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden silver-button-shine"
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                <span className="relative z-10">Contact Our Experts</span>
-                <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-              </Link>
-              
-              <Link
-                to="/portfolio"
-                className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <span className="relative z-10">View Our Projects</span>
-                <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-              </Link>
-              
-              <Link
-                to="/services"
-                className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <span className="relative z-10">Request Samples</span>
-                <Package size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-              </Link>
+        </section>
+
+        <section className="py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+              {stats.map((stat, index) => (
+                <article 
+                  key={index}
+                  className="animate-on-scroll text-center p-6 rounded-2xl hover:shadow-2xl cursor-pointer card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4 relative overflow-hidden">
+                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                    <stat.icon className="text-gray-900 relative z-10" size={24} aria-hidden="true" />
+                  </div>
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
+                  <p className="text-sm text-gray-400 font-medium">{stat.label}</p>
+                </article>
+              ))}
             </div>
 
-            <div className="mt-16 pt-12 border-t border-gray-800">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-white">
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <div className="text-4xl font-bold text-white mb-2 relative z-10">24/7</div>
-                  <div className="text-sm text-gray-400 font-medium relative z-10">Project Support</div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="animate-on-scroll">
+                <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                  <Award size={18} className="mr-2 relative z-10" aria-hidden="true" /> 
+                  <span className="relative z-10">Our Story</span>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <div className="text-4xl font-bold text-white mb-2 relative z-10">500+</div>
-                  <div className="text-sm text-gray-400 font-medium relative z-10">Successful Projects</div>
+                
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                  Pioneering <span className="excellence-text">Excellence</span> in Tile Solutions
+                </h2>
+                
+                <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+                  <p>
+                    Established in the heart of UAE, Simpolo Trading LLC has emerged as a leading provider 
+                    of premium tiles and sanitary solutions. With over 15 years of industry experience, 
+                    we combine traditional craftsmanship with modern technology.
+                  </p>
+                  <p>
+                    Our state-of-the-art manufacturing facility in India employs cutting-edge technology 
+                    and adheres to international standards (BS/EN, ANSI/ASTM), ensuring every product meets 
+                    the highest quality benchmarks.
+                  </p>
+                  <p>
+                    Our Abu Dhabi fabrication facility enables rapid customization and swift delivery 
+                    across all Emirates, making us the preferred choice for architects, contractors, 
+                    and interior designers.
+                  </p>
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <div className="text-4xl font-bold text-white mb-2 relative z-10">100%</div>
-                  <div className="text-sm text-gray-400 font-medium relative z-10">Quality Guarantee</div>
+                
+                <div className="mt-8 grid grid-cols-2 gap-4">
+                  {benefits.slice(0, 4).map((benefit, index) => (
+                    <div key={index} className="flex items-center text-gray-300">
+                      <CheckCircle size={18} className="text-gray-400 mr-2 flex-shrink-0" aria-hidden="true" />
+                      <span className="text-sm">{benefit}</span>
+                    </div>
+                  ))}
                 </div>
-                <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                
+                <Link
+                  to="/about"
+                  className="group inline-flex items-center mt-8 px-6 py-3 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
+                  aria-label="Learn more about Simpolo Trading history"
+                >
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                  <span className="relative z-10">Discover Our Journey</span>
+                  <ChevronRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                </Link>
+              </div>
+              
+              <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
+                <figure className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl card-hover group">
+                  <ImageWithFallback
+                    src="https://images.unsplash.com/photo-1531586024505-b040066c2d5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                    alt="Dubai building with premium tile installations"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    width="600"
+                    height="500"
+                    loading="lazy"
+                  />
+                  <div className="image-card-overlay"></div>
+                  <figcaption className="absolute bottom-0 left-0 right-0 p-8 image-card-content">
+                    <div className="text-xl font-semibold mb-2 text-white">Serving UAE Since 2008</div>
+                    <div className="text-sm text-gray-300">Transforming spaces across the Emirates</div>
+                  </figcaption>
+                </figure>
+                
+                <article className="absolute -bottom-6 -left-6 bg-white/5 backdrop-blur-md p-6 rounded-2xl shadow-2xl w-64 card-hover group relative overflow-hidden">
                   <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <div className="text-4xl font-bold text-white mb-2 relative z-10">15+</div>
-                  <div className="text-sm text-gray-400 font-medium relative z-10">Years Experience</div>
+                  <div className="flex items-center mb-4 relative z-10">
+                    <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Package size={20} className="text-gray-900 relative z-10" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-white">24,000+ m²</div>
+                      <div className="text-sm text-gray-400">Annual Production</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center relative z-10">
+                    <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Globe size={20} className="text-gray-900 relative z-10" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-white">50+ Countries</div>
+                      <div className="text-sm text-gray-400">Global Reach</div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate-on-scroll">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Premium <span className="collections-text">Collections</span>
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                Explore our comprehensive range of premium tile categories and solutions for every space
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {categories.map((category, index) => (
+                <Link
+                  key={index}
+                  to={category.link}
+                  className="group animate-on-scroll relative overflow-hidden rounded-2xl cursor-pointer"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  aria-label={`View ${category.title} collection`}
+                >
+                  <figure className="relative h-80 overflow-hidden">
+                    <ImageWithFallback
+                      src={category.src}
+                      alt={`${category.title} - ${category.description}`}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      width="400"
+                      height="320"
+                      loading={index < 3 ? "eager" : "lazy"}
+                    />
+
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+
+                    <figcaption className="absolute bottom-6 left-6">
+                      <h3 className="text-white text-2xl font-semibold tracking-wide">
+                        {category.title}
+                      </h3>
+                      <p className="text-gray-300 mt-2 text-sm">
+                        {category.description}
+                      </p>
+                    </figcaption>
+
+                    {category.tag && (
+                      <div className="absolute top-4 right-4">
+                        <span className="px-3 py-1 text-xs font-semibold rounded-full bg-white/90 text-gray-900">
+                          {category.tag}
+                        </span>
+                      </div>
+                    )}
+                  </figure>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center mt-14 animate-on-scroll">
+              <Link
+                to="/gallery"
+                className="group inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-xl"
+                aria-label="View all tile categories gallery"
+              >
+                View All Categories
+                <ChevronRight size={20} className="ml-2" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate-on-scroll">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Featured <span className="showcase-text">Projects</span>
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                Discover our exceptional work across residential, commercial, and hospitality sectors
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProjects.map((project, index) => (
+                <article
+                  key={project._id}
+                  className="group animate-on-scroll relative h-80 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl cursor-pointer card-hover"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => handleProjectClick(project)}
+                  itemScope
+                  itemType="https://schema.org/CreativeWork"
+                >
+                  <meta itemProp="name" content={project.title} />
+                  <meta itemProp="description" content={project.description} />
+                  
+                  <div className="image-card-overlay"></div>
+                  {project.images && project.images.length > 0 ? (
+                    <ImageWithFallback
+                      src={project.images[0].url}
+                      alt={`${project.title} - Tile installation project`}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      width="300"
+                      height="320"
+                      loading={index < 4 ? "eager" : "lazy"}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                      <Grid3x3 size={48} className="text-gray-600" aria-hidden="true" />
+                    </div>
+                  )}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 image-card-content text-white">
+                    <div className="text-xs font-semibold text-gray-300 mb-2">
+                      {project.category}
+                    </div>
+                    <h3 className="text-lg font-bold group-hover:text-gray-300 transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm text-gray-400 mt-2">{project.client}</p>
+                    <button 
+                      className="absolute top-4 right-4 p-2 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      aria-label={`View details of ${project.title} project`}
+                    >
+                      <Eye size={20} aria-hidden="true" />
+                    </button>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="text-center mt-12 animate-on-scroll">
+              <Link
+                to="/portfolio"
+                className="group inline-flex items-center px-8 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
+                aria-label="View all completed projects portfolio"
+              >
+                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                <span className="relative z-10">View All Projects</span>
+                <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+              <div className="animate-on-scroll">
+                <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-20"></div>
+                  <Building size={18} className="mr-2 relative z-10" aria-hidden="true" /> 
+                  <span className="relative z-10">Our Services</span>
+                </div>
+                
+                <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">
+                  Comprehensive <span className="showcase-text">Solutions</span>
+                </h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {services.map((service, index) => (
+                    <article key={index} className="p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <service.icon className="text-gray-900 relative z-10" size={24} aria-hidden="true" />
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2 relative z-10">{service.title}</h3>
+                      <p className="text-sm text-gray-400 relative z-10">{service.description}</p>
+                    </article>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
+                <div className="sword-gradient rounded-2xl p-8 text-white h-full card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Why Choose Us?</h3>
+                  <ul className="space-y-4 relative z-10">
+                    {benefits.map((benefit, index) => (
+                      <li key={index} className="flex items-center">
+                        <CheckCircle size={18} className="text-gray-400 mr-3 flex-shrink-0" aria-hidden="true" />
+                        <span className="text-gray-300">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div className="mt-8 p-6 bg-white/5 rounded-xl card-hover relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="flex items-center mb-4 relative z-10">
+                      <Truck size={24} className="text-gray-400 mr-3" aria-hidden="true" />
+                      <div>
+                        <div className="font-bold text-gray-300">Fast Delivery Across UAE</div>
+                        <div className="text-sm text-gray-400">24-48 hours for stock items</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {showModal && <ProjectModal />}
-    </div>
+        <section className="py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 animate-on-scroll">
+                <address className="sword-gradient rounded-2xl p-8 text-white card-hover relative overflow-hidden group not-italic">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Contact Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
+                    <div className="flex items-start">
+                      <MapPin size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" aria-hidden="true" />
+                      <div>
+                        <div className="font-bold mb-1 text-gray-300">Our Locations</div>
+                        <p className="text-gray-400 text-sm">Sharjah Industrial Area, UAE</p>
+                        <p className="text-gray-400 text-sm">ICAD, Abu Dhabi</p>
+                        <p className="text-gray-400 text-sm">Jebel Ali Free Zone, Dubai</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <Phone size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" aria-hidden="true" />
+                      <div>
+                        <div className="font-bold mb-1 text-gray-300">Call Us</div>
+                        <p className="text-gray-400 text-sm">+971 4 123 4567</p>
+                        <p className="text-gray-400 text-sm">+971 50 123 4567</p>
+                        <p className="text-gray-400 text-sm">+971 2 345 6789</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <Mail size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" aria-hidden="true" />
+                      <div>
+                        <div className="font-bold mb-1 text-gray-300">Email Us</div>
+                        <p className="text-gray-400 text-sm">info@simpolotrading.com</p>
+                        <p className="text-gray-400 text-sm">sales@simpolotrading.com</p>
+                        <p className="text-gray-400 text-sm">support@simpolotrading.com</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <Clock size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" aria-hidden="true" />
+                      <div>
+                        <div className="font-bold mb-1 text-gray-300">Working Hours</div>
+                        <p className="text-gray-400 text-sm">Sun - Thu: 8:00 AM - 6:00 PM</p>
+                        <p className="text-gray-400 text-sm">Fri: 9:00 AM - 1:00 PM</p>
+                        <p className="text-gray-400 text-sm">Sat: By Appointment</p>
+                      </div>
+                    </div>
+                  </div>
+                </address>
+              </div>
+              
+              <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
+                <div className="silver-gradient-dark rounded-2xl p-8 h-full card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <h3 className="text-2xl font-bold mb-6 text-gray-900 relative z-10">Quick Inquiry</h3>
+                  <p className="text-gray-700 mb-6 relative z-10">Get a free quote for your project</p>
+                  <Link
+                    to="/contact"
+                    className="group inline-flex items-center justify-center w-full px-6 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
+                    aria-label="Request free tile project quote"
+                  >
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                    <span className="relative z-10">Request a Quote</span>
+                    <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 relative overflow-hidden">
+          <div className="absolute inset-0 sword-gradient"></div>
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-0 w-full h-full">
+              <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-700 rounded-full mix-blend-overlay filter blur-3xl animate-float"></div>
+              <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-600 rounded-full mix-blend-overlay filter blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
+            </div>
+          </div>
+          
+          <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="animate-on-scroll">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Ready to <span className="transform-text">Transform</span> Your Space?
+              </h2>
+              <p className="text-xl mb-10 text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                Get in touch with our team today and let us help you bring your vision to life with premium tile solutions
+              </p>
+              
+              <div className="flex flex-wrap gap-4 justify-center">
+                <Link
+                  to="/contact"
+                  className="group px-8 py-4 silver-gradient text-gray-900 rounded-xl font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden silver-button-shine"
+                  aria-label="Contact tile experts for consultation"
+                >
+                  <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                  <span className="relative z-10">Contact Our Experts</span>
+                  <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                </Link>
+                
+                <Link
+                  to="/portfolio"
+                  className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+                  aria-label="View our completed tile projects"
+                >
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <span className="relative z-10">View Our Projects</span>
+                  <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                </Link>
+                
+                <Link
+                  to="/services"
+                  className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+                  aria-label="Request tile samples"
+                >
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <span className="relative z-10">Request Samples</span>
+                  <Package size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                </Link>
+              </div>
+
+              <div className="mt-16 pt-12 border-t border-gray-800">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-white">
+                  <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">24/7</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Project Support</p>
+                  </div>
+                  <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">500+</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Successful Projects</p>
+                  </div>
+                  <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">100%</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Quality Guarantee</p>
+                  </div>
+                  <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">15+</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Years Experience</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {showModal && <ProjectModal />}
+      </main>
+    </>
   );
 }
 

@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import { Package, Settings, Layers, Hammer, ChevronRight, CheckCircle2, Sparkles, Target, Award, Zap, Shield, Droplets, Users, Globe, Building, CheckCircle, Truck, Clock, MapPin, Phone, Mail, TrendingUp, Heart, ArrowRight } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
+import { useSEO } from '../../util/SEO';
 
 function Services() {
+
+
+  useSEO({
+    title: "Services | Simpolo Trading",
+    description: "Explore premium tiles and slabs by Simpolo Trading.",
+  });
   const products = [
     {
       title: 'Porcelain Tiles',
@@ -107,7 +114,171 @@ function Services() {
 
   const categories = ['All', 'Tiles', 'Fabrication', 'Stone', 'Sanitary', 'Specialty'];
 
+  // SEO Metadata
+  const pageTitle = "Tile Services & Solutions | Simpolo Trading LLC UAE - Premium Porcelain, Ceramic & Fabrication";
+  const pageDescription = "Complete tile solutions: Porcelain tiles, ceramic tiles, marble fabrication, bathroom fittings, swimming pool tiles & custom fabrication services across Dubai, Abu Dhabi, Sharjah UAE.";
+  const pageKeywords = "tile services UAE, porcelain tiles Dubai, ceramic tiles Abu Dhabi, marble fabrication, bathroom fittings, swimming pool tiles, outdoor tiles, mosaic tiles, kitchen countertops, tile cutting service, custom tile fabrication";
+  
+  // Set SEO meta tags
   useEffect(() => {
+    // Update document title
+    document.title = pageTitle;
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.name = 'description';
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.content = pageDescription;
+    
+    // Update keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.name = 'keywords';
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.content = pageKeywords;
+    
+    // Add canonical link
+    let linkCanonical = document.querySelector('link[rel="canonical"]');
+    if (!linkCanonical) {
+      linkCanonical = document.createElement('link');
+      linkCanonical.rel = 'canonical';
+      document.head.appendChild(linkCanonical);
+    }
+    linkCanonical.href = window.location.href;
+    
+    // Add Open Graph meta tags
+    const ogTags = [
+      { property: 'og:title', content: pageTitle },
+      { property: 'og:description', content: pageDescription },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:url', content: window.location.href },
+      { property: 'og:image', content: `${window.location.origin}/simlogo.webp` },
+      { property: 'og:site_name', content: 'Simpolo Trading LLC' },
+    ];
+    
+    ogTags.forEach(tag => {
+      let metaTag = document.querySelector(`meta[property="${tag.property}"]`);
+      if (!metaTag) {
+        metaTag = document.createElement('meta');
+        metaTag.setAttribute('property', tag.property);
+        document.head.appendChild(metaTag);
+      }
+      metaTag.content = tag.content;
+    });
+    
+    // Add Twitter Card meta tags
+    const twitterTags = [
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: pageTitle },
+      { name: 'twitter:description', content: pageDescription },
+      { name: 'twitter:image', content: `${window.location.origin}/simlogo.webp` },
+      { name: 'twitter:site', content: '@simpolotrading' },
+    ];
+    
+    twitterTags.forEach(tag => {
+      let metaTag = document.querySelector(`meta[name="${tag.name}"]`);
+      if (!metaTag) {
+        metaTag = document.createElement('meta');
+        metaTag.name = tag.name;
+        document.head.appendChild(metaTag);
+      }
+      metaTag.content = tag.content;
+    });
+    
+    // Add additional SEO meta tags
+    const additionalTags = [
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: 'Simpolo Trading LLC' },
+      { name: 'language', content: 'English' },
+      { name: 'geo.region', content: 'AE' },
+      { name: 'geo.placename', content: 'United Arab Emirates' },
+      { name: 'geo.position', content: '25.2048;55.2708' },
+      { name: 'ICBM', content: '25.2048, 55.2708' },
+    ];
+    
+    additionalTags.forEach(tag => {
+      let metaTag = document.querySelector(`meta[name="${tag.name}"]`);
+      if (!metaTag) {
+        metaTag = document.createElement('meta');
+        metaTag.name = tag.name;
+        document.head.appendChild(metaTag);
+      }
+      metaTag.content = tag.content;
+    });
+    
+    // Add structured data (JSON-LD)
+    const structuredData = {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      'name': 'Tile Installation and Fabrication Services',
+      'description': pageDescription,
+      'provider': {
+        '@type': 'Organization',
+        'name': 'Simpolo Trading LLC',
+        'description': 'Leading tile solutions provider in UAE',
+        'url': window.location.origin,
+        'logo': `${window.location.origin}/simlogo.webp`,
+        'address': {
+          '@type': 'PostalAddress',
+          'streetAddress': 'Sharjah Industrial Area',
+          'addressLocality': 'Sharjah',
+          'addressRegion': 'UAE',
+          'addressCountry': 'AE'
+        },
+        'contactPoint': {
+          '@type': 'ContactPoint',
+          'telephone': '+971-55-723-4180',
+          'contactType': 'customer service',
+          'availableLanguage': ['English', 'Arabic', 'Hindi']
+        }
+      },
+      'serviceType': [
+        'Porcelain Tile Installation',
+        'Ceramic Tile Installation', 
+        'Tile Cutting Service',
+        'Marble Fabrication',
+        'Bathroom Fitting Installation',
+        'Swimming Pool Tile Installation',
+        'Outdoor Tile Installation',
+        'Kitchen Countertop Fabrication'
+      ],
+      'areaServed': {
+        '@type': 'GeoCircle',
+        'geoMidpoint': {
+          '@type': 'GeoCoordinates',
+          'latitude': 25.2048,
+          'longitude': 55.2708
+        },
+        'geoRadius': '100000',
+        'description': 'Serving all Emirates in UAE'
+      },
+      'offers': {
+        '@type': 'Offer',
+        'description': 'Premium tile solutions with installation and fabrication services',
+        'priceSpecification': {
+          '@type': 'PriceSpecification',
+          'priceCurrency': 'AED'
+        }
+      }
+    };
+    
+    // Remove existing structured data
+    const existingScript = document.querySelector('script[type="application/ld+json"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+    
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.text = JSON.stringify(structuredData);
+    document.head.appendChild(script);
+    
+    // Intersection Observer for animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -145,553 +316,689 @@ function Services() {
   }, [activeCategory]);
 
   return (
-    <div className="min-h-screen bg-black">
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
+    <>
+      {/* Hidden SEO content for search engines */}
+      <div className="sr-only" aria-hidden="true">
+        <h1>Tile Services - Simpolo Trading LLC UAE</h1>
+        <h2>Comprehensive Tile Solutions Services in Dubai, Abu Dhabi, Sharjah</h2>
+        <ul>
+          <li><strong>Porcelain Tiles Supply and Installation:</strong> Premium quality porcelain tiles for floors and walls, waterproof and stain-resistant</li>
+          <li><strong>Ceramic Tiles Installation:</strong> High-quality ceramic tiles in various sizes and finishes</li>
+          <li><strong>Custom Tile Fabrication Services:</strong> Precision cutting, custom dimensions, and specialized profiling</li>
+          <li><strong>Marble and Granite Countertops:</strong> Natural stone fabrication for kitchens and bathrooms</li>
+          <li><strong>Bathroom Fittings and Sanitary Ware:</strong> Complete bathroom solutions with premium fixtures</li>
+          <li><strong>Swimming Pool Tiles and Mosaics:</strong> Water-resistant tiles for pools and water features</li>
+          <li><strong>Outdoor Heavy Duty Tiles:</strong> Weather-resistant tiles for patios, driveways, and outdoor spaces</li>
+          <li><strong>Mosaic Fabrication from Tiles:</strong> Custom mosaic designs for feature walls and artistic installations</li>
+          <li><strong>Tile Cutting and Custom Sizing:</strong> CNC and waterjet cutting for precise tile dimensions</li>
+          <li><strong>Kitchen Countertop Fabrication:</strong> Marble, granite, and quartz countertops with edge finishing</li>
+        </ul>
+        <h3>Service Areas in UAE:</h3>
+        <ul>
+          <li>Dubai</li>
+          <li>Abu Dhabi</li>
+          <li>Sharjah</li>
+          <li>Ajman</li>
+          <li>Umm Al Quwain</li>
+          <li>Fujairah</li>
+          <li>Ras Al Khaimah</li>
+        </ul>
+        <h3>Why Choose Our Tile Services:</h3>
+        <ul>
+          <li>15+ Years of Experience in Tile Industry</li>
+          <li>International Quality Standards (BS/EN, ANSI/ASTM)</li>
+          <li>Quick Delivery from Sharjah Warehouse</li>
+          <li>Custom Fabrication Facility in Abu Dhabi ICAD</li>
+          <li>Technical Support and Project Consultation</li>
+          <li>Competitive Pricing with Quality Assurance</li>
+        </ul>
+        <h3>Contact Information:</h3>
+        <p><strong>Phone:</strong> +971 55 723 4180</p>
+        <p><strong>Email:</strong> info@simpolotrading.com</p>
+        <p><strong>Location:</strong> Sharjah Industrial Area, United Arab Emirates</p>
+        <p><strong>Working Hours:</strong> Sunday - Thursday: 8:00 AM - 6:00 PM</p>
+      </div>
+
+      <div className="min-h-screen bg-black">
+        <style dangerouslySetInnerHTML={{__html: `
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
           }
-        }
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
-        }
-        @keyframes gradientShift {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
-        @keyframes swordShimmer {
-          0% { background-position: -100% 0; }
-          100% { background-position: 200% 0; }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.6s ease-out forwards;
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        .sword-shimmer {
-          background: linear-gradient(90deg, 
-            transparent, 
-            rgba(192, 192, 192, 0.1), 
-            rgba(192, 192, 192, 0.3), 
-            rgba(192, 192, 192, 0.6), 
-            rgba(192, 192, 192, 0.3), 
-            rgba(192, 192, 192, 0.1), 
-            transparent
-          );
-          background-size: 200% 100%;
-          animation: swordShimmer 3s infinite linear;
-        }
-        .sword-gradient {
-          background: linear-gradient(135deg, 
-            #000000 0%, 
-            #1a1a1a 25%, 
-            #2d2d2d 50%, 
-            #1a1a1a 75%, 
-            #000000 100%
-          );
-          background-size: 200% 200%;
-          animation: gradientShift 4s ease infinite;
-        }
-        .silver-gradient {
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .silver-gradient-dark {
-          background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
-        }
-        .dark-gradient {
-          background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
-        }
-        .card-hover {
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .card-hover:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
-        }
-        .product-card {
-          transition: all 0.4s ease;
-        }
-        .product-card:hover {
-          transform: translateY(-5px) scale(1.02);
-        }
-        .typewriter-cursor {
-          display: inline-block;
-          width: 3px;
-          background: #c0c0c0;
-          margin-left: 4px;
-          animation: blink 1s infinite;
-        }
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-        .services-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 700;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .fabrication-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 700;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .solution-text {
-          display: inline-block;
-          background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 700;
-          background-size: 200% 200%;
-          animation: gradientShift 3s ease infinite;
-        }
-        .silver-button-shine {
-          position: relative;
-          overflow: hidden;
-        }
-        .silver-button-shine::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -60%;
-          width: 20%;
-          height: 200%;
-          background: linear-gradient(
-            rgba(255, 255, 255, 0.3), 
-            rgba(255, 255, 255, 0.1) 50%, 
-            rgba(255, 255, 255, 0.3)
-          );
-          transform: rotate(30deg);
-          animation: buttonShine 3s infinite linear;
-        }
-        @keyframes buttonShine {
-          0% { left: -60%; }
-          100% { left: 140%; }
-        }
-      `}} />
+          @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+          }
+          @keyframes swordShimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+          }
+          .animate-fadeInUp {
+            animation: fadeInUp 0.6s ease-out forwards;
+          }
+          .animate-float {
+            animation: float 3s ease-in-out infinite;
+          }
+          .sword-shimmer {
+            background: linear-gradient(90deg, 
+              transparent, 
+              rgba(192, 192, 192, 0.1), 
+              rgba(192, 192, 192, 0.3), 
+              rgba(192, 192, 192, 0.6), 
+              rgba(192, 192, 192, 0.3), 
+              rgba(192, 192, 192, 0.1), 
+              transparent
+            );
+            background-size: 200% 100%;
+            animation: swordShimmer 3s infinite linear;
+          }
+          .sword-gradient {
+            background: linear-gradient(135deg, 
+              #000000 0%, 
+              #1a1a1a 25%, 
+              #2d2d2d 50%, 
+              #1a1a1a 75%, 
+              #000000 100%
+            );
+            background-size: 200% 200%;
+            animation: gradientShift 4s ease infinite;
+          }
+          .silver-gradient {
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .silver-gradient-dark {
+            background: linear-gradient(135deg, #808080 0%, #a0a0a0 50%, #c0c0c0 100%);
+          }
+          .dark-gradient {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #2d2d2d 100%);
+          }
+          .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
+          }
+          .product-card {
+            transition: all 0.4s ease;
+          }
+          .product-card:hover {
+            transform: translateY(-5px) scale(1.02);
+          }
+          .typewriter-cursor {
+            display: inline-block;
+            width: 3px;
+            background: #c0c0c0;
+            margin-left: 4px;
+            animation: blink 1s infinite;
+          }
+          @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+          }
+          .services-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .fabrication-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .solution-text {
+            display: inline-block;
+            background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+          }
+          .silver-button-shine {
+            position: relative;
+            overflow: hidden;
+          }
+          .silver-button-shine::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: linear-gradient(
+              rgba(255, 255, 255, 0.3), 
+              rgba(255, 255, 255, 0.1) 50%, 
+              rgba(255, 255, 255, 0.3)
+            );
+            transform: rotate(30deg);
+            animation: buttonShine 3s infinite linear;
+          }
+          @keyframes buttonShine {
+            0% { left: -60%; }
+            100% { left: 140%; }
+          }
+          .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+          }
+        `}} />
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black text-white py-24">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800 rounded-full blur-3xl animate-float"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="animate-on-scroll max-w-4xl">
-            <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
-              <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-              <Package size={18} className="mr-2 text-gray-400 relative z-10" />
-              <span className="text-gray-400 font-medium relative z-10">Premium Solutions</span>
-            </div>
-
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white">
-              Products & <span className="services-text">Services</span>
-            </h1>
-
-            <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden">
-              <div className="absolute inset-0 sword-shimmer"></div>
-            </div>
-
-            <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
-              <Typewriter
-                options={{
-                  strings: [
-                    'Comprehensive Tile Solutions',
-                    'Premium Quality Materials',
-                    'Custom Fabrication Services',
-                    'Expert Technical Support',
-                    'Timely Delivery Guaranteed',
-                    'End-to-End Project Solutions'
-                  ],
-                  autoStart: true,
-                  loop: true,
-                  delay: 50,
-                  deleteSpeed: 30,
-                  cursorClassName: 'typewriter-cursor'
-                }}
-              />
-            </div>
-
-            <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-3xl leading-relaxed">
-              Discover our extensive range of premium tiles, sanitary ware, and specialized fabrication services. 
-              From residential renovations to large-scale commercial projects, we provide comprehensive solutions 
-              tailored to your specific requirements.
-            </p>
+        {/* Main Hero Section */}
+        <header className="relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black text-white py-24">
+          <div className="absolute inset-0 opacity-10" aria-hidden="true">
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gray-800 rounded-full blur-3xl animate-float"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gray-700 rounded-full blur-3xl animate-float" style={{ animationDelay: '1.5s' }}></div>
           </div>
-        </div>
-      </section>
+          
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="animate-on-scroll max-w-4xl">
+              <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
+                <div className="absolute inset-0 sword-shimmer opacity-30" aria-hidden="true"></div>
+                <Package size={18} className="mr-2 text-gray-400 relative z-10" aria-hidden="true" />
+                <span className="text-gray-400 font-medium relative z-10">Premium Solutions</span>
+              </div>
 
-      <section className="py-12 bg-white/5 backdrop-blur-sm sticky top-0 z-20 border-b border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`px-6 py-3 rounded-full text-sm font-medium transition-all border relative overflow-hidden group ${
-                  activeCategory === category
-                    ? 'silver-gradient text-gray-900 border-gray-300'
-                    : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-300 border border-gray-700'
-                }`}
-              >
-                {activeCategory === category && (
-                  <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                )}
-                <span className="relative z-10">{category}</span>
-              </button>
-            ))}
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white">
+                Products & <span className="services-text">Services</span>
+              </h1>
+
+              <div className="w-32 h-1.5 silver-gradient mb-8 rounded-full relative overflow-hidden" aria-hidden="true">
+                <div className="absolute inset-0 sword-shimmer"></div>
+              </div>
+
+              <div className="text-2xl md:text-3xl mb-8 text-gray-300 font-semibold h-12">
+                <Typewriter
+                  options={{
+                    strings: [
+                      'Comprehensive Tile Solutions',
+                      'Premium Quality Materials',
+                      'Custom Fabrication Services',
+                      'Expert Technical Support',
+                      'Timely Delivery Guaranteed',
+                      'End-to-End Project Solutions'
+                    ],
+                    autoStart: true,
+                    loop: true,
+                    delay: 50,
+                    deleteSpeed: 30,
+                    cursorClassName: 'typewriter-cursor'
+                  }}
+                />
+              </div>
+
+              <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-3xl leading-relaxed">
+                Discover our extensive range of premium tiles, sanitary ware, and specialized fabrication services. 
+                From residential renovations to large-scale commercial projects across Dubai, Abu Dhabi, Sharjah, and all Emirates, 
+                we provide comprehensive solutions tailored to your specific requirements.
+              </p>
+
+              {/* Breadcrumb Navigation for SEO */}
+              <nav aria-label="Breadcrumb" className="mb-8">
+                <ol className="flex items-center space-x-2 text-sm text-gray-400">
+                  <li>
+                    <Link to="/" className="hover:text-gray-300 transition-colors">Home</Link>
+                  </li>
+                  <li className="flex items-center">
+                    <ChevronRight size={16} className="mx-2" />
+                    <span className="text-gray-300" aria-current="page">Services</span>
+                  </li>
+                </ol>
+              </nav>
+            </div>
           </div>
-        </div>
-      </section>
+        </header>
 
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product, index) => (
-              <div
-                key={index}
-                className="animate-on-scroll product-card bg-white/5 backdrop-blur-md rounded-2xl overflow-hidden card-hover border border-gray-700 hover:border-gray-500 relative overflow-hidden group"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <div className="p-8 relative z-10">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="w-14 h-14 rounded-xl silver-gradient flex items-center justify-center relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                      <product.icon className="text-gray-900 relative z-10" size={24} />
-                    </div>
-                    <div className="px-3 py-1 bg-white/5 text-gray-300 text-xs font-medium rounded-full border border-gray-700">
-                      Featured
-                    </div>
-                  </div>
-                  
-                  <h3 className="text-xl font-bold text-white mb-4 hover:text-gray-300 transition-colors relative z-10">{product.title}</h3>
-                  <p className="text-gray-400 mb-6 text-sm leading-relaxed relative z-10">{product.description}</p>
-                  
-                  <div className="space-y-4 relative z-10">
-                    {product.sizes && (
-                      <div>
-                        <div className="text-xs font-medium text-gray-400 mb-2">AVAILABLE SIZES</div>
-                        <div className="flex flex-wrap gap-2">
-                          {product.sizes.map((size, idx) => (
-                            <span key={idx} className="px-3 py-1 bg-white/5 text-gray-300 text-xs rounded-full hover:bg-white/10 hover:text-gray-200 transition-colors border border-gray-700">
-                              {size}
-                            </span>
-                          ))}
+        {/* Services Filter Section */}
+        <section aria-label="Services Filter" className="py-12 bg-white/5 backdrop-blur-sm sticky top-0 z-20 border-b border-gray-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="sr-only">Filter Services by Category</h2>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-6 py-3 rounded-full text-sm font-medium transition-all border relative overflow-hidden group ${
+                    activeCategory === category
+                      ? 'silver-gradient text-gray-900 border-gray-300'
+                      : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-gray-300 border border-gray-700'
+                  }`}
+                  aria-pressed={activeCategory === category}
+                  aria-label={`Filter services by ${category}`}
+                >
+                  {activeCategory === category && (
+                    <div className="absolute inset-0 sword-shimmer opacity-30" aria-hidden="true"></div>
+                  )}
+                  <span className="relative z-10">{category}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Main Services Grid */}
+        <main id="main-content">
+          <section className="py-24 bg-black" aria-labelledby="products-services">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 id="products-services" className="sr-only">Our Products and Services</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProducts.map((product, index) => (
+                  <article
+                    key={index}
+                    className="animate-on-scroll product-card bg-white/5 backdrop-blur-md rounded-2xl overflow-hidden card-hover border border-gray-700 hover:border-gray-500 relative overflow-hidden group"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                    itemScope
+                    itemType="https://schema.org/Service"
+                  >
+                    <meta itemProp="provider" content="Simpolo Trading LLC" />
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                    <div className="p-8 relative z-10">
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="w-14 h-14 rounded-xl silver-gradient flex items-center justify-center relative overflow-hidden" aria-hidden="true">
+                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                          <product.icon className="text-gray-900 relative z-10" size={24} aria-hidden="true" />
+                        </div>
+                        <div className="px-3 py-1 bg-white/5 text-gray-300 text-xs font-medium rounded-full border border-gray-700">
+                          Featured
                         </div>
                       </div>
-                    )}
-                    
-                    {product.features && (
-                      <div>
-                        <div className="text-xs font-medium text-gray-400 mb-2">KEY FEATURES</div>
-                        <div className="space-y-2">
-                          {product.features.map((feature, idx) => (
-                            <div key={idx} className="flex items-center group">
-                              <CheckCircle2 size={14} className="text-gray-500 mr-2 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                              <span className="text-sm text-gray-300 group-hover:text-gray-200 transition-colors">{feature}</span>
+                      
+                      <h3 className="text-xl font-bold text-white mb-4 hover:text-gray-300 transition-colors relative z-10" itemProp="name">
+                        {product.title}
+                      </h3>
+                      <p className="text-gray-400 mb-6 text-sm leading-relaxed relative z-10" itemProp="description">
+                        {product.description}
+                      </p>
+                      
+                      <div className="space-y-4 relative z-10">
+                        {product.sizes && (
+                          <div>
+                            <div className="text-xs font-medium text-gray-400 mb-2">AVAILABLE SIZES</div>
+                            <div className="flex flex-wrap gap-2">
+                              {product.sizes.map((size, idx) => (
+                                <span key={idx} className="px-3 py-1 bg-white/5 text-gray-300 text-xs rounded-full hover:bg-white/10 hover:text-gray-200 transition-colors border border-gray-700">
+                                  {size}
+                                </span>
+                              ))}
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        )}
+                        
+                        {product.features && (
+                          <div>
+                            <div className="text-xs font-medium text-gray-400 mb-2">KEY FEATURES</div>
+                            <div className="space-y-2">
+                              {product.features.map((feature, idx) => (
+                                <div key={idx} className="flex items-center group">
+                                  <CheckCircle2 size={14} className="text-gray-500 mr-2 flex-shrink-0 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                                  <span className="text-sm text-gray-300 group-hover:text-gray-200 transition-colors" itemProp="featureList">{feature}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
+                        {product.benefits && (
+                          <div>
+                            <div className="text-xs font-medium text-gray-400 mb-2">BENEFITS</div>
+                            <div className="flex flex-wrap gap-2">
+                              {product.benefits.map((benefit, idx) => (
+                                <span key={idx} className="px-2 py-1 bg-white/5 text-gray-300 text-xs rounded-full hover:bg-white/10 transition-colors border border-gray-700">
+                                  {benefit}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+                      
+                      <div className="mt-8 pt-6 border-t border-gray-700 relative z-10">
+                        <Link
+                          to="/contact"
+                          className="group inline-flex items-center text-sm text-gray-400 hover:text-gray-300 transition-colors font-medium"
+                          aria-label={`Request sample for ${product.title}`}
+                        >
+                          Request Sample
+                          <ChevronRight size={16} className="ml-1 relative z-10 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+                        </Link>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Fabrication Services Section */}
+          <section className="py-24 bg-black" aria-labelledby="fabrication-services">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-16 animate-on-scroll">
+                <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-20" aria-hidden="true"></div>
+                  <Settings size={18} className="mr-2 relative z-10" aria-hidden="true" /> 
+                  <span className="relative z-10">Custom Solutions</span>
+                </div>
+                <h2 id="fabrication-services" className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                  Precision <span className="fabrication-text">Fabrication</span> Services
+                </h2>
+                <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                  Advanced customization services to meet your exact project specifications
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {fabricationServices.map((service, index) => (
+                  <article
+                    key={index}
+                    className="animate-on-scroll bg-white/5 backdrop-blur-md rounded-2xl p-8 card-hover border border-gray-700 hover:border-gray-600 relative overflow-hidden group"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                    itemScope
+                    itemType="https://schema.org/Service"
+                  >
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                    <div className="w-16 h-16 rounded-xl silver-gradient flex items-center justify-center mb-6 mx-auto relative overflow-hidden" aria-hidden="true">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <service.icon className="text-gray-900 relative z-10" size={28} aria-hidden="true" />
+                    </div>
+                    <h3 className="text-xl font-bold text-center text-white mb-4 relative z-10" itemProp="name">{service.title}</h3>
+                    <p className="text-gray-400 text-center text-sm leading-relaxed relative z-10" itemProp="description">{service.description}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Why Choose Us Section */}
+          <section className="py-24 sword-gradient" aria-labelledby="why-choose-us">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="bg-white/5 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-gray-600">
+                <div className="grid lg:grid-cols-2">
+                  <div className="p-12 lg:p-16">
+                    <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30" aria-hidden="true"></div>
+                      <Sparkles size={18} className="mr-2 text-gray-300 relative z-10" aria-hidden="true" />
+                      <span className="text-gray-300 relative z-10">Why Choose Us</span>
+                    </div>
                     
-                    {product.benefits && (
-                      <div>
-                        <div className="text-xs font-medium text-gray-400 mb-2">BENEFITS</div>
-                        <div className="flex flex-wrap gap-2">
-                          {product.benefits.map((benefit, idx) => (
-                            <span key={idx} className="px-2 py-1 bg-white/5 text-gray-300 text-xs rounded-full hover:bg-white/10 transition-colors border border-gray-700">
-                              {benefit}
-                            </span>
-                          ))}
+                    <h2 id="why-choose-us" className="text-4xl font-bold text-white mb-6">
+                      Beyond <span className="text-gray-300">Products</span>
+                    </h2>
+                    
+                    <div className="space-y-6 mb-8">
+                      <div className="flex items-start">
+                        <div className="p-2 rounded-lg bg-white/10 mr-4" aria-hidden="true">
+                          <Award className="text-gray-300" size={20} />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-medium mb-1">Quality Assurance</h3>
+                          <p className="text-gray-300 text-sm">All products meet international BS / EN and ANSI / ASTM standards</p>
                         </div>
                       </div>
-                    )}
+                      
+                      <div className="flex items-start">
+                        <div className="p-2 rounded-lg bg-white/10 mr-4" aria-hidden="true">
+                          <Truck className="text-gray-300" size={20} />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-medium mb-1">Fast Delivery</h3>
+                          <p className="text-gray-300 text-sm">Immediate stock availability from our Sharjah warehouse</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-start">
+                        <div className="p-2 rounded-lg bg-white/10 mr-4" aria-hidden="true">
+                          <Shield className="text-gray-300" size={20} />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-medium mb-1">Expert Support</h3>
+                          <p className="text-gray-300 text-sm">Technical guidance and project consultation from concept to completion</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <div className="p-2 rounded-lg bg-white/10 mr-4" aria-hidden="true">
+                          <Clock className="text-gray-300" size={20} />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-medium mb-1">Timely Response</h3>
+                          <p className="text-gray-300 text-sm">Quick quotes and responsive customer service</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-4">
+                      <Link
+                        to="/contact"
+                        className="group px-8 py-4 silver-gradient text-gray-900 rounded-xl font-medium hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-300 relative overflow-hidden silver-button-shine"
+                        aria-label="Request a free consultation for your tile project"
+                      >
+                        <div className="absolute inset-0 sword-shimmer opacity-30" aria-hidden="true"></div>
+                        <span className="relative z-10">Request Consultation</span>
+                        <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                      </Link>
+                      
+                      <a
+                        href="tel:+971557234180"
+                        className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-medium hover:bg-white/10 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+                        aria-label="Call us now at +971 55 723 4180"
+                      >
+                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                        <span className="relative z-10">Call Now: +971 55 723 4180</span>
+                      </a>
+                    </div>
                   </div>
                   
-                  <div className="mt-8 pt-6 border-t border-gray-700 relative z-10">
+                  <div className="relative h-64 lg:h-auto min-h-[300px] bg-gradient-to-r from-gray-900/80 to-gray-800/80">
+                    <div className="absolute inset-0 flex items-center justify-center p-8">
+                      <div className="text-center">
+                        <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 border border-gray-600 relative overflow-hidden" aria-hidden="true">
+                          <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                          <Target className="text-white relative z-10" size={32} />
+                        </div>
+                        <p className="text-2xl font-bold text-white mb-2">Custom Solutions</p>
+                        <p className="text-gray-300">Tailored to your specific project needs</p>
+                        <div className="mt-8 grid grid-cols-2 gap-4 max-w-xs mx-auto">
+                          <div className="text-center p-4 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
+                            <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                            <div className="text-xl font-bold text-white relative z-10">300+</div>
+                            <div className="text-sm text-gray-300 relative z-10">Projects</div>
+                          </div>
+                          <div className="text-center p-4 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
+                            <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                            <div className="text-xl font-bold text-white relative z-10">15+</div>
+                            <div className="text-sm text-gray-300 relative z-10">Years Experience</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Customer Commitment Section */}
+          <section className="py-24 bg-black" aria-labelledby="customer-commitment">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 animate-on-scroll">
+                  <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 card-hover border border-gray-700 relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                    <div className="flex items-center mb-8 relative z-10">
+                      <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden" aria-hidden="true">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <Heart className="text-gray-900 relative z-10" size={32} />
+                      </div>
+                      <h2 id="customer-commitment" className="text-3xl font-bold text-white relative z-10">Customer Commitment</h2>
+                    </div>
+                    <p className="text-gray-300 mb-8 leading-relaxed text-lg relative z-10">
+                      We serve residential, commercial, hospitality, and government projects with 
+                      personalized solutions, technical support, and comprehensive after-sales service.
+                      Our team is dedicated to ensuring your complete satisfaction from concept to completion.
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+                      {['Free Consultation', 'Custom Designs', 'Installation Support', '10-Year Warranty', 
+                        'Technical Guidance', 'Project Management', 'Quality Assurance', 'Timely Delivery'].map((item, idx) => (
+                        <div key={idx} className="flex items-center text-sm group">
+                          <CheckCircle size={16} className="text-gray-500 mr-2 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                          <span className="text-gray-300 group-hover:text-gray-200 transition-colors">{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
+                  <div className="silver-gradient-dark rounded-2xl p-8 h-full card-hover border border-gray-600 relative overflow-hidden group">
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                    <h2 className="text-2xl font-bold mb-6 text-gray-900 relative z-10">Quick Contact</h2>
+                    <p className="text-gray-700 mb-8 leading-relaxed relative z-10">Get in touch with our team for expert advice</p>
+                    
+                    <address className="space-y-4 mb-8 relative z-10 not-italic">
+                      <div className="flex items-center text-gray-800">
+                        <Phone size={18} className="mr-3 text-gray-600" aria-hidden="true" />
+                        <a href="tel:+971557234180" className="hover:text-gray-900 transition-colors">+971 55 723 4180</a>
+                      </div>
+                      <div className="flex items-center text-gray-800">
+                        <Mail size={18} className="mr-3 text-gray-600" aria-hidden="true" />
+                        <a href="mailto:info@simpolotrading.com" className="hover:text-gray-900 transition-colors">info@simpolotrading.com</a>
+                      </div>
+                      <div className="flex items-center text-gray-800">
+                        <Clock size={18} className="mr-3 text-gray-600" aria-hidden="true" />
+                        <time dateTime="08:00-18:00">Sun - Thu: 8 AM - 6 PM</time>
+                      </div>
+                      <div className="flex items-center text-gray-800">
+                        <MapPin size={18} className="mr-3 text-gray-600" aria-hidden="true" />
+                        <span>Sharjah Industrial Area, UAE</span>
+                      </div>
+                    </address>
+                    
                     <Link
                       to="/contact"
-                      className="group inline-flex items-center text-sm text-gray-400 hover:text-gray-300 transition-colors font-medium"
+                      className="group w-full px-6 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center justify-center border border-gray-700 relative overflow-hidden silver-button-shine"
+                      aria-label="Schedule a consultation with our tile experts"
                     >
-                      Request Sample
-                      <ChevronRight size={16} className="ml-1 relative z-10 group-hover:translate-x-1 transition-transform" />
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity" aria-hidden="true"></div>
+                      <span className="relative z-10">Schedule a Consultation</span>
                     </Link>
+                    <div className="mt-6 text-center relative z-10">
+                      <div className="text-sm text-gray-600">Response within 24 hours</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16 animate-on-scroll">
-            <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
-              <div className="absolute inset-0 sword-shimmer opacity-20"></div>
-              <Settings size={18} className="mr-2 relative z-10" /> 
-              <span className="relative z-10">Custom Solutions</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-              Precision <span className="fabrication-text">Fabrication</span> Services
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-              Advanced customization services to meet your exact project specifications
-            </p>
+          </section>
+
+          {/* Additional Service Information for SEO */}
+          <div className="sr-only" aria-hidden="true">
+            <h2>Complete Tile Solutions Across UAE</h2>
+            <h3>Our Service Process:</h3>
+            <ol>
+              <li><strong>Consultation:</strong> Free project assessment and requirement analysis</li>
+              <li><strong>Material Selection:</strong> Assistance in choosing the right tiles and materials</li>
+              <li><strong>Custom Fabrication:</strong> Precision cutting and customization as needed</li>
+              <li><strong>Quality Check:</strong> Thorough inspection of all materials</li>
+              <li><strong>Delivery:</strong> Timely delivery to your project site</li>
+              <li><strong>Installation Support:</strong> Technical guidance for installation teams</li>
+              <li><strong>After-Sales Service:</strong> Ongoing support and maintenance advice</li>
+            </ol>
+            
+            <h3>Industry Standards We Follow:</h3>
+            <ul>
+              <li>BS EN 14411: Ceramic tiles - Definitions, classification, characteristics and marking</li>
+              <li>ANSI A137.1: American National Standard Specifications for Ceramic Tile</li>
+              <li>ISO 13006: Ceramic tiles - Definitions, classification, characteristics and marking</li>
+              <li>ASTM C1027: Standard Test Method for Determining Visible Abrasion Resistance</li>
+            </ul>
+            
+            <h3>Service Guarantee:</h3>
+            <p>All our tile products come with a 10-year warranty against manufacturing defects. Our fabrication services are backed by our quality assurance guarantee ensuring precision and durability.</p>
+            
+            <h3>FAQs:</h3>
+            <p><strong>Q: Do you provide installation services?</strong><br />
+            A: While we specialize in supply and fabrication, we work with certified installation partners across UAE and provide technical support for all installation projects.</p>
+            
+            <p><strong>Q: What is the delivery time for custom orders?</strong><br />
+            A: Standard orders: 2-3 days. Custom fabrication: 5-7 working days depending on complexity.</p>
+            
+            <p><strong>Q: Do you provide samples?</strong><br />
+            A: Yes, we provide free samples for all our tile collections. Contact us to request samples.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {fabricationServices.map((service, index) => (
-              <div
-                key={index}
-                className="animate-on-scroll bg-white/5 backdrop-blur-md rounded-2xl p-8 card-hover border border-gray-700 hover:border-gray-600 relative overflow-hidden group"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <div className="w-16 h-16 rounded-xl silver-gradient flex items-center justify-center mb-6 mx-auto relative overflow-hidden">
-                  <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                  <service.icon className="text-gray-900 relative z-10" size={28} />
+          {/* Call to Action Section */}
+          <section className="pb-24 bg-black" aria-labelledby="custom-solutions">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center animate-on-scroll">
+                <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
+                  <div className="absolute inset-0 sword-shimmer opacity-20" aria-hidden="true"></div>
+                  <TrendingUp size={18} className="mr-2 relative z-10" aria-hidden="true" /> 
+                  <span className="relative z-10">Our Expertise</span>
                 </div>
-                <h3 className="text-xl font-bold text-center text-white mb-4 relative z-10">{service.title}</h3>
-                <p className="text-gray-400 text-center text-sm leading-relaxed relative z-10">{service.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 sword-gradient">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white/5 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden border border-gray-600">
-            <div className="grid lg:grid-cols-2">
-              <div className="p-12 lg:p-16">
-                <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 relative overflow-hidden">
-                  <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                  <Sparkles size={18} className="mr-2 text-gray-300 relative z-10" />
-                  <span className="text-gray-300 relative z-10">Why Choose Us</span>
-                </div>
-                
-                <h2 className="text-4xl font-bold text-white mb-6">
-                  Beyond <span className="text-gray-300">Products</span>
+                <h2 id="custom-solutions" className="text-3xl md:text-4xl font-bold mb-8 text-white">
+                  Need a <span className="solution-text">Custom Solution</span>?
                 </h2>
+                <p className="text-gray-400 max-w-2xl mx-auto text-lg mb-12">
+                  Our team specializes in creating tailored solutions for unique project requirements
+                </p>
                 
-                <div className="space-y-6 mb-8">
-                  <div className="flex items-start">
-                    <div className="p-2 rounded-lg bg-white/10 mr-4">
-                      <Award className="text-gray-300" size={20} />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-medium mb-1">Quality Assurance</h4>
-                      <p className="text-gray-300 text-sm">All products meet international BS / EN and ANSI / ASTM standards</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <div className="p-2 rounded-lg bg-white/10 mr-4">
-                      <Truck className="text-gray-300" size={20} />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-medium mb-1">Fast Delivery</h4>
-                      <p className="text-gray-300 text-sm">Immediate stock availability from our Sharjah warehouse</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start">
-                    <div className="p-2 rounded-lg bg-white/10 mr-4">
-                      <Shield className="text-gray-300" size={20} />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-medium mb-1">Expert Support</h4>
-                      <p className="text-gray-300 text-sm">Technical guidance and project consultation from concept to completion</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start">
-                    <div className="p-2 rounded-lg bg-white/10 mr-4">
-                      <Clock className="text-gray-300" size={20} />
-                    </div>
-                    <div>
-                      <h4 className="text-white font-medium mb-1">Timely Response</h4>
-                      <p className="text-gray-300 text-sm">Quick quotes and responsive customer service</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap gap-4 justify-center">
                   <Link
-                    to="/contact"
-                    className="group px-8 py-4 silver-gradient text-gray-900 rounded-xl font-medium hover:shadow-xl transition-all duration-300 flex items-center space-x-3 card-hover border border-gray-300 relative overflow-hidden silver-button-shine"
+                    to="/portfolio"
+                    className="group px-8 py-4 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover flex items-center space-x-3 border border-gray-700 relative overflow-hidden silver-button-shine"
+                    aria-label="View our portfolio of completed tile projects"
                   >
-                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                    <span className="relative z-10">Request Consultation</span>
-                    <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity" aria-hidden="true"></div>
+                    <span className="relative z-10">View Our Projects</span>
+                    <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
                   </Link>
                   
-                  <a
-                    href="tel:+971557234180"
-                    className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-medium hover:bg-white/10 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+                  <Link
+                    to="/contact"
+                    className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-medium hover:bg-white/5 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
+                    aria-label="Get expert advice for your tile project"
                   >
-                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                    <span className="relative z-10">Call Now: +971 55 723 4180</span>
-                  </a>
-                </div>
-              </div>
-              
-              <div className="relative h-64 lg:h-auto min-h-[300px] bg-gradient-to-r from-gray-900/80 to-gray-800/80">
-                <div className="absolute inset-0 flex items-center justify-center p-8">
-                  <div className="text-center">
-                    <div className="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-6 border border-gray-600 relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <Target className="text-white relative z-10" size={32} />
-                    </div>
-                    <p className="text-2xl font-bold text-white mb-2">Custom Solutions</p>
-                    <p className="text-gray-300">Tailored to your specific project needs</p>
-                    <div className="mt-8 grid grid-cols-2 gap-4 max-w-xs mx-auto">
-                      <div className="text-center p-4 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
-                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                        <div className="text-xl font-bold text-white relative z-10">300+</div>
-                        <div className="text-sm text-gray-300 relative z-10">Projects</div>
-                      </div>
-                      <div className="text-center p-4 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
-                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                        <div className="text-xl font-bold text-white relative z-10">15+</div>
-                        <div className="text-sm text-gray-300 relative z-10">Years Experience</div>
-                      </div>
-                    </div>
-                  </div>
+                    <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
+                    <span className="relative z-10">Get Expert Advice</span>
+                    <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
+                  </Link>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 animate-on-scroll">
-              <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 card-hover border border-gray-700 relative overflow-hidden group">
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <div className="flex items-center mb-8 relative z-10">
-                  <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
-                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                    <Heart className="text-gray-900 relative z-10" size={32} />
-                  </div>
-                  <h3 className="text-3xl font-bold text-white relative z-10">Customer Commitment</h3>
-                </div>
-                <p className="text-gray-300 mb-8 leading-relaxed text-lg relative z-10">
-                  We serve residential, commercial, hospitality, and government projects with 
-                  personalized solutions, technical support, and comprehensive after-sales service.
-                  Our team is dedicated to ensuring your complete satisfaction from concept to completion.
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
-                  {['Free Consultation', 'Custom Designs', 'Installation Support', '10-Year Warranty', 
-                    'Technical Guidance', 'Project Management', 'Quality Assurance', 'Timely Delivery'].map((item, idx) => (
-                    <div key={idx} className="flex items-center text-sm group">
-                      <CheckCircle size={16} className="text-gray-500 mr-2 group-hover:scale-110 transition-transform" />
-                      <span className="text-gray-300 group-hover:text-gray-200 transition-colors">{item}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            
-            <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
-              <div className="silver-gradient-dark rounded-2xl p-8 h-full card-hover border border-gray-600 relative overflow-hidden group">
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <h3 className="text-2xl font-bold mb-6 text-gray-900 relative z-10">Quick Contact</h3>
-                <p className="text-gray-700 mb-8 leading-relaxed relative z-10">Get in touch with our team for expert advice and quotes</p>
-                
-                <div className="space-y-4 mb-8 relative z-10">
-                  <div className="flex items-center text-gray-800">
-                    <Phone size={18} className="mr-3 text-gray-600" />
-                    <span>+971 55 723 4180</span>
-                  </div>
-                  <div className="flex items-center text-gray-800">
-                    <Mail size={18} className="mr-3 text-gray-600" />
-                    <span>info@simpolotrading.com</span>
-                  </div>
-                  <div className="flex items-center text-gray-800">
-                    <Clock size={18} className="mr-3 text-gray-600" />
-                    <span>Sun - Thu: 8 AM - 6 PM</span>
-                  </div>
-                </div>
-                
-                <Link
-                  to="/contact"
-                  className="group w-full px-6 py-4 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 flex items-center justify-center border border-gray-700 relative overflow-hidden silver-button-shine"
-                >
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                  <span className="relative z-10">Schedule a Consultation</span>
-                </Link>
-                <div className="mt-6 text-center relative z-10">
-                  <div className="text-sm text-gray-600">Response within 24 hours</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="pb-24 bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center animate-on-scroll">
-            <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
-              <div className="absolute inset-0 sword-shimmer opacity-20"></div>
-              <TrendingUp size={18} className="mr-2 relative z-10" /> 
-              <span className="relative z-10">Our Expertise</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-white">
-              Need a <span className="solution-text">Custom Solution</span>?
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto text-lg mb-12">
-              Our team specializes in creating tailored solutions for unique project requirements
-            </p>
-            
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Link
-                to="/portfolio"
-                className="group px-8 py-4 sword-gradient text-white rounded-xl font-medium hover:shadow-xl transition-all duration-300 card-hover flex items-center space-x-3 border border-gray-700 relative overflow-hidden silver-button-shine"
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                <span className="relative z-10">View Our Projects</span>
-                <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-              </Link>
-              
-              <Link
-                to="/contact"
-                className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-medium hover:bg-white/5 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
-              >
-                <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                <span className="relative z-10">Get Expert Advice</span>
-                <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+          </section>
+        </main>
+      </div>
+    </>
   );
 }
 
