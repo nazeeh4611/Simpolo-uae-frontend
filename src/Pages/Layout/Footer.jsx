@@ -137,9 +137,9 @@ export function Footer() {
               <div className="flex items-center space-x-2">
                 <Link to="/" className="flex items-center h-full relative">
                   <img
-                    src="/sim.webp"
+                    src="/lc.webp"
                     alt="Simpolo"
-                    className="max-h-[110px] w-auto object-contain"
+                    className="max-h-[120px] w-auto object-contain"
                   />
                   <div className="absolute -bottom-2 left-0 right-0 h-[2px] sword-shimmer rounded-full"></div>
                 </Link>
