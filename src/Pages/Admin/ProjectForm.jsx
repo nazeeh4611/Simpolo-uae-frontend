@@ -319,40 +319,65 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
+  
     setLoading(true);
     try {
       const formDataToSend = new FormData();
-
-      Object.keys(formData).forEach(key => {
-        if (formData[key] !== undefined && formData[key] !== null && formData[key] !== '') {
-          formDataToSend.append(key, formData[key]);
+  
+      // Append basic form data
+      const formKeys = ['title', 'client', 'location', 'description', 'category', 'scope', 'featured'];
+      formKeys.forEach(key => {
+        if (formData[key] !== undefined && formData[key] !== null) {
+          if (key === 'featured') {
+            formDataToSend.append(key, formData[key].toString());
+          } else {
+            formDataToSend.append(key, formData[key]);
+          }
         }
       });
-
-      const validProducts = productsUsed.filter(p => p.name.trim());
-      formDataToSend.append('productsUsed', JSON.stringify(validProducts));
-
+  
+      // Append completion date only once
+      if (formData.completionDate) {
+        formDataToSend.append('completionDate', formData.completionDate);
+      }
+  
+      // Append productsUsed as JSON string
+      const validProducts = productsUsed.filter(p => p.name && p.name.trim());
+      if (validProducts.length > 0) {
+        formDataToSend.append('productsUsed', JSON.stringify(validProducts));
+      }
+  
+      // Append images with their captions
       images.forEach((image, index) => {
-        formDataToSend.append('images', image.file);
-        formDataToSend.append(`caption_${index}`, image.caption || '');
+        if (image.file) {
+          formDataToSend.append('images', image.file);
+          formDataToSend.append(`caption_${index}`, image.caption || '');
+        }
       });
-
+  
+      console.log("Form data being sent:");
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(key, value);
+      }
+  
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
         }
       };
-
+  
       if (isEditMode && projectData) {
-        await axios.put(`${baseurl}admin/projects/${projectData._id}`, formDataToSend, config);
+        const response = await axios.put(`${baseurl}admin/projects/${projectData._id}`, formDataToSend, config);
+        console.log("Update response:", response.data);
         toast.success('Project updated successfully');
       } else {
-        await axios.post(`${baseurl}admin/projects`, formDataToSend, config);
+        const response = await axios.post(`${baseurl}admin/projects`, formDataToSend, config);
+        console.log("Create response:", response.data);
         toast.success('Project created successfully');
       }
-
+  
+      // Clean up blob URLs
       images.forEach(image => {
         if (image.preview && image.file) {
           const url = imageUrlsRef.current.get(image.file);
@@ -362,11 +387,12 @@ const ProjectForm = ({ isEditMode = false, projectData = null, onSuccess, onCanc
           }
         }
       });
-
+  
       onSuccess();
     } catch (error) {
       console.error('Error saving project:', error);
-      toast.error(error.response?.data?.message || 'Error saving project');
+      console.error('Error response:', error.response?.data);
+      toast.error(error.response?.data?.message || error.response?.data?.error || 'Error saving project');
     } finally {
       setLoading(false);
     }
