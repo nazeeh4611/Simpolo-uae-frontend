@@ -14,6 +14,9 @@ import Portfolio from "../Pages/User/Portfolio";
 import Gallery from "../Pages/User/Gallery";
 import Contact from "../Pages/User/Contact";
 import Maintenance from "../Pages/Maintenance";
+import PrivacyPolicy from "../Pages/User/Privacy";
+import TermsOfService from "../Pages/User/Terms";
+import Sitemap from "../Pages/User/Sitemap";
 
 /* ===============================
    TOGGLE MAINTENANCE MODE HERE
@@ -67,6 +70,9 @@ function UserRoutes() {
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/sitemap" element={<Sitemap />} />
           </>
         )}
       </Routes>

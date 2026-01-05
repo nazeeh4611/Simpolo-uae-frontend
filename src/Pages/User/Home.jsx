@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight, Sparkles, Award, Clock, Shield, Star, TrendingUp, Users, Zap, Package, Globe, Truck, CheckCircle, Home, Building, Hotel, ShoppingBag, Phone, Mail, MapPin, Eye, Grid3x3 } from 'lucide-react';
+import { ArrowRight, ChevronRight, Sparkles, Award, Clock, Shield, Star, TrendingUp, Users, Zap, Package, Globe, Truck, CheckCircle, Home, Building, Hotel, ShoppingBag, Phone, Mail, MapPin, Eye, Grid3x3, ChevronLeft, ChevronRight as ChevronRightIcon, X } from 'lucide-react';
 import { ImageWithFallback } from '../../util/Fallback';
 import Typewriter from 'typewriter-effect';
 import { baseurl } from '../../util/Base';
 import { useSEO } from '../../util/SEO';
+import ValuableClients from '../Layout/Clients';
 
 function HomePage() {
 
@@ -12,7 +13,7 @@ function HomePage() {
     title: "Home | Simpolo Trading",
     description: "Explore premium tiles and slabs by Simpolo Trading.",
   });
-  // SEO Metadata
+  
   const pageTitle = "Simpolo Trading LLC | Premium Tile Solutions & Sanitary Ware UAE";
   const pageDescription = "Simpolo Trading LLC - UAE's leading supplier of premium porcelain tiles, ceramic tiles, marble, and sanitary ware. 15+ years expertise in luxury tile solutions across Emirates.";
   const pageKeywords = "Simpolo Trading UAE, premium tiles Dubai, porcelain tiles UAE, ceramic tiles suppliers, marble tiles Dubai, bathroom fittings UAE, tile suppliers Sharjah, sanitary ware Abu Dhabi";
@@ -21,7 +22,9 @@ function HomePage() {
   const [featuredProjects, setFeaturedProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const videoRef = useRef(null);
+  const modalRef = useRef(null);
 
   const features = [
     { 
@@ -153,12 +156,9 @@ function HomePage() {
     'After-sales support'
   ];
 
-  // Set SEO meta tags
   useEffect(() => {
-    // Update document title
     document.title = pageTitle;
     
-    // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -167,7 +167,6 @@ function HomePage() {
     }
     metaDescription.content = pageDescription;
     
-    // Update keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
     if (!metaKeywords) {
       metaKeywords = document.createElement('meta');
@@ -176,7 +175,6 @@ function HomePage() {
     }
     metaKeywords.content = pageKeywords;
     
-    // Add canonical link
     let linkCanonical = document.querySelector('link[rel="canonical"]');
     if (!linkCanonical) {
       linkCanonical = document.createElement('link');
@@ -185,7 +183,6 @@ function HomePage() {
     }
     linkCanonical.href = window.location.href;
     
-    // Add Open Graph meta tags
     const ogTags = [
       { property: 'og:title', content: pageTitle },
       { property: 'og:description', content: pageDescription },
@@ -206,7 +203,6 @@ function HomePage() {
       metaTag.content = tag.content;
     });
     
-    // Add Twitter Card meta tags
     const twitterTags = [
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: pageTitle },
@@ -225,7 +221,6 @@ function HomePage() {
       metaTag.content = tag.content;
     });
     
-    // Add structured data for Homepage
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'HomeAndConstructionBusiness',
@@ -295,7 +290,6 @@ function HomePage() {
       'numberOfEmployees': '50'
     };
     
-    // Remove existing structured data
     const existingScript = document.querySelector('script[type="application/ld+json"]');
     if (existingScript) {
       existingScript.remove();
@@ -308,7 +302,6 @@ function HomePage() {
 
     setLoaded(true);
     
-    // Intersection Observer for animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -348,6 +341,7 @@ function HomePage() {
 
   const handleProjectClick = (project) => {
     setSelectedProject(project);
+    setCurrentImageIndex(0);
     setShowModal(true);
     document.body.style.overflow = 'hidden';
   };
@@ -355,36 +349,175 @@ function HomePage() {
   const closeModal = () => {
     setShowModal(false);
     setSelectedProject(null);
+    setCurrentImageIndex(0);
     document.body.style.overflow = 'auto';
   };
 
+  const nextImage = () => {
+    if (selectedProject && selectedProject.images) {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === selectedProject.images.length - 1 ? 0 : prevIndex + 1
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedProject && selectedProject.images) {
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? selectedProject.images.length - 1 : prevIndex - 1
+      );
+    }
+  };
+
+  // Close modal on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') closeModal();
+    };
+    
+    if (showModal) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [showModal]);
+
+  // Handle click outside modal
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        closeModal();
+      }
+    };
+    
+    if (showModal) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showModal]);
+
   const ProjectModal = () => {
     if (!selectedProject) return null;
-
+  
+    const handleNextImage = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      nextImage();
+    };
+  
+    const handlePrevImage = (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      prevImage();
+    };
+  
+    const handleThumbnailClick = (index, e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      setCurrentImageIndex(index);
+    };
+  
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') {
+        nextImage();
+      } else if (e.key === 'ArrowLeft') {
+        prevImage();
+      }
+    };
+  
+    useEffect(() => {
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }, [selectedProject, currentImageIndex]);
+  
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-        <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-gray-900 rounded-2xl shadow-2xl">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+        <div 
+          ref={modalRef}
+          className="relative w-full max-w-6xl max-h-[95vh] overflow-y-auto bg-gray-900 rounded-2xl shadow-2xl"
+        >
+          {/* Close Button */}
           <button
             onClick={closeModal}
-            className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors"
+            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-black/80 text-white hover:bg-black hover:scale-110 transition-all duration-200"
             aria-label="Close project modal"
           >
-            <ChevronRight className="rotate-45" size={24} aria-hidden="true" />
+            <X size={24} aria-hidden="true" />
           </button>
           
+          {/* Image Slider Section */}
           {selectedProject.images && selectedProject.images.length > 0 && (
-            <div className="relative h-64 md:h-80 overflow-hidden rounded-t-2xl">
-              <ImageWithFallback
-                src={selectedProject.images[0].url}
-                alt={selectedProject.title}
-                className="w-full h-full object-cover"
-                width="800"
-                height="400"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <div className="relative h-96 md:h-[500px] overflow-hidden rounded-t-2xl">
+              {/* Main Image */}
+              <div className="relative w-full h-full">
+                <ImageWithFallback
+                  key={`project-image-${selectedProject._id}-${currentImageIndex}`}
+                  src={selectedProject.images[currentImageIndex]?.url}
+                  alt={`${selectedProject.title} - Image ${currentImageIndex + 1}`}
+                  className="w-full h-full object-cover"
+                  width="1200"
+                  height="500"
+                  loading="eager"
+                />
+              </div>
+              
+              {/* Navigation Arrows */}
+              {selectedProject.images.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevImage}
+                    className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 rounded-full bg-black/70 text-white hover:bg-black hover:scale-110 transition-all duration-200 z-10"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft size={24} aria-hidden="true" />
+                  </button>
+                  
+                  <button
+                    onClick={handleNextImage}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 rounded-full bg-black/70 text-white hover:bg-black hover:scale-110 transition-all duration-200 z-10"
+                    aria-label="Next image"
+                  >
+                    <ChevronRightIcon size={24} aria-hidden="true" />
+                  </button>
+                </>
+              )}
+              
+              {/* Image Counter */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full bg-black/70 text-white text-sm z-10 backdrop-blur-sm">
+                {currentImageIndex + 1} / {selectedProject.images.length}
+              </div>
+              
+              {/* Thumbnail Navigation */}
+              {selectedProject.images.length > 1 && (
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center space-x-2 z-10">
+                  {selectedProject.images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => handleThumbnailClick(index, e)}
+                      className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                        index === currentImageIndex 
+                          ? 'bg-white scale-125' 
+                          : 'bg-white/50 hover:bg-white/80 hover:scale-110'
+                      }`}
+                      aria-label={`Go to image ${index + 1}`}
+                      aria-current={index === currentImageIndex ? "true" : "false"}
+                    />
+                  ))}
+                </div>
+              )}
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
             </div>
           )}
-
+  
+          {/* Content Section */}
           <div className="p-6 md:p-8">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
               {selectedProject.title}
@@ -392,21 +525,21 @@ function HomePage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <p className="text-gray-400 mb-2">
-                  <span className="font-semibold text-gray-300">Client:</span> {selectedProject.client}
+                <p className="text-gray-300 mb-2">
+                  <span className="font-semibold text-gray-200">Client:</span> {selectedProject.client}
                 </p>
-                <p className="text-gray-400 mb-2">
-                  <span className="font-semibold text-gray-300">Location:</span> {selectedProject.location}
+                <p className="text-gray-300 mb-2">
+                  <span className="font-semibold text-gray-200">Location:</span> {selectedProject.location}
                 </p>
-                <p className="text-gray-400">
-                  <span className="font-semibold text-gray-300">Category:</span> {selectedProject.category}
+                <p className="text-gray-300">
+                  <span className="font-semibold text-gray-200">Category:</span> {selectedProject.category}
                 </p>
               </div>
               
               {selectedProject.completionDate && (
                 <div>
-                  <p className="text-gray-400">
-                    <span className="font-semibold text-gray-300">Completed:</span>{' '}
+                  <p className="text-gray-300">
+                    <span className="font-semibold text-gray-200">Completed:</span>{' '}
                     {new Date(selectedProject.completionDate).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -416,52 +549,70 @@ function HomePage() {
                 </div>
               )}
             </div>
-
-            <div className="mb-6">
-              <h4 className="text-lg font-semibold text-white mb-3">Project Description</h4>
-              <p className="text-gray-300 leading-relaxed">{selectedProject.description}</p>
-            </div>
-
+  
+            {selectedProject.description && (
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold text-white mb-3">Project Description</h4>
+                <p className="text-gray-200 leading-relaxed">{selectedProject.description}</p>
+              </div>
+            )}
+  
             {selectedProject.scope && (
               <div className="mb-6">
                 <h4 className="text-lg font-semibold text-white mb-3">Project Scope</h4>
-                <p className="text-gray-300 leading-relaxed">{selectedProject.scope}</p>
+                <p className="text-gray-200 leading-relaxed">{selectedProject.scope}</p>
               </div>
             )}
-
+  
             {selectedProject.productsUsed && selectedProject.productsUsed.length > 0 && (
               <div className="mb-6">
                 <h4 className="text-lg font-semibold text-white mb-3">Products Used</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {selectedProject.productsUsed.map((product, index) => (
-                    <div key={index} className="bg-gray-800/50 rounded-lg p-3">
+                    <div key={index} className="bg-gray-800/70 rounded-lg p-3 hover:bg-gray-800 transition-colors">
                       <p className="font-medium text-white">{product.name}</p>
                       {product.category && (
-                        <p className="text-sm text-gray-400">Category: {product.category}</p>
+                        <p className="text-sm text-gray-300">Category: {product.category}</p>
                       )}
                       {product.quantity && (
-                        <p className="text-sm text-gray-400">Quantity: {product.quantity}</p>
+                        <p className="text-sm text-gray-300">Quantity: {product.quantity}</p>
                       )}
                     </div>
                   ))}
                 </div>
               </div>
             )}
-
+  
+            {/* Additional Images Grid */}
             {selectedProject.images && selectedProject.images.length > 1 && (
               <div>
-                <h4 className="text-lg font-semibold text-white mb-3">More Images</h4>
+                <h4 className="text-lg font-semibold text-white mb-3">Project Gallery</h4>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {selectedProject.images.slice(1).map((image, index) => (
-                    <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
+                  {selectedProject.images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => handleThumbnailClick(index, e)}
+                      className={`relative aspect-square rounded-lg overflow-hidden group transition-all duration-200 ${
+                        index === currentImageIndex 
+                          ? 'ring-2 ring-white ring-offset-2 ring-offset-gray-900 scale-105' 
+                          : 'hover:scale-105'
+                      }`}
+                      aria-label={`View image ${index + 1}`}
+                      aria-current={index === currentImageIndex ? "true" : "false"}
+                    >
                       <ImageWithFallback
                         src={image.url}
-                        alt={`${selectedProject.title} - Image ${index + 2}`}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                        alt={`${selectedProject.title} - Image ${index + 1}`}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                         width="200"
                         height="200"
+                        loading="lazy"
                       />
-                    </div>
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <Eye size={20} className="text-white" aria-hidden="true" />
+                      </div>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -474,7 +625,6 @@ function HomePage() {
 
   return (
     <>
-      {/* Hidden SEO content for search engines */}
       <div className="sr-only" aria-hidden="true">
         <h1>Simpolo Trading LLC - Premium Tile Solutions Provider in UAE</h1>
         <p>Leading supplier of porcelain tiles, ceramic tiles, marble, granite, and sanitary ware across United Arab Emirates since 2008.</p>
@@ -845,120 +995,7 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="py-24 bg-black">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-              {stats.map((stat, index) => (
-                <article 
-                  key={index}
-                  className="animate-on-scroll text-center p-6 rounded-2xl hover:shadow-2xl cursor-pointer card-hover bg-white/5 backdrop-blur-md relative overflow-hidden group"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full silver-gradient mb-4 relative overflow-hidden">
-                    <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                    <stat.icon className="text-gray-900 relative z-10" size={24} aria-hidden="true" />
-                  </div>
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">{stat.value}</div>
-                  <p className="text-sm text-gray-400 font-medium">{stat.label}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div className="animate-on-scroll">
-                <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-gray-900 text-gray-300 text-sm font-semibold relative overflow-hidden">
-                  <div className="absolute inset-0 sword-shimmer opacity-20"></div>
-                  <Award size={18} className="mr-2 relative z-10" aria-hidden="true" /> 
-                  <span className="relative z-10">Our Story</span>
-                </div>
-                
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
-                  Pioneering <span className="excellence-text">Excellence</span> in Tile Solutions
-                </h2>
-                
-                <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
-                  <p>
-                    Established in the heart of UAE, Simpolo Trading LLC has emerged as a leading provider 
-                    of premium tiles and sanitary solutions. With over 15 years of industry experience, 
-                    we combine traditional craftsmanship with modern technology.
-                  </p>
-                  <p>
-                    Our state-of-the-art manufacturing facility in India employs cutting-edge technology 
-                    and adheres to international standards (BS/EN, ANSI/ASTM), ensuring every product meets 
-                    the highest quality benchmarks.
-                  </p>
-                  <p>
-                    Our Abu Dhabi fabrication facility enables rapid customization and swift delivery 
-                    across all Emirates, making us the preferred choice for architects, contractors, 
-                    and interior designers.
-                  </p>
-                </div>
-                
-                <div className="mt-8 grid grid-cols-2 gap-4">
-                  {benefits.slice(0, 4).map((benefit, index) => (
-                    <div key={index} className="flex items-center text-gray-300">
-                      <CheckCircle size={18} className="text-gray-400 mr-2 flex-shrink-0" aria-hidden="true" />
-                      <span className="text-sm">{benefit}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <Link
-                  to="/about"
-                  className="group inline-flex items-center mt-8 px-6 py-3 sword-gradient text-white rounded-xl font-semibold hover:shadow-xl transition-all duration-300 card-hover relative overflow-hidden silver-button-shine"
-                  aria-label="Learn more about Simpolo Trading history"
-                >
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
-                  <span className="relative z-10">Discover Our Journey</span>
-                  <ChevronRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
-                </Link>
-              </div>
-              
-              <div className="animate-on-scroll relative" style={{ animationDelay: '0.2s' }}>
-                <figure className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl card-hover group">
-                  <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1531586024505-b040066c2d5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
-                    alt="Dubai building with premium tile installations"
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    width="600"
-                    height="500"
-                    loading="lazy"
-                  />
-                  <div className="image-card-overlay"></div>
-                  <figcaption className="absolute bottom-0 left-0 right-0 p-8 image-card-content">
-                    <div className="text-xl font-semibold mb-2 text-white">Serving UAE Since 2008</div>
-                    <div className="text-sm text-gray-300">Transforming spaces across the Emirates</div>
-                  </figcaption>
-                </figure>
-                
-                <article className="absolute -bottom-6 -left-6 bg-white/5 backdrop-blur-md p-6 rounded-2xl shadow-2xl w-64 card-hover group relative overflow-hidden">
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <div className="flex items-center mb-4 relative z-10">
-                    <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                      <Package size={20} className="text-gray-900 relative z-10" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-white">24,000+ m²</div>
-                      <div className="text-sm text-gray-400">Annual Production</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center relative z-10">
-                    <div className="p-2 rounded-lg silver-gradient mr-3 relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                      <Globe size={20} className="text-gray-900 relative z-10" aria-hidden="true" />
-                    </div>
-                    <div>
-                      <div className="font-bold text-white">50+ Countries</div>
-                      <div className="text-sm text-gray-400">Global Reach</div>
-                    </div>
-                  </div>
-                </article>
-              </div>
-            </div>
-          </div>
-        </section>
+        <ValuableClients />
 
         <section className="py-24 bg-black">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1074,7 +1111,7 @@ function HomePage() {
                     </h3>
                     <p className="text-sm text-gray-400 mt-2">{project.client}</p>
                     <button 
-                      className="absolute top-4 right-4 p-2 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-4 right-4 p-2 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/70"
                       aria-label={`View details of ${project.title} project`}
                     >
                       <Eye size={20} aria-hidden="true" />

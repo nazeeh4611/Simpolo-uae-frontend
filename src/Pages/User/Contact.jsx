@@ -488,7 +488,7 @@ function Contact() {
                 </a>
 
                 <Link
-                  to="/products"
+                  to="/gallery"
                   className="group px-8 py-4 border-2 border-gray-600 rounded-xl font-semibold hover:bg-white/5 hover:border-gray-400 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
                   aria-label="View our tile products and collections"
                 >
