@@ -10,12 +10,10 @@ function About() {
     title: "About | Simpolo Trading",
     description: "Explore premium tiles and slabs by Simpolo Trading.",
   });
-  // SEO Metadata
   const pageTitle = "About Simpolo Trading LLC | Premium Tile Solutions & Services";
-  const pageDescription = "Learn about Simpolo Trading LLC's 15+ years of excellence in premium tile solutions, porcelain fabrication, and ceramic tiles across UAE. Discover our vision, mission, and partnerships.";
+  const pageDescription = "Learn about Simpolo Trading LLC's excellence in premium tile solutions, porcelain fabrication, and ceramic tiles across UAE. Discover our vision, mission, and partnerships.";
   const pageKeywords = "Simpolo Trading, About Simpolo, Tile Solutions UAE, Porcelain Tiles, Ceramic Tiles, UAE Tile Suppliers, Tile Fabrication, Bathroom Fittings, Flooring Solutions";
   
-  // Partners data
   const partners = [
     { name: 'Simpolo Ceramics', logo: 'SC' },
     { name: 'Volark Indian Tiles', logo: 'VIT' },
@@ -27,11 +25,6 @@ function About() {
     { name: 'Laticrete', logo: 'LAT' },
     { name: 'Mapei', logo: 'MAP' },
     { name: 'Saveto', logo: 'SAV' },
-    { name: 'Johnson Tiles', logo: 'JT' },
-    { name: 'Kajaria', logo: 'KAJ' },
-    { name: 'Somany', logo: 'SOM' },
-    { name: 'Asian Tiles', logo: 'AT' },
-    { name: 'Cera Sanitary', logo: 'CERA' },
   ];
 
   const divisions = [
@@ -46,36 +39,20 @@ function About() {
     'Marble Countertops and Fabrications',
     'Sanitary Ware',
     'Bathroom Fittings',
-    'Kitchen Countertops',
-    'Flooring Solutions',
-    'Wall Cladding',
-    'Pool Coping',
-  ];
-
-  const milestones = [
-    { year: '2008', title: 'Company Founded', description: 'Started operations in Dubai' },
-    { year: '2012', title: 'First Production Unit', description: 'Established manufacturing in India' },
-    { year: '2015', title: 'UAE Fabrication', description: 'Opened facility in Abu Dhabi' },
-    { year: '2018', title: 'Warehouse Expansion', description: 'Expanded Sharjah warehouse' },
-    { year: '2020', title: 'Digital Transformation', description: 'Launched online platform' },
-    { year: '2023', title: 'Regional Expansion', description: 'Covered all Emirates' },
   ];
 
   const team = [
-    { name: 'Mohammed Al Said', role: 'Founder & CEO', experience: '20+ years' },
-    { name: 'Sarah Johnson', role: 'Head of Operations', experience: '15+ years' },
-    { name: 'Ahmed Hassan', role: 'Technical Director', experience: '18+ years' },
-    { name: 'Layla Mohammed', role: 'Design Manager', experience: '12+ years' },
-    { name: 'Raj Patel', role: 'Production Head', experience: '16+ years' },
-    { name: 'Fatima Al Mansoori', role: 'Client Relations', experience: '10+ years' },
+    { name: 'Mohammed Al Said', role: 'Founder & CEO' },
+    { name: 'Sarah Johnson', role: 'Head of Operations' },
+    { name: 'Ahmed Hassan', role: 'Technical Director' },
+    { name: 'Layla Mohammed', role: 'Design Manager' },
+    { name: 'Raj Patel', role: 'Production Head' },
+    { name: 'Fatima Al Mansoori', role: 'Client Relations' },
   ];
 
-  // Set SEO meta tags
   useEffect(() => {
-    // Update document title
     document.title = pageTitle;
     
-    // Update meta description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
       metaDescription = document.createElement('meta');
@@ -84,7 +61,6 @@ function About() {
     }
     metaDescription.content = pageDescription;
     
-    // Update keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
     if (!metaKeywords) {
       metaKeywords = document.createElement('meta');
@@ -93,7 +69,6 @@ function About() {
     }
     metaKeywords.content = pageKeywords;
     
-    // Add canonical link
     let linkCanonical = document.querySelector('link[rel="canonical"]');
     if (!linkCanonical) {
       linkCanonical = document.createElement('link');
@@ -102,7 +77,6 @@ function About() {
     }
     linkCanonical.href = window.location.href;
     
-    // Add Open Graph meta tags
     const ogTags = [
       { property: 'og:title', content: pageTitle },
       { property: 'og:description', content: pageDescription },
@@ -121,7 +95,6 @@ function About() {
       metaTag.content = tag.content;
     });
     
-    // Add Twitter Card meta tags
     const twitterTags = [
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: pageTitle },
@@ -139,7 +112,6 @@ function About() {
       metaTag.content = tag.content;
     });
     
-    // Add structured data (JSON-LD)
     const structuredData = {
       '@context': 'https://schema.org',
       '@type': 'Organization',
@@ -147,11 +119,9 @@ function About() {
       'description': pageDescription,
       'url': window.location.origin,
       'logo': `${window.location.origin}/simlogo.webp`,
-      'foundingDate': '2008',
-      'founder': 'Mohammed Al Said',
       'address': {
         '@type': 'PostalAddress',
-        'streetAddress': 'Sharjah Industrial Area',
+        'streetAddress': 'Sajja Industrial Area',
         'addressLocality': 'Sharjah',
         'addressRegion': 'UAE',
         'addressCountry': 'AE'
@@ -161,15 +131,9 @@ function About() {
         'telephone': '+971-4-123-4567',
         'contactType': 'customer service',
         'availableLanguage': ['English', 'Arabic', 'Hindi']
-      },
-      'sameAs': [
-        'https://www.linkedin.com/company/simpolo-trading',
-        'https://www.facebook.com/simpolotrading',
-        'https://www.instagram.com/simpolotrading'
-      ]
+      }
     };
     
-    // Remove existing structured data
     const existingScript = document.querySelector('script[type="application/ld+json"]');
     if (existingScript) {
       existingScript.remove();
@@ -180,7 +144,6 @@ function About() {
     script.text = JSON.stringify(structuredData);
     document.head.appendChild(script);
     
-    // Intersection Observer for animations
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -198,10 +161,9 @@ function About() {
 
   return (
     <>
-      {/* Hidden SEO content for search engines */}
       <div className="sr-only" aria-hidden="true">
         <h1>About Simpolo Trading LLC - Premium Tile Solutions Provider in UAE</h1>
-        <p>Simpolo Trading LLC is a leading provider of premium tile solutions in UAE since 2008. Specializing in porcelain tiles, ceramic tiles, marble fabrication, and bathroom fittings across all Emirates.</p>
+        <p>Simpolo Trading LLC is a UAE-based trading and project-focused supply company with direct access to its own manufacturing operations.</p>
         <h2>Our Services:</h2>
         <ul>
           <li>Porcelain and Ceramic Tiles Supply</li>
@@ -211,7 +173,7 @@ function About() {
           <li>Flooring and Wall Cladding</li>
           <li>Swimming Pool Tiles</li>
         </ul>
-        <p>Operating from Sharjah, Abu Dhabi, and Dubai with global partnerships including RAK Ceramics, Kajaria, TOTO, and Mapei.</p>
+        <p>Operating from Sharjah, Abu Dhabi, and Dubai with global partnerships including RAK Ceramics, Simpolo Ceramics, TOTO, and Mapei.</p>
       </div>
 
       <main className="min-h-screen bg-black">
@@ -315,33 +277,6 @@ function About() {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
           }
-          .timeline-item {
-            position: relative;
-          }
-          .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 24px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #c0c0c0;
-            border: 3px solid #1a1a1a;
-            box-shadow: 0 0 0 3px rgba(192, 192, 192, 0.2);
-          }
-          .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 5px;
-            top: 40px;
-            bottom: -20px;
-            width: 2px;
-            background: linear-gradient(to bottom, #c0c0c0, transparent);
-          }
-          .timeline-item:last-child::after {
-            display: none;
-          }
           .excellence-text {
             display: inline-block;
             background: linear-gradient(135deg, #c0c0c0 0%, #d4d4d4 50%, #e8e8e8 100%);
@@ -423,7 +358,7 @@ function About() {
                 <div className="inline-flex items-center mb-6 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 relative overflow-hidden">
                   <div className="absolute inset-0 sword-shimmer opacity-30"></div>
                   <Sparkles size={18} className="mr-2 text-gray-400 relative z-10" />
-                  <span className="text-gray-400 font-medium relative z-10">Our Legacy</span>
+                  <span className="text-gray-400 font-medium relative z-10">Who We Are</span>
                 </div>
 
                 <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white">
@@ -438,10 +373,11 @@ function About() {
                   <Typewriter
                     options={{
                       strings: [
-                        '15+ Years of Excellence',
-                        'Pioneering Tile Solutions',
-                        'Quality That Endures',
-                        'Innovation in Design',
+                        'Pioneering Excellence in Tile Solutions',
+                        'UAE-based Trading Company',
+                        'Direct Manufacturing Access',
+                        'Quality Crafted for Delight',
+                        'Innovative Design Capability',
                         'Your Trusted Partner',
                         'Transforming Spaces'
                       ],
@@ -455,9 +391,8 @@ function About() {
                 </div>
 
                 <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-3xl leading-relaxed">
-                  From humble beginnings to becoming a market leader, Simpolo Trading LLC has redefined
-                  excellence in premium tile solutions. Our journey spans over a decade of innovation,
-                  quality craftsmanship, and unwavering commitment to customer satisfaction.
+                  Established in the heart of the UAE, Simpolo Trading LLC is a trusted name in premium tiles and sanitary solutions, 
+                  delivering elegance, performance, and lasting quality for residential and commercial projects.
                 </p>
 
                 <Link
@@ -491,11 +426,116 @@ function About() {
         <section className="py-24 bg-black">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
+              <div className="animate-on-scroll mb-16">
+                <div className="text-center mb-12">
+                  <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                    Our <span className="excellence-text">Excellence</span>
+                  </h2>
+                  <p className="text-gray-400 max-w-3xl mx-auto text-lg">
+                    Pioneering excellence in tile solutions through innovation and quality craftsmanship
+                  </p>
+                </div>
+
+                <div className="grid lg:grid-cols-2 gap-12 items-start">
+                  <div className="space-y-8">
+                    <article className="bg-white/5 backdrop-blur-md p-8 rounded-3xl card-hover border border-gray-700 relative overflow-hidden group">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                      <div className="flex items-start mb-4 relative z-10">
+                        <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                          <Building className="text-gray-900 relative z-10" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white mb-2">Advanced Manufacturing</h3>
+                          <p className="text-gray-300 leading-relaxed">
+                            We specialize in advanced tile solutions crafted using cutting-edge manufacturing technology and 
+                            produced in full compliance with international standards including BS/EN and ANSI/ASTM, ensuring 
+                            exceptional durability, precision, and finish.
+                          </p>
+                        </div>
+                      </div>
+                    </article>
+                    
+                    <article className="bg-white/5 backdrop-blur-md p-8 rounded-3xl card-hover border border-gray-700 relative overflow-hidden group">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                      <div className="flex items-start mb-4 relative z-10">
+                        <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                          <Package className="text-gray-900 relative z-10" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white mb-2">State-of-the-Art Facilities</h3>
+                          <p className="text-gray-300 leading-relaxed">
+                            Our state-of-the-art manufacturing facility in India. Fabrication works, including cutting and 
+                            customization, are handled at our dedicated warehouse facility. Additionally, we operate a 
+                            porcelain tile production unit in ICAD, Abu Dhabi, focused exclusively on manufacturing and 
+                            efficient delivery across all Emirates.
+                          </p>
+                        </div>
+                      </div>
+                    </article>
+                  </div>
+                  
+                  <div className="space-y-8">
+                    <article className="sword-gradient text-white p-8 rounded-3xl border border-gray-600 relative overflow-hidden group">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                      <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Trusted Partnership</h3>
+                      <p className="text-gray-300 mb-6 leading-relaxed relative z-10">
+                        Driven by quality, innovation, and reliability, Simpolo Trading LLC is the preferred partner for 
+                        architects, contractors, developers, and interior designers seeking refined solutions and 
+                        dependable execution.
+                      </p>
+                      <div className="space-y-6 relative z-10">
+                        {[
+                          'Direct manufacturing access',
+                          'BS/EN and ANSI/ASTM certified',
+                          'Customized tile sizes',
+                          'Fast delivery solutions',
+                          'Immediate stock availability',
+                          'High-volume capacity',
+                          'Flexibility for project schedules'
+                        ].map((item, index) => (
+                          <div key={index} className="flex items-center pl-4">
+                            <CheckCircle size={20} className="text-gray-400 mr-4 flex-shrink-0" />
+                            <span className="text-gray-300">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </article>
+                    
+                    <article className="bg-white/5 backdrop-blur-md p-8 rounded-3xl card-hover border-r-4 border-gray-600 relative overflow-hidden group">
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                      <div className="flex items-start mb-4 relative z-10">
+                        <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                          <Heart className="text-gray-900 relative z-10" size={24} />
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white mb-2">Market Presence</h3>
+                          <p className="text-gray-300 leading-relaxed">
+                            We serve residential, commercial, hospitality, and government projects across 
+                            Abu Dhabi, Dubai, Sharjah, and the Northern Emirates with personalized solutions.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-6 grid grid-cols-2 gap-4 relative z-10">
+                        {['Dubai', 'Abu Dhabi', 'Sharjah', 'All Emirates'].map((item, idx) => (
+                          <div key={idx} className="flex items-center text-sm text-gray-300">
+                            <CheckCircle size={16} className="text-gray-400 mr-2" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid lg:grid-cols-3 gap-8 mb-16">
                 {[
-                  { icon: Users, value: '300+', label: 'Happy Clients', desc: 'Across UAE' },
-                  { icon: Award, value: '500+', label: 'Projects', desc: 'Successfully Completed' },
-                  { icon: Globe, value: '15+', label: 'Years', desc: 'Industry Experience' },
+                  { icon: Users, value: 'India', label: 'Production Unit', desc: 'Advanced Technology' },
+                  { icon: Award, value: 'UAE', label: 'Fabrication Facility', desc: 'ICAD, Abu Dhabi' },
+                  { icon: Globe, value: 'Dual', label: 'Production Strength', desc: 'Consistent Supply' },
                 ].map((stat, index) => (
                   <article 
                     key={index} 
@@ -512,116 +552,6 @@ function About() {
                     <div className="text-sm text-gray-400">{stat.desc}</div>
                   </article>
                 ))}
-              </div>
-
-              <div className="animate-on-scroll">
-                <div className="inline-flex items-center mb-4 px-4 py-2 rounded-full bg-white/5 backdrop-blur border border-gray-700 text-gray-300 text-sm font-semibold relative overflow-hidden">
-                  <div className="absolute inset-0 sword-shimmer opacity-20"></div>
-                  <Briefcase size={18} className="mr-2 relative z-10" /> 
-                  <span className="relative z-10">Our Journey</span>
-                </div>
-                
-                <h2 className="text-4xl md:text-5xl font-bold mb-12 text-white">
-                  Crafting <span className="excellence-text">Excellence</span> Since 2008
-                </h2>
-                
-                <div className="grid lg:grid-cols-2 gap-12 items-start">
-                  <div className="space-y-8">
-                    <article className="bg-white/5 backdrop-blur-md p-8 rounded-3xl card-hover border border-gray-700 relative overflow-hidden group">
-                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <div className="flex items-start mb-4 relative z-10">
-                        <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
-                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                          <Building className="text-gray-900 relative z-10" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-white mb-2">Company Foundation</h3>
-                          <p className="text-gray-300 leading-relaxed">
-                            <strong>Simpolo Trading LLC</strong> began its journey 
-                            in 2008 with a vision to revolutionize the tile industry in UAE through 
-                            superior quality and innovative designs.
-                          </p>
-                        </div>
-                      </div>
-                    </article>
-                    
-                    <article className="bg-white/5 backdrop-blur-md p-8 rounded-3xl card-hover border border-gray-700 relative overflow-hidden group">
-                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <div className="flex items-start mb-4 relative z-10">
-                        <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
-                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                          <Package className="text-gray-900 relative z-10" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-white mb-2">Manufacturing Excellence</h3>
-                          <p className="text-gray-300 leading-relaxed">
-                            Our state-of-the-art production unit in India employs cutting-edge technology 
-                            meeting BS/EN and ANSI/ASTM standards, ensuring exceptional product quality 
-                            and innovative design capability.
-                          </p>
-                        </div>
-                      </div>
-                    </article>
-                    
-                    <article className="bg-white/5 backdrop-blur-md p-8 rounded-3xl card-hover border border-gray-700 relative overflow-hidden group">
-                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <div className="flex items-start mb-4 relative z-10">
-                        <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
-                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                          <Truck className="text-gray-900 relative z-10" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-white mb-2">UAE Operations</h3>
-                          <p className="text-gray-300 leading-relaxed">
-                            With a dedicated fabrication facility in ICAD, Abu Dhabi and warehousing in 
-                            Sharjah, we provide rapid customization and reliable delivery across all Emirates.
-                          </p>
-                        </div>
-                      </div>
-                    </article>
-                  </div>
-                  
-                  <div className="space-y-8">
-                    <article className="sword-gradient text-white p-8 rounded-3xl border border-gray-600 relative overflow-hidden group">
-                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Our Timeline</h3>
-                      <div className="space-y-8 pl-6 relative z-10">
-                        {milestones.map((milestone, index) => (
-                          <div key={index} className="timeline-item pl-8">
-                            <time dateTime={milestone.year} className="text-3xl font-bold text-gray-400 mb-1">{milestone.year}</time>
-                            <h4 className="text-lg font-semibold mb-1 text-white">{milestone.title}</h4>
-                            <p className="text-gray-300 text-sm">{milestone.description}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </article>
-                    
-                    <article className="bg-white/5 backdrop-blur-md p-8 rounded-3xl card-hover border-r-4 border-gray-600 relative overflow-hidden group">
-                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                      <div className="flex items-start mb-4 relative z-10">
-                        <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
-                          <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                          <Heart className="text-gray-900 relative z-10" size={24} />
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-white mb-2">Customer Commitment</h3>
-                          <p className="text-gray-300 leading-relaxed">
-                            We serve residential, commercial, hospitality, and government projects with 
-                            personalized solutions, technical support, and after-sales service.
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mt-6 grid grid-cols-2 gap-4 relative z-10">
-                        {['Free Consultation', 'Custom Designs', 'Installation Support', '10-Year Warranty'].map((item, idx) => (
-                          <div key={idx} className="flex items-center text-sm text-gray-300">
-                            <CheckCircle size={16} className="text-gray-400 mr-2" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </article>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -641,17 +571,15 @@ function About() {
                     <h2 className="text-3xl md:text-4xl font-bold text-white">Our Vision</h2>
                   </div>
                   <p className="text-lg text-gray-300 mb-8 leading-relaxed relative z-10">
-                    To become the most trusted and preferred tile supplier in the UAE market by consistently 
-                    delivering superior ceramic, porcelain, and specialty tile solutions that transform spaces 
-                    and exceed expectations.
+                    To become one of the most trusted and preferred tile suppliers in the UAE market by consistently 
+                    delivering high-quality ceramic, porcelain, and specialty tile solutions.
                   </p>
                   <ul className="space-y-4 relative z-10">
                     {[
-                      'Establish market leadership across all Emirates',
-                      'Pioneer innovative and sustainable tile solutions',
-                      'Deliver unmatched customer service excellence',
-                      'Expand global partnerships and reach',
-                      'Set industry benchmarks for quality and innovation'
+                      'Strengthen presence across all Emirates',
+                      'Provide durable products and innovative designs',
+                      'Meet growing needs of residential, commercial, and hospitality projects',
+                      'Set benchmark for professionalism and product excellence'
                     ].map((item, index) => (
                       <li key={index} className="flex items-start group">
                         <div className="p-2 rounded-full bg-gray-800 mr-4 mt-1 group-hover:silver-gradient transition-all duration-300 relative overflow-hidden">
@@ -676,18 +604,15 @@ function About() {
                     <h2 className="text-3xl md:text-4xl font-bold text-white">Our Mission</h2>
                   </div>
                   <p className="text-lg text-gray-300 mb-8 leading-relaxed relative z-10">
-                    To deliver world-class services and solutions for all porcelain and ceramic tile 
-                    requirements with uncompromising quality, technical excellence, and customer-centric 
-                    innovation.
+                    To deliver world-class services and solutions for all requirements related to porcelain and ceramic tiles.
                   </p>
                   <ul className="space-y-4 relative z-10">
                     {[
-                      'Advanced manufacturing with precision engineering',
-                      'Efficient logistics and quality assurance systems',
-                      'Timely delivery and technical excellence',
-                      'Customer-first approach from concept to completion',
-                      'Sustainable practices and eco-friendly solutions',
-                      'Continuous innovation in design and technology'
+                      'Combine advanced manufacturing and precision',
+                      'Ensure quality and timely delivery',
+                      'Provide reliable service',
+                      'Become preferred partner for every project',
+                      'Support from concept to completion'
                     ].map((item, index) => (
                       <li key={index} className="flex items-start group">
                         <div className="p-2 rounded-full bg-gray-800 mr-4 mt-1 group-hover:silver-gradient transition-all duration-300 relative overflow-hidden">
@@ -721,7 +646,7 @@ function About() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {divisions.map((division, index) => (
                   <article
                     key={index}
@@ -747,7 +672,9 @@ function About() {
                         <div className="w-full bg-gray-800 rounded-full h-2">
                           <div className="silver-gradient h-2 rounded-full w-0 group-hover:w-full transition-all duration-500"></div>
                         </div>
+                        <Link to='/gallery'>
                         <span className="ml-2 group-hover:text-gray-300 transition-colors">View Details</span>
+                        </Link>
                       </div>
                     </div>
                   </article>
@@ -765,7 +692,7 @@ function About() {
                   Meet Our <span className="text-gray-300">Leadership</span>
                 </h2>
                 <p className="text-gray-400 max-w-2xl mx-auto text-lg">
-                  Experienced professionals dedicated to excellence and innovation
+                  Dedicated professionals committed to excellence and innovation
                 </p>
               </div>
 
@@ -786,10 +713,6 @@ function About() {
                         <h3 className="text-lg font-semibold text-white">{member.name}</h3>
                         <p className="text-sm text-gray-400">{member.role}</p>
                       </div>
-                    </div>
-                    <div className="mb-4 relative z-10">
-                      <p className="text-sm text-gray-400">Experience</p>
-                      <p className="text-lg font-semibold text-white">{member.experience}</p>
                     </div>
                     <div className="pt-4 border-t border-gray-700 relative z-10">
                       <div className="flex items-center text-sm text-gray-400 group-hover:text-gray-300 transition-colors">
@@ -872,9 +795,9 @@ function About() {
                       <MapPin size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" />
                       <div>
                         <div className="font-bold mb-1 text-gray-300">Our Locations</div>
-                        <p className="text-gray-400 text-sm">Sharjah Industrial Area, UAE</p>
+                        <p className="text-gray-400 text-sm">Sajja Industrial Area, Sharjah</p>
                         <p className="text-gray-400 text-sm">ICAD, Abu Dhabi</p>
-                        <p className="text-gray-400 text-sm">Jebel Ali Free Zone, Dubai</p>
+                        <p className="text-gray-400 text-sm">Dubai, UAE</p>
                       </div>
                     </div>
                     <div className="flex items-start">
@@ -946,7 +869,7 @@ function About() {
                 Ready to Work <span className="excellence-text">With Us?</span>
               </h2>
               <p className="text-xl mb-10 text-gray-300 max-w-2xl mx-auto leading-relaxed">
-                Join our network of satisfied clients and experience the Simpolo difference in quality, service, and innovation
+                Experience the Simpolo difference in quality, service, and innovation
               </p>
               
               <div className="flex flex-wrap gap-4 justify-center">
@@ -958,16 +881,6 @@ function About() {
                   <div className="absolute inset-0 sword-shimmer opacity-30"></div>
                   <span className="relative z-10">Start Your Project</span>
                   <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
-                </Link>
-                
-                <Link
-                  to="/careers"
-                  className="group px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-semibold hover:bg-white/5 hover:border-gray-500 transition-all duration-300 flex items-center space-x-3 card-hover relative overflow-hidden"
-                  aria-label="Join our team at Simpolo Trading LLC"
-                >
-                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                  <span className="relative z-10">Join Our Team</span>
-                  <ChevronRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
                 </Link>
                 
                 <Link
@@ -984,10 +897,10 @@ function About() {
               <div className="mt-16 pt-12 border-t border-gray-800">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-white">
                   {[
-                    { value: '15+', label: 'Years Experience' },
-                    { value: '500+', label: 'Projects Completed' },
-                    { value: '300+', label: 'Happy Clients' },
-                    { value: '50+', label: 'Global Partners' }
+                    { value: 'India', label: 'Production Unit' },
+                    { value: 'UAE', label: 'Fabrication Facility' },
+                    { value: 'BS/EN', label: 'Certified Quality' },
+                    { value: 'ANSI/ASTM', label: 'Standards Compliant' }
                   ].map((stat, index) => (
                     <div key={index} className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
                       <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>

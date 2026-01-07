@@ -15,8 +15,8 @@ function HomePage() {
   });
   
   const pageTitle = "Simpolo Trading LLC | Premium Tile Solutions & Sanitary Ware UAE";
-  const pageDescription = "Simpolo Trading LLC - UAE's leading supplier of premium porcelain tiles, ceramic tiles, marble, and sanitary ware. 15+ years expertise in luxury tile solutions across Emirates.";
-  const pageKeywords = "Simpolo Trading UAE, premium tiles Dubai, porcelain tiles UAE, ceramic tiles suppliers, marble tiles Dubai, bathroom fittings UAE, tile suppliers Sharjah, sanitary ware Abu Dhabi";
+  const pageDescription = "Simpolo Trading LLC - UAE's leading supplier of premium porcelain tiles, ceramic tiles, marble, and sanitary ware with direct manufacturing access and UAE fabrication facility.";
+  const pageKeywords = "Simpolo Trading UAE, porcelain tiles UAE, ceramic tiles suppliers, marble tiles Dubai, bathroom fittings UAE, tile suppliers Sharjah, sanitary ware Abu Dhabi";
 
   const [loaded, setLoaded] = useState(false);
   const [featuredProjects, setFeaturedProjects] = useState([]);
@@ -30,22 +30,22 @@ function HomePage() {
     { 
       icon: Shield,
       title: 'Direct Manufacturing Access',
-      description: 'Full control over production quality and timelines'
+      description: 'Own production unit in India with advanced technology'
     },
     { 
       icon: Award,
       title: 'International Standards',
-      description: 'BS / EN and ANSI / ASTM certified products'
+      description: 'BS/EN and ANSI/ASTM certified products'
     },
     { 
       icon: Clock,
       title: 'UAE Fabrication Facility',
-      description: 'Rapid customization and fast delivery'
+      description: 'ICAD Abu Dhabi facility for fast delivery'
     },
     { 
       icon: Sparkles,
       title: 'Immediate Stock Availability',
-      description: 'Ready-to-ship inventory in Sharjah warehouse'
+      description: 'Warehouse in Sajja Industrial Area, Sharjah'
     }
   ];
 
@@ -53,7 +53,7 @@ function HomePage() {
     {
       src: '/1.webp',
       title: 'Porcelain Tiles',
-      description: 'Durable and non-porous tiles in various sizes and finishes',
+      description: 'Durable, non-porous tiles made from refined clay',
       link: '/gallery?category=Porcelain Tiles',
       tag: 'Premium'
     },
@@ -67,21 +67,21 @@ function HomePage() {
     {
       src: '/3.webp',
       title: 'Slab Tiles',
-      description: 'Large format slabs for seamless installations',
+      description: 'Large-format porcelain tiles for seamless look',
       link: '/gallery?category=Slab Tiles',
       tag: 'Modern'
     },
     {
       src: '/4.webp',
       title: 'Ceramic Tiles',
-      description: 'Traditional and modern ceramic tile solutions',
+      description: 'Manufactured from clay with consistent quality',
       link: '/gallery?category=Ceramic Tiles',
       tag: 'Classic'
     },
     {
       src: '/5.webp',
       title: 'Outdoor Heavy-Duty Tiles',
-      description: 'Weather-resistant tiles for outdoor applications',
+      description: 'Anti-slip finishes for outdoor applications',
       link: '/gallery?category=Outdoor Heavy-Duty Tiles',
       tag: 'Durable'
     },
@@ -95,65 +95,65 @@ function HomePage() {
     {
       src: '/7.webp',
       title: 'Swimming Pool Tiles',
-      description: 'Color-stable, water-resistant tiles for pools and spas',
+      description: 'Color-stable, water-resistant tiles for pools',
       link: '/gallery?category=Swimming Pool Tiles',
       tag: 'Specialty'
     },
     {
       src: '/8.webp',
       title: 'Marble and Granite',
-      description: 'Natural stone with elegant patterns and timeless appeal',
+      description: 'Natural stone with elegant patterns',
       link: '/gallery?category=Marble and Granite',
       tag: 'Luxury'
     },
     {
       src: '/9.webp',
       title: 'Marble Countertops and Fabrications',
-      description: 'Custom marble countertops and stone fabrications',
+      description: 'Custom marble countertops and fabrications',
       link: '/gallery?category=Marble Countertops and Fabrications',
       tag: 'Premium'
     },
   ];
 
   const stats = [
-    { icon: Star, value: '500+', label: 'Completed Projects' },
-    { icon: Users, value: '300+', label: 'Happy Clients' },
-    { icon: Award, value: '15+', label: 'Years Experience' },
-    { icon: TrendingUp, value: '98%', label: 'Client Satisfaction' }
+    { icon: Star, value: 'Direct', label: 'Manufacturing Access' },
+    { icon: Users, value: 'Dual', label: 'Production Strength' },
+    { icon: Award, value: 'BS/EN', label: 'Certified Quality' },
+    { icon: TrendingUp, value: 'UAE', label: 'Fabrication Facility' }
   ];
 
   const services = [
     {
       icon: Home,
       title: 'Residential Projects',
-      description: 'Complete tile solutions for villas, apartments, and residential complexes'
+      description: 'Complete tile solutions for residential projects'
     },
     {
       icon: Building,
       title: 'Commercial Spaces',
-      description: 'Durable and stylish tiles for offices, malls, and commercial buildings'
+      description: 'Tiles for commercial and government projects'
     },
     {
       icon: Hotel,
       title: 'Hospitality Industry',
-      description: 'Luxury tiles for hotels, resorts, and hospitality establishments'
+      description: 'Luxury tiles for hotels and resorts'
     },
     {
       icon: ShoppingBag,
-      title: 'Retail Stores',
-      description: 'Custom tile designs for retail spaces and showrooms'
+      title: 'Project Support',
+      description: 'Fast delivery solutions for ongoing projects'
     }
   ];
 
   const benefits = [
-    'Direct factory prices',
-    'Custom size and design options',
-    'Quick delivery across UAE',
-    'Professional installation support',
-    '10-year warranty on premium tiles',
-    'Free consultation and samples',
-    'Project management services',
-    'After-sales support'
+    'Direct manufacturing operations',
+    'Customized tile sizes',
+    'Fast delivery across UAE',
+    'Large-scale production capacity',
+    'BS/EN and ANSI/ASTM standards',
+    'Immediate stock availability',
+    'Integrated production ecosystem',
+    'Modern showroom and warehousing'
   ];
 
   useEffect(() => {
@@ -231,7 +231,7 @@ function HomePage() {
       'image': `${window.location.origin}/ban.webp`,
       'address': {
         '@type': 'PostalAddress',
-        'streetAddress': 'Sharjah Industrial Area',
+        'streetAddress': 'Sajja Industrial Area',
         'addressLocality': 'Sharjah',
         'addressRegion': 'UAE',
         'addressCountry': 'AE'
@@ -242,9 +242,6 @@ function HomePage() {
         'Fr 09:00-13:00',
         'Sa 09:00-13:00'
       ],
-      'priceRange': '$$',
-      'currenciesAccepted': 'AED',
-      'paymentAccepted': 'Cash, Credit Card',
       'areaServed': {
         '@type': 'GeoCircle',
         'geoMidpoint': {
@@ -279,15 +276,7 @@ function HomePage() {
             'description': 'Natural stone tiles and slabs'
           }
         }
-      ],
-      'aggregateRating': {
-        '@type': 'AggregateRating',
-        'ratingValue': '4.8',
-        'reviewCount': '300'
-      },
-      'founder': 'Mohammed Al Said',
-      'foundingDate': '2008',
-      'numberOfEmployees': '50'
+      ]
     };
     
     const existingScript = document.querySelector('script[type="application/ld+json"]');
@@ -369,7 +358,6 @@ function HomePage() {
     }
   };
 
-  // Close modal on escape key
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') closeModal();
@@ -384,7 +372,6 @@ function HomePage() {
     };
   }, [showModal]);
 
-  // Handle click outside modal
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -443,7 +430,6 @@ function HomePage() {
           ref={modalRef}
           className="relative w-full max-w-6xl max-h-[95vh] overflow-y-auto bg-gray-900 rounded-2xl shadow-2xl"
         >
-          {/* Close Button */}
           <button
             onClick={closeModal}
             className="absolute top-4 right-4 z-50 p-3 rounded-full bg-black/80 text-white hover:bg-black hover:scale-110 transition-all duration-200"
@@ -452,10 +438,8 @@ function HomePage() {
             <X size={24} aria-hidden="true" />
           </button>
           
-          {/* Image Slider Section */}
           {selectedProject.images && selectedProject.images.length > 0 && (
             <div className="relative h-96 md:h-[500px] overflow-hidden rounded-t-2xl">
-              {/* Main Image */}
               <div className="relative w-full h-full">
                 <ImageWithFallback
                   key={`project-image-${selectedProject._id}-${currentImageIndex}`}
@@ -468,7 +452,6 @@ function HomePage() {
                 />
               </div>
               
-              {/* Navigation Arrows */}
               {selectedProject.images.length > 1 && (
                 <>
                   <button
@@ -489,12 +472,10 @@ function HomePage() {
                 </>
               )}
               
-              {/* Image Counter */}
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full bg-black/70 text-white text-sm z-10 backdrop-blur-sm">
                 {currentImageIndex + 1} / {selectedProject.images.length}
               </div>
               
-              {/* Thumbnail Navigation */}
               {selectedProject.images.length > 1 && (
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex justify-center space-x-2 z-10">
                   {selectedProject.images.map((_, index) => (
@@ -517,7 +498,6 @@ function HomePage() {
             </div>
           )}
   
-          {/* Content Section */}
           <div className="p-6 md:p-8">
             <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
               {selectedProject.title}
@@ -583,7 +563,6 @@ function HomePage() {
               </div>
             )}
   
-            {/* Additional Images Grid */}
             {selectedProject.images && selectedProject.images.length > 1 && (
               <div>
                 <h4 className="text-lg font-semibold text-white mb-3">Project Gallery</h4>
@@ -627,7 +606,7 @@ function HomePage() {
     <>
       <div className="sr-only" aria-hidden="true">
         <h1>Simpolo Trading LLC - Premium Tile Solutions Provider in UAE</h1>
-        <p>Leading supplier of porcelain tiles, ceramic tiles, marble, granite, and sanitary ware across United Arab Emirates since 2008.</p>
+        <p>Leading supplier of porcelain tiles, ceramic tiles, marble, granite, and sanitary ware with direct manufacturing operations.</p>
         
         <h2>Our Services:</h2>
         <ul>
@@ -638,33 +617,16 @@ function HomePage() {
           <li>Custom Tile Fabrication Services</li>
           <li>Swimming Pool Tiles Installation</li>
           <li>Outdoor Heavy-Duty Tiles</li>
-          <li>Project Management Services</li>
-        </ul>
-        
-        <h2>Locations Served:</h2>
-        <ul>
-          <li>Dubai</li>
-          <li>Abu Dhabi</li>
-          <li>Sharjah</li>
-          <li>Ajman</li>
-          <li>Ras Al Khaimah</li>
-          <li>Fujairah</li>
-          <li>Umm Al Quwain</li>
         </ul>
         
         <h2>Why Choose Us:</h2>
         <ul>
-          <li>15+ Years Industry Experience</li>
           <li>Direct Manufacturing Access</li>
           <li>BS/EN and ANSI/ASTM Certified</li>
           <li>UAE Fabrication Facility</li>
           <li>Immediate Stock Availability</li>
-          <li>500+ Successful Projects</li>
-          <li>300+ Happy Clients</li>
-          <li>98% Client Satisfaction Rate</li>
+          <li>Dual Production Strength</li>
         </ul>
-        
-        <p>Contact us today for free consultation and samples: +971 4 123 4567 | info@simpolotrading.com</p>
       </div>
 
       <main className="min-h-screen bg-black">
@@ -919,9 +881,10 @@ function HomePage() {
                 <Typewriter
                   options={{
                     strings: [
-                      'Crafted for quality designed for Delight',
-                      "Crafted for Excellence",
-                      "Designed for Perfection",
+                      'Pioneering Excellence in Tile Solutions',
+                      "Crafted for quality designed for Delight",
+                      "Direct Manufacturing Access",
+                      "UAE Fabrication Facility",
                       "Premium Tile Solutions",
                       "Your Trusted Partner",
                       "Innovative Designs",
@@ -937,10 +900,8 @@ function HomePage() {
               </div>
 
               <p className="text-lg md:text-xl mb-10 text-gray-300 max-w-2xl leading-relaxed">
-                Your trusted partner for premium tiles, sanitary ware, and bathroom
-                fittings across the UAE. Delivering exceptional quality through direct
-                manufacturing and innovative solutions with 15+ years of expertise in
-                transforming spaces.
+                Established in the heart of the UAE, Simpolo Trading LLC is a trusted name in premium tiles and sanitary solutions, 
+                delivering elegance, performance, and lasting quality for residential and commercial projects.
               </p>
 
               <div className="flex flex-wrap gap-4">
@@ -1067,6 +1028,79 @@ function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 animate-on-scroll">
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                Our <span className="showcase-text">Story</span>
+              </h2>
+              <p className="text-gray-400 max-w-2xl mx-auto text-lg">
+                Pioneering excellence in tile solutions through innovation and quality craftsmanship
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="animate-on-scroll">
+                <div className="sword-gradient rounded-2xl p-8 text-white card-hover relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <h3 className="text-2xl font-bold mb-6 text-gray-300 relative z-10">Our Excellence</h3>
+                  <p className="text-gray-300 mb-6 leading-relaxed relative z-10">
+                    We specialize in advanced tile solutions crafted using cutting-edge manufacturing technology and 
+                    produced in full compliance with international standards including BS/EN and ANSI/ASTM, ensuring 
+                    exceptional durability, precision, and finish.
+                  </p>
+                  <p className="text-gray-300 mb-6 leading-relaxed relative z-10">
+                    Our state-of-the-art manufacturing facility in India. Fabrication works, including cutting and 
+                    customization, are handled at our dedicated warehouse facility. Additionally, we operate a 
+                    porcelain tile production unit in ICAD, Abu Dhabi, focused exclusively on manufacturing and 
+                    efficient delivery across all Emirates.
+                  </p>
+                  <div className="mt-8 grid grid-cols-2 gap-4 relative z-10">
+                    {['Architects', 'Contractors', 'Developers', 'Interior Designers'].map((item, index) => (
+                      <div key={index} className="flex items-center text-gray-300">
+                        <CheckCircle size={18} className="text-gray-400 mr-3 flex-shrink-0" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="animate-on-scroll" style={{ animationDelay: '0.2s' }}>
+                <div className="bg-white/5 backdrop-blur-md rounded-2xl p-8 card-hover border border-gray-700 relative overflow-hidden group">
+                  <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                  <div className="flex items-center mb-6 relative z-10">
+                    <div className="p-3 rounded-xl silver-gradient mr-4 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <Award className="text-gray-900 relative z-10" size={32} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">Trusted Partner</h3>
+                  </div>
+                  <p className="text-gray-300 mb-6 leading-relaxed relative z-10">
+                    Driven by quality, innovation, and reliability, Simpolo Trading LLC is the preferred partner for 
+                    architects, contractors, developers, and interior designers seeking refined solutions and 
+                    dependable execution.
+                  </p>
+                  <div className="space-y-4 relative z-10">
+                    {[
+                      'Advanced manufacturing technology',
+                      'International standards compliance',
+                      'State-of-the-art facilities',
+                      'Efficient delivery network',
+                      'Cutting-edge fabrication'
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center">
+                        <div className="w-2 h-2 rounded-full silver-gradient mr-3"></div>
+                        <span className="text-gray-300">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-black">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate-on-scroll">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
                 Featured <span className="showcase-text">Projects</span>
               </h2>
               <p className="text-gray-400 max-w-2xl mx-auto text-lg">
@@ -1183,7 +1217,7 @@ function HomePage() {
                       <Truck size={24} className="text-gray-400 mr-3" aria-hidden="true" />
                       <div>
                         <div className="font-bold text-gray-300">Fast Delivery Across UAE</div>
-                        <div className="text-sm text-gray-400">24-48 hours for stock items</div>
+                        <div className="text-sm text-gray-400">Covering all Emirates</div>
                       </div>
                     </div>
                   </div>
@@ -1205,9 +1239,9 @@ function HomePage() {
                       <MapPin size={24} className="text-gray-400 mr-4 flex-shrink-0 mt-1" aria-hidden="true" />
                       <div>
                         <div className="font-bold mb-1 text-gray-300">Our Locations</div>
-                        <p className="text-gray-400 text-sm">Sharjah Industrial Area, UAE</p>
+                        <p className="text-gray-400 text-sm">Sajja Industrial Area, Sharjah</p>
                         <p className="text-gray-400 text-sm">ICAD, Abu Dhabi</p>
-                        <p className="text-gray-400 text-sm">Jebel Ali Free Zone, Dubai</p>
+                        <p className="text-gray-400 text-sm">Dubai, UAE</p>
                       </div>
                     </div>
                     <div className="flex items-start">
@@ -1315,23 +1349,23 @@ function HomePage() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-white">
                   <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
                     <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                    <div className="text-4xl font-bold text-white mb-2 relative z-10">24/7</div>
-                    <p className="text-sm text-gray-400 font-medium relative z-10">Project Support</p>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">Direct</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Manufacturing Access</p>
                   </div>
                   <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
                     <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                    <div className="text-4xl font-bold text-white mb-2 relative z-10">500+</div>
-                    <p className="text-sm text-gray-400 font-medium relative z-10">Successful Projects</p>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">Dual</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Production Strength</p>
                   </div>
                   <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
                     <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                    <div className="text-4xl font-bold text-white mb-2 relative z-10">100%</div>
-                    <p className="text-sm text-gray-400 font-medium relative z-10">Quality Guarantee</p>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">BS/EN</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Certified Quality</p>
                   </div>
                   <div className="text-center p-6 rounded-xl bg-white/5 backdrop-blur-sm card-hover relative overflow-hidden group">
                     <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                    <div className="text-4xl font-bold text-white mb-2 relative z-10">15+</div>
-                    <p className="text-sm text-gray-400 font-medium relative z-10">Years Experience</p>
+                    <div className="text-4xl font-bold text-white mb-2 relative z-10">UAE</div>
+                    <p className="text-sm text-gray-400 font-medium relative z-10">Fabrication Facility</p>
                   </div>
                 </div>
               </div>
