@@ -921,7 +921,7 @@ function Portfolio() {
               aria-label="View complete Products"
             >
               <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-              <span className="relative z-10">View Complete Portfolio Gallery</span>
+              <span className="relative z-10">View complete Products</span>
               <ArrowRight size={20} className="ml-2 relative z-10 group-hover:translate-x-2 transition-transform" aria-hidden="true" />
             </Link>
           </div>
