@@ -918,7 +918,7 @@ function Portfolio() {
             <Link
               to="/gallery"
               className="group inline-flex items-center px-8 py-4 border-2 border-gray-600 text-white rounded-xl font-medium hover:bg-white/5 hover:border-gray-500 transition-all duration-300 card-hover relative overflow-hidden"
-              aria-label="View complete portfolio gallery"
+              aria-label="View complete Products"
             >
               <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
               <span className="relative z-10">View Complete Portfolio Gallery</span>
