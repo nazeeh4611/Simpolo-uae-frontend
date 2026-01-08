@@ -1,4 +1,3 @@
-// src/components/admin/GalleryForm.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
@@ -22,6 +21,8 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [catalogFile, setCatalogFile] = useState(null);
+  const [existingCatalog, setExistingCatalog] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -56,6 +57,7 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
     });
     
     setExistingImages(Array.isArray(itemData.images) ? itemData.images : []);
+    setExistingCatalog(itemData.catalog || null);
   };
 
   const handleInputChange = (e) => {
@@ -102,6 +104,24 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
     setImages(prev => [...prev, ...newImages]);
   };
 
+  const handleCatalogUpload = (e) => {
+    const file = e.target.files[0];
+    
+    if (!file) return;
+    
+    if (file.type !== 'application/pdf') {
+      toast.error('Only PDF files are allowed for catalog');
+      return;
+    }
+    
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error('Catalog file size must be less than 20MB');
+      return;
+    }
+    
+    setCatalogFile(file);
+  };
+
   const removeImage = (index) => {
     const image = images[index];
     if (image.preview) {
@@ -139,6 +159,55 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
               } catch (error) {
                 console.error('Error deleting image:', error);
                 toast.error(error.response?.data?.message || 'Failed to delete image');
+                toast.dismiss(t.id);
+              }
+            }}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-red-600 hover:text-red-500 focus:outline-none"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), {
+      duration: Infinity,
+    });
+  };
+
+  const removeCatalog = async () => {
+    if (!isEditMode || !itemData || !existingCatalog) return;
+    
+    toast.custom((t) => (
+      <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
+        <div className="flex-1 w-0 p-4">
+          <div className="flex items-start">
+            <div className="ml-3 flex-1">
+              <p className="text-sm font-medium text-gray-900">Delete Catalog</p>
+              <p className="mt-1 text-sm text-gray-500">Are you sure you want to delete this catalog? This action cannot be undone.</p>
+            </div>
+          </div>
+        </div>
+        <div className="flex border-l border-gray-200">
+          <button
+            onClick={async () => {
+              try {
+                await axios.delete(`${baseurl}admin/gallery/${itemData._id}/catalog`, {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                  }
+                });
+                setExistingCatalog(null);
+                toast.success('Catalog deleted successfully');
+                toast.dismiss(t.id);
+              } catch (error) {
+                console.error('Error deleting catalog:', error);
+                toast.error(error.response?.data?.message || 'Failed to delete catalog');
                 toast.dismiss(t.id);
               }
             }}
@@ -201,6 +270,10 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
         formDataToSend.append('images', image.file);
         formDataToSend.append(`altText_${index}`, image.altText || '');
       });
+
+      if (catalogFile) {
+        formDataToSend.append('catalog', catalogFile);
+      }
 
       if (isEditMode && itemData) {
         await axios.put(`${baseurl}admin/gallery/${itemData._id}`, formDataToSend, {
@@ -365,6 +438,68 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
               className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="e.g., Frost, Stain, Scratch"
             />
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t pt-8">
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          Product Catalog
+        </h2>
+        
+        <div className="space-y-4">
+          {existingCatalog && (
+            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center">
+                <svg className="w-8 h-8 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                </svg>
+                <div>
+                  <p className="font-medium text-gray-900">Existing Catalog</p>
+                  <a 
+                    href={existingCatalog.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    View Catalog
+                  </a>
+                </div>
+              </div>
+              {isEditMode && (
+                <button
+                  type="button"
+                  onClick={removeCatalog}
+                  className="text-red-600 hover:text-red-800 text-sm font-medium"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          )}
+
+          <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-blue-500 transition-colors">
+            <input
+              type="file"
+              accept=".pdf"
+              onChange={handleCatalogUpload}
+              className="hidden"
+              id="catalog-upload"
+            />
+            <label htmlFor="catalog-upload" className="cursor-pointer block">
+              <div className="flex flex-col items-center">
+                <svg className="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+                <p className="text-gray-600 font-medium">Upload Catalog (PDF)</p>
+                <p className="text-sm text-gray-500 mt-1">Maximum file size: 20MB</p>
+                {catalogFile && (
+                  <p className="text-sm text-green-600 mt-2">
+                    Selected: {catalogFile.name}
+                  </p>
+                )}
+              </div>
+            </label>
           </div>
         </div>
       </div>

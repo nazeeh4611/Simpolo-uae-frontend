@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ImageWithFallback } from '../../util/Fallback';
-import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock, Users, Star, Heart, Share2, Download, Grid, List, X, ArrowRight, Play, ImageIcon, Eye, Tag, Layers, ChevronLeft, ChevronRight as ChevronRightIcon, CheckCircle, Ruler, Package, Building, Home, Settings, Check, Info } from 'lucide-react';
+import { Filter, Search, MapPin, Calendar, ChevronRight, Sparkles, Award, Clock, Users, Star, Heart, Share2, Download, Grid, List, X, ArrowRight, Play, ImageIcon, Eye, Tag, Layers, ChevronLeft, ChevronRight as ChevronRightIcon, CheckCircle, Ruler, Package, Building, Home, Settings, Check, Info, FileText } from 'lucide-react';
 import Typewriter from 'typewriter-effect';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -8,15 +8,10 @@ import { baseurl } from '../../util/Base';
 import { useSEO } from '../../util/SEO';
 
 function Gallery() {
-
   useSEO({
     title: "Gallery | Simpolo Trading",
     description: "Explore premium tiles and slabs by Simpolo Trading.",
   });
-  // SEO Metadata
-  const pageTitle = "Gallery | Simpolo Trading LLC - Premium Tile Projects & Installations";
-  const pageDescription = "Explore Simpolo Trading's gallery of premium tile installations across UAE. View porcelain tiles, ceramic tiles, marble fabrication projects and luxury transformations.";
-  const pageKeywords = "tile gallery UAE, porcelain tile projects, ceramic tile installations, marble gallery, bathroom tile design, kitchen tile designs, luxury tile gallery, Simpolo projects";
 
   const [gallery, setGallery] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,116 +41,19 @@ function Gallery() {
   const [sortBy, setSortBy] = useState('date');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [downloadingCatalog, setDownloadingCatalog] = useState({});
   const modalContentRef = useRef(null);
 
   const location = useLocation();
   
-  // Set SEO meta tags
   useEffect(() => {
-    // Update document title
-    document.title = pageTitle;
-    
-    // Update meta description
-    let metaDescription = document.querySelector('meta[name="description"]');
-    if (!metaDescription) {
-      metaDescription = document.createElement('meta');
-      metaDescription.name = 'description';
-      document.head.appendChild(metaDescription);
-    }
-    metaDescription.content = pageDescription;
-    
-    // Update keywords
-    let metaKeywords = document.querySelector('meta[name="keywords"]');
-    if (!metaKeywords) {
-      metaKeywords = document.createElement('meta');
-      metaKeywords.name = 'keywords';
-      document.head.appendChild(metaKeywords);
-    }
-    metaKeywords.content = pageKeywords;
-    
-    // Add canonical link
-    let linkCanonical = document.querySelector('link[rel="canonical"]');
-    if (!linkCanonical) {
-      linkCanonical = document.createElement('link');
-      linkCanonical.rel = 'canonical';
-      document.head.appendChild(linkCanonical);
-    }
-    linkCanonical.href = window.location.href;
-    
-    // Add Open Graph meta tags
-    const ogTags = [
-      { property: 'og:title', content: pageTitle },
-      { property: 'og:description', content: pageDescription },
-      { property: 'og:type', content: 'website' },
-      { property: 'og:url', content: window.location.href },
-      { property: 'og:image', content: `${window.location.origin}/simlogo.webp` },
-    ];
-    
-    ogTags.forEach(tag => {
-      let metaTag = document.querySelector(`meta[property="${tag.property}"]`);
-      if (!metaTag) {
-        metaTag = document.createElement('meta');
-        metaTag.setAttribute('property', tag.property);
-        document.head.appendChild(metaTag);
-      }
-      metaTag.content = tag.content;
-    });
-    
-    // Add Twitter Card meta tags
-    const twitterTags = [
-      { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: pageTitle },
-      { name: 'twitter:description', content: pageDescription },
-      { name: 'twitter:image', content: `${window.location.origin}/simlogo.webp` },
-    ];
-    
-    twitterTags.forEach(tag => {
-      let metaTag = document.querySelector(`meta[name="${tag.name}"]`);
-      if (!metaTag) {
-        metaTag = document.createElement('meta');
-        metaTag.name = tag.name;
-        document.head.appendChild(metaTag);
-      }
-      metaTag.content = tag.content;
-    });
-    
-    // Add structured data for Gallery/CollectionPage
-    const structuredData = {
-      '@context': 'https://schema.org',
-      '@type': 'CollectionPage',
-      'name': 'Simpolo Trading Gallery',
-      'description': pageDescription,
-      'url': window.location.href,
-      'hasPart': gallery.map(item => ({
-        '@type': 'ImageObject',
-        'name': item.title || 'Tile Installation',
-        'description': item.description || 'Premium tile installation by Simpolo Trading',
-        'contentUrl': item.images?.[0]?.url || `${window.location.origin}/default-image.jpg`,
-        'thumbnailUrl': item.images?.[0]?.url || `${window.location.origin}/default-thumb.jpg`,
-        'datePublished': item.createdAt,
-        'category': item.category
-      })).slice(0, 20) // Limit to first 20 items
-    };
-    
-    // Remove existing structured data
-    const existingScript = document.querySelector('script[type="application/ld+json"]');
-    if (existingScript) {
-      existingScript.remove();
-    }
-    
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.text = JSON.stringify(structuredData);
-    document.head.appendChild(script);
-
-    // Handle category from URL
     const queryParams = new URLSearchParams(location.search);
     const categoryFromUrl = queryParams.get('category');
     
     if (categoryFromUrl && categories.includes(categoryFromUrl)) {
       setSelectedCategory(categoryFromUrl);
     }
-  }, [location.search, gallery]);
+  }, [location.search]);
   
   useEffect(() => {
     const fetchGalleryData = async () => {
@@ -265,6 +163,47 @@ function Gallery() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleDownloadCatalog = async (item) => {
+    if (!item.catalog || !item.catalog.url) {
+      alert('No catalog available for this item');
+      return;
+    }
+
+    setDownloadingCatalog(prev => ({ ...prev, [item._id]: true }));
+
+    try {
+      const response = await fetch(item.catalog.url, {
+        method: 'GET',
+        mode: 'cors'
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to download catalog');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      
+      const filename = item.catalog.filename || 
+                      `${item.title.replace(/[^a-z0-9]/gi, '_')}_catalog.pdf` || 
+                      'catalog.pdf';
+      
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+    } catch (error) {
+      console.error('Error downloading catalog:', error);
+      alert('Failed to download catalog. Please try again.');
+    } finally {
+      setDownloadingCatalog(prev => ({ ...prev, [item._id]: false }));
+    }
   };
 
   const formatDate = (dateString) => {
@@ -392,6 +331,15 @@ function Gallery() {
                   </div>
                 )}
                 
+                {item.catalog && (
+                  <div className="absolute top-4 left-16 z-20">
+                    <span className="px-3 py-1.5 bg-blue-900/80 text-blue-100 text-xs font-semibold rounded-full shadow-sm border border-blue-700 relative overflow-hidden">
+                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                      <span className="relative z-10">Catalog</span>
+                    </span>
+                  </div>
+                )}
+                
                 <div className="absolute top-4 right-4 z-20">
                   <button
                     onClick={(e) => {
@@ -455,6 +403,14 @@ function Gallery() {
                       </span>
                     </div>
                   )}
+                  {item.catalog && (
+                    <div className="absolute top-4 left-20">
+                      <span className="px-3 py-1.5 bg-blue-900/80 text-blue-100 text-xs font-semibold rounded-full shadow-sm border border-blue-700 relative overflow-hidden">
+                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
+                        <span className="relative z-10">Catalog</span>
+                      </span>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex-1 p-8">
@@ -494,6 +450,12 @@ function Gallery() {
                         <Calendar size={16} className="mr-1.5" aria-hidden="true" />
                         {item.createdAt ? formatDate(item.createdAt) : 'N/A'}
                       </div>
+                      {item.catalog && (
+                        <div className="flex items-center text-blue-400">
+                          <FileText size={16} className="mr-1.5" aria-hidden="true" />
+                          Catalog Available
+                        </div>
+                      )}
                     </div>
                     
                     <div className="flex items-center text-sm text-gray-300 font-semibold">
@@ -512,7 +474,6 @@ function Gallery() {
 
   return (
     <>
-      {/* Hidden SEO content for search engines */}
       <div className="sr-only" aria-hidden="true">
         <h1>Simpolo Trading Gallery - Premium Tile Installations & Projects</h1>
         <p>Browse our extensive gallery of premium tile installations including porcelain tiles, ceramic tiles, marble fabrications, and bathroom fittings across UAE.</p>
@@ -1020,6 +981,11 @@ function Gallery() {
                             <span className="relative z-10">Featured</span>
                           </span>
                         )}
+                        {selectedImage.catalog && (
+                          <span className="px-3 py-1.5 bg-blue-900/20 text-blue-400 text-xs font-semibold rounded-full border border-blue-700">
+                            Catalog Available
+                          </span>
+                        )}
                         {selectedImage.status && (
                           <span className={`px-3 py-1.5 text-xs font-semibold rounded-full border ${
                             selectedImage.status === 'published' ? 'bg-green-900/20 text-green-400 border-green-700' :
@@ -1061,6 +1027,47 @@ function Gallery() {
                         <p className="text-gray-300 leading-relaxed">
                           {selectedImage.description}
                         </p>
+                      </div>
+                    )}
+                    
+                    {selectedImage.catalog && (
+                      <div>
+                        <h4 className="text-lg font-bold text-white mb-3 flex items-center">
+                          <FileText size={20} className="mr-2" aria-hidden="true" />
+                          Product Catalog
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="bg-white/5 p-4 rounded-lg border border-gray-700">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="text-gray-300 font-medium mb-1">Product Catalog PDF</div>
+                                <div className="text-sm text-gray-400">
+                                  {selectedImage.catalog.filename || 'catalog.pdf'}
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => handleDownloadCatalog(selectedImage)}
+                                disabled={downloadingCatalog[selectedImage._id]}
+                                className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {downloadingCatalog[selectedImage._id] ? (
+                                  <>
+                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                    </svg>
+                                    Downloading...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Download size={16} />
+                                    Download
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
                     
