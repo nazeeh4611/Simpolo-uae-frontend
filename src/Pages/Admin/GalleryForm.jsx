@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { toast } from 'react-hot-toast';
 import { baseurl } from '../../util/Base';
+import { Toaster, toast } from 'react-hot-toast';
+
 
 const galleryCategories = [
   'Porcelain Tiles',
@@ -180,62 +181,44 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
     });
   };
 
-  const removeCatalog = async () => {
-    if (!isEditMode || !itemData || !existingCatalog) return;
-    
+  const removeCatalog = () => {
+    if (!isEditMode || !existingCatalog) return;
+    console.log("first")
+
     toast.custom((t) => (
-      <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}>
-        <div className="flex-1 w-0 p-4">
-          <div className="flex items-start">
-            <div className="ml-3 flex-1">
-              <p className="text-sm font-medium text-gray-900">Delete Catalog</p>
-              <p className="mt-1 text-sm text-gray-500">Are you sure you want to delete this catalog? This action cannot be undone.</p>
-            </div>
-          </div>
+      <div className="max-w-md w-full bg-white shadow-lg rounded-lg flex ring-1 ring-black ring-opacity-5">
+        <div className="flex-1 p-4">
+          <p className="text-sm font-medium text-gray-900">Delete Catalog</p>
+          <p className="mt-1 text-sm text-gray-500">
+            This will be removed when you update the gallery.
+          </p>
         </div>
-        <div className="flex border-l border-gray-200">
+
+        <div className="flex border-l">
           <button
-            onClick={async () => {
-              try {
-                await axios.delete(`${baseurl}admin/gallery/${itemData._id}/catalog`, {
-                  headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                  }
-                });
-                
-                setExistingCatalog(null);
-                setCatalogFile(null);
-                setCatalogRemoved(true);
-                
-                if (onSuccess) {
-                  onSuccess();
-                }
-                
-                toast.success('Catalog deleted successfully');
-                toast.dismiss(t.id);
-              } catch (error) {
-                console.error('Error deleting catalog:', error);
-                toast.error(error.response?.data?.message || 'Failed to delete catalog');
-                toast.dismiss(t.id);
-              }
+            onClick={() => {
+              setExistingCatalog(null);
+              setCatalogFile(null);
+              setCatalogRemoved(true);
+              toast.dismiss(t.id);
+              toast.success("Catalog marked for removal");
             }}
-            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-red-600 hover:text-red-500 focus:outline-none"
+            className="p-4 text-red-600 font-medium"
           >
             Delete
           </button>
           <button
             onClick={() => toast.dismiss(t.id)}
-            className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none"
+            className="p-4 text-gray-600"
           >
             Cancel
           </button>
         </div>
       </div>
-    ), {
-      duration: Infinity,
-    });
+      
+    ), { duration: Infinity });
   };
+  
 
   const handleAltTextChange = (index, value) => {
     setImages(prev => prev.map((img, i) => 
@@ -315,6 +298,17 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
   };
 
   return (
+    <>
+    
+    
+    <Toaster
+    position="top-right"
+    toastOptions={{
+      style: {
+        zIndex: 99999,
+      },
+    }}
+  />
     <form onSubmit={handleSubmit} className="space-y-8">
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-gray-900">Basic Information</h2>
@@ -658,6 +652,8 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
         </button>
       </div>
     </form>
+    </>
+
   );
 };
 
