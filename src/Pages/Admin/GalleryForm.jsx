@@ -19,6 +19,7 @@ const galleryCategories = [
 
 const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel }) => {
   const [loading, setLoading] = useState(false);
+  const [catalogRemoved, setCatalogRemoved] = useState(false);
   const [images, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [catalogFile, setCatalogFile] = useState(null);
@@ -205,6 +206,7 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
                 
                 setExistingCatalog(null);
                 setCatalogFile(null);
+                setCatalogRemoved(true);
                 
                 if (onSuccess) {
                   onSuccess();
@@ -283,6 +285,9 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
       }
 
       if (isEditMode && itemData) {
+        if (isEditMode && catalogRemoved) {
+          formDataToSend.append('removeCatalog', 'true');
+        }        
         await axios.put(`${baseurl}admin/gallery/${itemData._id}`, formDataToSend, {
           headers: {
             'Content-Type': 'multipart/form-data',
