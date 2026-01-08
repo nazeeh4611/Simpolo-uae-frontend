@@ -165,8 +165,12 @@ function Gallery() {
     document.body.removeChild(link);
   };
 
+  const hasCatalog = (item) => {
+    return item.catalog && item.catalog.url && item.catalog.url.trim() !== '';
+  };
+
   const handleDownloadCatalog = async (item) => {
-    if (!item.catalog || !item.catalog.url) {
+    if (!hasCatalog(item)) {
       alert('No catalog available for this item');
       return;
     }
@@ -174,33 +178,43 @@ function Gallery() {
     setDownloadingCatalog(prev => ({ ...prev, [item._id]: true }));
 
     try {
-      const response = await fetch(item.catalog.url, {
-        method: 'GET',
-        mode: 'cors'
+      const response = await axios.get(item.catalog.url, {
+        responseType: 'blob',
+        timeout: 30000,
+        headers: {
+          'Accept': 'application/pdf, */*'
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to download catalog');
+      if (!response.data) {
+        throw new Error('No data received');
       }
 
-      const blob = await response.blob();
+      const blob = new Blob([response.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       
-      const filename = item.catalog.filename || 
-                      `${item.title.replace(/[^a-z0-9]/gi, '_')}_catalog.pdf` || 
-                      'catalog.pdf';
+      const filename = `${item.title ? item.title.replace(/[^a-z0-9]/gi, '_') : 'catalog'}.pdf`;
       
       link.href = url;
       link.download = filename;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
+      
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 100);
       
     } catch (error) {
       console.error('Error downloading catalog:', error);
-      alert('Failed to download catalog. Please try again.');
+      
+      try {
+        window.open(item.catalog.url, '_blank');
+      } catch (fallbackError) {
+        console.error('Fallback also failed:', fallbackError);
+        alert('Failed to download catalog. The file might be unavailable or there might be a network issue.');
+      }
     } finally {
       setDownloadingCatalog(prev => ({ ...prev, [item._id]: false }));
     }
@@ -331,12 +345,32 @@ function Gallery() {
                   </div>
                 )}
                 
-                {item.catalog && (
-                  <div className="absolute top-4 left-16 z-20">
-                    <span className="px-3 py-1.5 bg-blue-900/80 text-blue-100 text-xs font-semibold rounded-full shadow-sm border border-blue-700 relative overflow-hidden">
-                      <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                      <span className="relative z-10">Catalog</span>
-                    </span>
+                {hasCatalog(item) && (
+                  <div className="absolute top-4 left-4 z-20">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDownloadCatalog(item);
+                      }}
+                      disabled={downloadingCatalog[item._id]}
+                      className="px-3 py-1.5 bg-blue-600/80 text-white text-xs font-semibold rounded-full shadow-sm hover:bg-blue-700/80 transition-all border border-blue-500 flex items-center gap-1 relative overflow-hidden group"
+                      aria-label="Download catalog"
+                    >
+                      <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                      {downloadingCatalog[item._id] ? (
+                        <>
+                          <svg className="animate-spin h-3 w-3 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                          </svg>
+                        </>
+                      ) : (
+                        <>
+                          <Download size={12} />
+                          <span className="relative z-10">PDF</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 )}
                 
@@ -403,12 +437,32 @@ function Gallery() {
                       </span>
                     </div>
                   )}
-                  {item.catalog && (
-                    <div className="absolute top-4 left-20">
-                      <span className="px-3 py-1.5 bg-blue-900/80 text-blue-100 text-xs font-semibold rounded-full shadow-sm border border-blue-700 relative overflow-hidden">
-                        <div className="absolute inset-0 sword-shimmer opacity-30"></div>
-                        <span className="relative z-10">Catalog</span>
-                      </span>
+                  {hasCatalog(item) && (
+                    <div className="absolute top-4 left-4">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDownloadCatalog(item);
+                        }}
+                        disabled={downloadingCatalog[item._id]}
+                        className="px-3 py-1.5 bg-blue-600/80 text-white text-xs font-semibold rounded-full shadow-sm hover:bg-blue-700/80 transition-all border border-blue-500 flex items-center gap-1 relative overflow-hidden group"
+                        aria-label="Download catalog"
+                      >
+                        <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-30 transition-opacity"></div>
+                        {downloadingCatalog[item._id] ? (
+                          <>
+                            <svg className="animate-spin h-3 w-3 text-white" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                          </>
+                        ) : (
+                          <>
+                            <Download size={12} />
+                            <span className="relative z-10">PDF</span>
+                          </>
+                        )}
+                      </button>
                     </div>
                   )}
                 </div>
@@ -450,7 +504,7 @@ function Gallery() {
                         <Calendar size={16} className="mr-1.5" aria-hidden="true" />
                         {item.createdAt ? formatDate(item.createdAt) : 'N/A'}
                       </div>
-                      {item.catalog && (
+                      {hasCatalog(item) && (
                         <div className="flex items-center text-blue-400">
                           <FileText size={16} className="mr-1.5" aria-hidden="true" />
                           Catalog Available
@@ -981,7 +1035,7 @@ function Gallery() {
                             <span className="relative z-10">Featured</span>
                           </span>
                         )}
-                        {selectedImage.catalog && (
+                        {hasCatalog(selectedImage) && (
                           <span className="px-3 py-1.5 bg-blue-900/20 text-blue-400 text-xs font-semibold rounded-full border border-blue-700">
                             Catalog Available
                           </span>
@@ -1030,7 +1084,7 @@ function Gallery() {
                       </div>
                     )}
                     
-                    {selectedImage.catalog && (
+                    {hasCatalog(selectedImage) && (
                       <div>
                         <h4 className="text-lg font-bold text-white mb-3 flex items-center">
                           <FileText size={20} className="mr-2" aria-hidden="true" />
@@ -1039,16 +1093,14 @@ function Gallery() {
                         <div className="space-y-3">
                           <div className="bg-white/5 p-4 rounded-lg border border-gray-700">
                             <div className="flex items-center justify-between">
-                              <div>
-                                <div className="text-gray-300 font-medium mb-1">Product Catalog PDF</div>
-                                <div className="text-sm text-gray-400">
-                                  {selectedImage.catalog.filename || 'catalog.pdf'}
-                                </div>
+                              <div className="flex items-center">
+                                <div className="text-gray-300 font-medium mb-1">Download Product Catalog</div>
                               </div>
                               <button
                                 onClick={() => handleDownloadCatalog(selectedImage)}
                                 disabled={downloadingCatalog[selectedImage._id]}
-                                className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed min-w-[120px] justify-center"
+                                aria-label="Download product catalog"
                               >
                                 {downloadingCatalog[selectedImage._id] ? (
                                   <>
@@ -1061,7 +1113,7 @@ function Gallery() {
                                 ) : (
                                   <>
                                     <Download size={16} />
-                                    Download
+                                    Download PDF
                                   </>
                                 )}
                               </button>
