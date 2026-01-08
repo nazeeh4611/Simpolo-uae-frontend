@@ -202,7 +202,14 @@ const GalleryForm = ({ isEditMode = false, itemData = null, onSuccess, onCancel 
                     Authorization: `Bearer ${token}`
                   }
                 });
+                
                 setExistingCatalog(null);
+                setCatalogFile(null);
+                
+                if (onSuccess) {
+                  onSuccess();
+                }
+                
                 toast.success('Catalog deleted successfully');
                 toast.dismiss(t.id);
               } catch (error) {
