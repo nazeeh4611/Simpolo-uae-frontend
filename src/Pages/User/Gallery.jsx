@@ -790,7 +790,6 @@ function Gallery() {
               {[
                 { value: gallery.length, label: 'Gallery Items', icon: Layers },
                 { value: '100%', label: 'Client Satisfaction', icon: Award },
-                { value: '15+', label: 'Years Experience', icon: Clock },
                 { value: '300+', label: 'Happy Clients', icon: Users }
               ].map((stat, index) => (
                 <article 
@@ -1288,8 +1287,7 @@ function Gallery() {
                       <div className="mt-8 grid grid-cols-2 gap-4 max-w-xs mx-auto">
                         <div className="text-center p-3 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
                           <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                          <div className="text-lg font-bold text-white relative z-10">15+</div>
-                          <div className="text-xs text-gray-300 relative z-10">Years Experience</div>
+                          <div className="text-xs text-gray-300 relative z-10">Years Of Experience</div>
                         </div>
                         <div className="text-center p-3 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
                           <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity"></div>

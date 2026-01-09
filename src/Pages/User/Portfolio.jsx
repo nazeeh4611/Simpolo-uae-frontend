@@ -215,11 +215,6 @@ function Portfolio() {
       icon: CheckCircle2,
     },
     { 
-      value: '15+', 
-      label: 'Years Experience',
-      icon: Clock,
-    },
-    { 
       value: '100%', 
       label: 'Client Satisfaction',
       icon: Users,
@@ -565,7 +560,6 @@ function Portfolio() {
         <h2>Featured Project Statistics:</h2>
         <ul>
           <li>Total Projects: {projects.length}</li>
-          <li>Years Experience: 15+ Years</li>
           <li>Client Satisfaction: 100%</li>
           <li>Happy Clients: 300+</li>
         </ul>

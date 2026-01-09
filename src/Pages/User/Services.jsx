@@ -835,8 +835,6 @@ function Services() {
                           </div>
                           <div className="text-center p-4 bg-white/5 rounded-xl border border-gray-600 relative overflow-hidden group">
                             <div className="absolute inset-0 sword-shimmer opacity-0 group-hover:opacity-20 transition-opacity" aria-hidden="true"></div>
-                            <div className="text-xl font-bold text-white relative z-10">15+</div>
-                            <div className="text-sm text-gray-300 relative z-10">Years Experience</div>
                           </div>
                         </div>
                       </div>
